@@ -1,0 +1,23 @@
+<h2>What's new in 0.26.1</h2>
+
+<p>Summarizing earlier messages no longer looks like something went wrong. There is no migration in
+this update and nothing changes about your library.</p>
+
+<h3>Summarizing earlier messages reads as maintenance</h3>
+<ul>
+  <li><strong>When a conversation gets long, earlier messages are summarized so it can keep
+      going.</strong> That is routine and it can happen many times in a long conversation. It was
+      shown with a red alert icon and border, which made ordinary housekeeping look like a
+      failure.</li>
+  <li>The note now says "Summarized earlier messages" and sits quietly in the transcript.</li>
+  <li>When summarizing does not work, the note is a caution rather than an alarm, and it tells you
+      what happens next. Mechanician tries again on your next message, and in the one case where
+      that will not help, because a single message is too large to summarize around, it says so and
+      suggests what to do.</li>
+  <li><strong>The internal error identifier is gone from the message.</strong> Text like
+      <code>Code: too_few_groups</code> was shown as though it were something to act on. The detail
+      still goes to the system log, where it can be used for diagnosis.</li>
+</ul>
+
+<p>This update changes how summarizing is described, not how often it happens. If conversations are
+being summarized more than you would expect, that is being looked at separately.</p>

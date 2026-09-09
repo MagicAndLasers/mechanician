@@ -1,0 +1,8 @@
+<h2>What's new in 0.9.3</h2>
+<ul>
+  <li><strong>Codex Ultra stays recoverable.</strong> Quiet turns are checked against Codex's authoritative state instead of being treated as stalled, and missing completion notifications are recovered without duplicating output.</li>
+  <li><strong>More reliable stopping.</strong> If Codex reports that a turn is no longer active, Mechanician now reconciles the provider's thread state before deciding whether to finish or restart the lane.</li>
+  <li><strong>Codex is self-contained.</strong> The app includes its pinned Codex App Server and code-mode runtime, so subscription users do not need a separate Codex installation.</li>
+  <li><strong>Safer runtime boundaries.</strong> Provider processes, credentials, permissions, background work, and multi-window turn ownership have stronger isolation and failure handling.</li>
+  <li><strong>Reproducible release builds.</strong> The signed app now records source and dependency provenance, ships a locked production runtime and license inventory, and verifies every artifact before publication.</li>
+</ul>

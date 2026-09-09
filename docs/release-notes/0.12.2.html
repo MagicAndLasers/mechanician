@@ -1,0 +1,42 @@
+<h2>What's new in 0.12.2</h2>
+
+<h3>Transcript</h3>
+<ul>
+  <li><strong>Assistant messages no longer break apart while streaming.</strong> Each streamed chunk
+      carries its own identifier, and the transcript was treating every one as a new message — so a
+      reply could persist as a row per chunk. Fenced code blocks were the visible casualty: the
+      opening fence landed in its own row, so nothing parsed as code and snippets rendered as plain
+      prose.</li>
+  <li><strong>Copy button on code blocks.</strong> Hover any fenced block for a copy control in its
+      top-right corner. It copies the block verbatim, so a long command can no longer be truncated
+      by an imprecise selection.</li>
+</ul>
+
+<h3>Providers</h3>
+<ul>
+  <li><strong>Fixed: long API keys were silently truncated when saved.</strong> Keys were stored
+      through a path that caps at 128 characters without reporting it, so an OpenAI project key
+      (164 characters) was stored as a valid-looking prefix and then rejected by the provider as
+      incorrect. Existing keys longer than that need re-entering.</li>
+  <li><strong>Keys are now verified before they are saved.</strong> A key the provider rejects is
+      refused while you are still looking at the field, rather than failing at the next turn. If the
+      provider cannot be reached, the key is saved with a note instead of being blocked.</li>
+</ul>
+
+<h3>Scheduled &amp; ambient work</h3>
+<ul>
+  <li><strong>Each scheduled task picks its own provider.</strong> Anthropic API, Claude on Vertex,
+      or OpenAI API. Subscription providers are listed with the reason they cannot run unattended
+      rather than being quietly absent.</li>
+  <li><strong>Tasks say up front what they will not be able to do.</strong> The editor flags a task
+      whose instructions expect a person — asking a question, waiting, taking a screenshot — and one
+      that intends to change files while set to read-only access.</li>
+  <li><strong>One unconnected provider no longer stops every other task from running.</strong></li>
+</ul>
+
+<h3>Background work</h3>
+<ul>
+  <li><strong>Work an agent leaves running is now visible and stoppable</strong> in the Schedule
+      window: poll loops, watchers and detached commands, each with a Stop button.</li>
+  <li><strong>Waiting on</strong> lists conversations parked on a trigger, with resume and cancel.</li>
+</ul>

@@ -1,0 +1,53 @@
+<h2>What's new in 0.14.1</h2>
+
+<h3>Root work is visible and controllable</h3>
+<ul>
+  <li><strong>The conversation's root agent now has its own card.</strong> It sits below the
+      whole-conversation summary and reports only the root turn's observed duration, token use,
+      tool activity, and tool mix, so delegated work no longer inflates the root's figures.</li>
+  <li><strong>Requested and provider-reported models are kept distinct.</strong> When Codex reports
+      the model that actually answered, the root card retains that identity across model switches
+      and relaunches without rewriting the model the user selected.</li>
+  <li><strong>Root Stop is scoped to the root.</strong> The control reaches the bridge that owns the
+      active or provisional root—even from a duplicate viewer—without stopping independent
+      delegates. It remains available while assistant text is streaming.</li>
+  <li><strong>Every agent Stop control now uses the same octagonal road-sign artwork.</strong> The
+      composer, root, standalone-agent, workflow, and detail controls share one visual and
+      accessibility treatment instead of mixing a stop sign with red squares.</li>
+</ul>
+
+<h3>Faster, quieter Codex startup</h3>
+<ul>
+  <li><strong>Codex thread prewarming now validates the complete turn configuration.</strong>
+      Warm-state proofs include the exact model, workspace, permissions, process generation, and
+      tool schema, so an incompatible prewarm is discarded rather than reused.</li>
+  <li><strong>Skill inventory maintenance is quieter.</strong> Startup, workspace, plugin, and
+      provider-change signals coalesce, and new refreshes are dispatched only while no root turn
+      is active.</li>
+  <li><strong>Codex Skills use the provider's authoritative, workspace-scoped inventory.</strong>
+      System, user, repository, and enabled plugin skills retain the last valid result and reject
+      stale responses from a previous workspace.</li>
+  <li>Provider compaction boundaries no longer fabricate a meaningless 0 → 0 token reading when
+      Codex did not report before-and-after counts.</li>
+</ul>
+
+<h3>Recovery and reliability</h3>
+<ul>
+  <li><strong>Inconclusive Claude credential checks now offer Reconnect.</strong> The
+      <code>credential_unknown</code> / <code>status_unavailable</code> failure remains honestly
+      retryable, but its card also provides a forced fresh sign-in instead of leaving the user
+      trapped behind repeated connection errors.</li>
+  <li><strong>Claude's MCP guidance now treats the callable tool list as authoritative.</strong>
+      It tells the model to prefer directly exposed <code>mcp__…</code> tools and to use discovery
+      only when a discovery primitive is callable.</li>
+  <li><strong>Agent-activity tooltips no longer retain transient Objective-C string owners.</strong>
+      Native tooltip callbacks now stay with their views, fixing the AppKit pointer-authentication
+      crash seen while hovering the activity panel.</li>
+</ul>
+
+<h3>A more recognizably Mechanician welcome</h3>
+<ul>
+  <li>The Mechanician-titled new-conversation panel now pairs the app icon with the wordmark in the
+      same display typeface used by the product site, with the licensed font bundled in every
+      build.</li>
+</ul>

@@ -1,0 +1,22 @@
+<h2>What's new in 0.26.18</h2>
+
+<h3>Mechanician does less work while it is idle</h3>
+<ul>
+  <li><strong>Each connected provider was scanning every process on the Mac every five seconds,
+      even before an agent had run.</strong> With several providers or windows open, those scans
+      added up while Mechanician appeared idle.</li>
+  <li>A provider now starts background-process discovery only after an agent has actually run in a
+      workspace. Work an agent leaves running remains visible and stoppable.</li>
+  <li>A process scan that stalls is stopped after two seconds. A failed scan keeps the last known
+      process identities instead of making the Stop controls forget them.</li>
+</ul>
+
+<h3>Background checks finish cleanly</h3>
+<ul>
+  <li>The scheduled-task Mail check can no longer wait forever on Mail or a hidden macOS permission
+      prompt. It stops after fifteen seconds and tries again on the next scheduled check.</li>
+  <li>The timer that notices a delegated agent has gone silent now stops itself after settling the
+      final agent, instead of continuing to wake up once a minute.</li>
+  <li>After Mechanician has already released an old library rollback copy, later launches no longer
+      repeat a database integrity scan merely to rediscover that there is nothing left to release.</li>
+</ul>

@@ -1,0 +1,20 @@
+<h2>What's new in 0.26.26</h2>
+
+<p>This Daily build repairs stalled long-running provider sessions and makes several live-session
+boundaries more reliable.</p>
+
+<ul>
+  <li>When a resumed Claude or Google Vertex turn ends without producing a response, Mechanician
+      now retries it once in a fresh session when doing so is safe. If provider work may already
+      have occurred, it retires the stale session and presents a recoverable error instead of
+      silently remaining wedged.</li>
+  <li>Stop now retires the complete provider process tree before a replacement starts. Model and
+      context changes also wait until the fresh-session boundary is durably saved, preventing a
+      stopped or stalled session from being reused.</li>
+  <li>MCP authentication now waits for a fresh provider session and positive tool inventory before
+      sending the next prompt, including across windows, account changes, and relaunches.</li>
+  <li>Questions waiting in another conversation show a persistent question-mark indicator and can
+      notify you across Mechanician windows. Activity-span labels are larger and higher contrast.</li>
+  <li>Long conversations render more efficiently through process-wide live-update batching and
+      incremental transcript and Markdown updates.</li>
+</ul>

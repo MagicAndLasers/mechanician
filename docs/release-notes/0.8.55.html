@@ -1,0 +1,11 @@
+<h2>What's new in 0.8.55</h2>
+<ul>
+<li><b>Provider recovery that stays out of your way</b> — Codex now restarts its App Server after a failure without treating a healthy ChatGPT login as disconnected. Stop escalates when a provider does not respond, and a clear recovery action replaces an endless spinner.</li>
+<li><b>Honest Guide Current Turn delivery</b> — guidance remains visible while it is delivered, and a rejected or timed-out steer shows its reason before being sent once as the next message.</li>
+<li><b>Safer crash and relaunch behavior</b> — restored queues wait for confirmation instead of silently starting work, stale activity is healed, daemon shutdown is bounded, and provider diagnostics are retained in rotating logs.</li>
+<li><b>Reconnect directly from the model picker</b> — configured but disconnected providers keep their last-known model list visible as recovery information, with an inline Reconnect action.</li>
+<li><b>Context-meter parity</b> — context usage now persists across conversation switches and relaunches for Claude, Codex, and direct API conversations.</li>
+<li><b>More stable conversation controls</b> — changing effort or models no longer destabilizes an open popover, and the utility controls now share one compact native toolbar rail.</li>
+<li><b>Deeper Codex integration</b> — connected Codex accounts gain native change review, more truthful child-agent status and metrics, and reliable final agent reconciliation.</li>
+<li><b>Sharper workspace feedback</b> — the Changes panel refreshes from agent and terminal activity, conversation commit markers require real Git evidence, and Markdown tables render natively.</li>
+</ul>

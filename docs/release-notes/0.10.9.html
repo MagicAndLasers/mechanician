@@ -1,0 +1,8 @@
+<h2>Runtime Service replacement recovery</h2>
+<ul>
+  <li>Completes upgrades from every Runtime Service shipped before durable drain support.</li>
+  <li>Closes persistent legacy-helper terminals visibly so they cannot block replacement forever.</li>
+  <li>Queues new prompts durably for the installed helper while existing turns finish safely.</li>
+  <li>Keeps steering, approvals, answers, and cancellation working throughout the handoff.</li>
+  <li>Changes launchd registration only after the old helper checkpoints and exits.</li>
+</ul>

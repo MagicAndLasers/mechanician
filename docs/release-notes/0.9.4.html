@@ -1,0 +1,6 @@
+<h2>What's new in 0.9.4</h2>
+<ul>
+  <li><strong>Fast, responsive launches.</strong> Mechanician no longer waits on the main thread while macOS validates bundled runtimes or while launchd refreshes background scheduling.</li>
+  <li><strong>Safer background startup.</strong> Provider and ambient processes now launch asynchronously, and a window close, quit, or settings change safely cancels a launch that is still pending.</li>
+  <li><strong>Less scheduler churn.</strong> The background agent refreshes only after the app build changes instead of being torn down and recreated on every launch.</li>
+</ul>

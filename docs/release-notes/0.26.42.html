@@ -1,0 +1,27 @@
+<h2>What's new in 0.26.42</h2>
+
+<p>Two fixes to the transcript: where it puts you while you are reading, and what it says about a
+command you declined.</p>
+
+<h3>The transcript stays where you left it</h3>
+<ul>
+  <li><strong>Reading back through a conversation no longer throws you to a much earlier part of
+  it.</strong> When rows above you were added, removed or rebuilt, everything below them moved while
+  your view stayed at the same place in the document, so you landed somewhere else entirely.</li>
+  <li>It happened periodically rather than rarely because a run of tool calls is regrouped as a turn
+  goes along, which changes the rows above you during ordinary work.</li>
+  <li>One earlier row changing shape could move you more than 1500 points, which is several
+  screens.</li>
+  <li>Following a live answer is unchanged. If you have not scrolled away, you are still carried to
+  the bottom as it arrives.</li>
+</ul>
+
+<h3>A command you declined is not a command that failed</h3>
+<ul>
+  <li><strong>Declining a command left a red "1 failed" above it, and a row that said it ran.</strong>
+  Nothing ran. It now reads "1 denied", with no red, and the row says "Denied" rather than claiming
+  the command executed.</li>
+  <li>VoiceOver announced a declined call as "error". It now says "denied".</li>
+  <li>This is the same correction 0.26.41 made to what Memory records. Until now the record had
+  stopped calling a refusal a failure while the screen still did.</li>
+</ul>

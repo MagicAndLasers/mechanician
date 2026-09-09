@@ -1,0 +1,26 @@
+<h2>What's new in 0.26.12</h2>
+
+<p>Reasoning levels now come from your model provider rather than from a list baked into the app.</p>
+
+<h3>Ultra works on Claude through Vertex AI and Bedrock</h3>
+<ul>
+  <li><strong>Ultra was only offered on Claude accounts and the Anthropic API.</strong> On a managed
+      Claude route it was missing, with nothing explaining why. That was an oversight: everything
+      underneath already supported it.</li>
+  <li>It now appears on every Claude route whose model offers Extra High, which is what it has always
+      been built on.</li>
+</ul>
+
+<h3>New reasoning levels appear when your provider adds them</h3>
+<ul>
+  <li><strong>A reasoning level added by Anthropic or OpenAI after a given Mechanician release was
+      invisible, and could not be selected, until Mechanician itself updated.</strong> The app
+      checked every level against a fixed list and quietly discarded anything it did not
+      recognize.</li>
+  <li>Levels the app knows are still shown cheapest to strongest. Anything new is listed after them,
+      and says plainly that this version cannot say how it compares, rather than implying a position
+      it cannot justify.</li>
+  <li>For managed setups this also removes a sharp edge: a configuration naming a reasoning level
+      newer than the app was rejected in full, taking every model and provider in it down. Only a
+      malformed entry is refused now.</li>
+</ul>

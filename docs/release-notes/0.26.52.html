@@ -1,0 +1,73 @@
+<h2>What's new in 0.26.52</h2>
+
+<p>This Stable brings Mechanician's Help agent into the app, modernizes the workspace browsers,
+and makes long-running agent work faster and more reliable.</p>
+
+<h3>Help that can explain and demonstrate the app</h3>
+<ul>
+  <li><strong>The dedicated Help workspace can answer questions from a signed, build-matched
+  product guide.</strong> Answers distinguish current behavior from history and carry reviewed
+  source evidence.</li>
+  <li>Ask Help to show you a supported feature and it can open and spotlight the relevant control
+  in your working conversation. Outside Plan, it can also perform a bounded set of requested
+  interface operations.</li>
+  <li>Reviewed workflow recommendations check the exact tools available to the current conversation
+  before suggesting a demonstration. Plan remains read-only: bounded app operations are withheld
+  and independently rejected.</li>
+</ul>
+
+<h3>A clearer workspace</h3>
+<ul>
+  <li>Conversations now have compact All, Unread, and Working filters, scoped Select All, and
+  reliable bulk actions. New tabs in a workspace inherit the active conversation's provider and
+  model.</li>
+  <li>The workspace gallery scrolls as one surface, so Home and Help no longer crowd named
+  workspaces out of view.</li>
+  <li>Artifacts use a native browser with more stable rows and previews. Changes records file work
+  across conversations and lets the current conversation collapse like the others.</li>
+  <li>The experimental personal Memory wiki, learned skills, and Memrank have been removed after
+  testing showed that automatic retrieval was not reliable. An existing Memory workspace becomes
+  an ordinary, renameable workspace.</li>
+</ul>
+
+<h3>Long conversations and background work</h3>
+<ul>
+  <li>Claude workflows keep their permission context until background agents finish, and the
+  conversation says when delegated work continues after the root turn.</li>
+  <li>OpenAI scheduled runs now answer unattended permission and question requests with the correct
+  protocol shape and retain both inline and large file-backed artifacts instead of hanging or
+  dropping their output.</li>
+  <li>Typing stays responsive while tasks run; transcript rows hold their position more reliably,
+  and Copy, Retry, and Fork remain available after reload.</li>
+  <li>A turn waiting on a visible permission card is no longer called stalled. Interrupted
+  harness-only activity is closed on relaunch.</li>
+</ul>
+
+<h3>Performance, storage, and providers</h3>
+<ul>
+  <li>Conversation switching and file previews stay responsive. Large tool results are stored
+  compressed, while only bounded excerpts enter the disposable search index; text deep inside very
+  large tool output may no longer match search. Obsolete database and runtime copies are reclaimed
+  safely.</li>
+  <li>Deleting a conversation with media no longer disables daily backups, and live conversations
+  are checkpointed before abrupt app exits.</li>
+  <li>Agents and scheduled tasks receive the person's usable command path; the bundled Node is only
+  a fallback and now includes working npm and npx launchers.</li>
+  <li>Codex-generated images appear directly in the transcript, and provider capacity, service,
+  model-refresh, and Vertex reauthentication failures recover or explain themselves more clearly.</li>
+</ul>
+
+<h3>Permissions and managed deployment</h3>
+<ul>
+  <li>Write containment applies even with Bypass permissions. <code>/tmp</code> works as intended,
+  while a write outside the workspace names the requested path, resolved target, workspace boundary,
+  and the folder an Always Allow rule would cover.</li>
+  <li>Permission cards and the transcript distinguish a denied request from a failed tool.</li>
+  <li>On first launch after this update, unmanaged installations choose Manual Check Only or
+  Automatic Update Checks. Manual is the network-quiet default; Settings shows the update host,
+  and managed policy can enforce the choice.</li>
+  <li>Managed deployments can enforce provider, permission, scheduling, extension, and update
+  policy through forced MDM preferences. Releases publish a versioned, signed and notarized
+  enterprise PKG alongside the app; administrators generate the managed-preferences profile with
+  the supplied template and tooling.</li>
+</ul>

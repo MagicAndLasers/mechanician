@@ -1,0 +1,61 @@
+<h2>What's new in 0.25.1</h2>
+
+<p>Fixes for things 0.25.0's move to a database left behind. There is no migration in this update
+and nothing changes about your library.</p>
+
+<h3>Saving</h3>
+<ul>
+  <li><strong>A conversation could stop saving and keep failing.</strong> If a message appeared and
+      was withdrawn at the wrong moment, such as a streamed reply replaced by a final one, the
+      record it left behind blocked every later save of that conversation. The banner said
+      your messages were not on disk, and it never cleared. Nothing was lost, because the save was
+      refused rather than half-written, but the conversation could not be saved again until you
+      restarted.</li>
+</ul>
+
+<h3>Siri, Shortcuts and Spotlight</h3>
+<ul>
+  <li><strong>They can see your whole library again.</strong> They were still reading the copy your
+      library was migrated from, so a conversation or artifact created since the update could not be
+      picked in Shortcuts, opened by Siri, or found in Spotlight, and one you had deleted still
+      turned up.</li>
+  <li>Spotlight rebuilds its list of artifacts at every launch. It no longer empties that list when
+      it cannot read the source.</li>
+</ul>
+
+<h3>Recovering a conversation Mechanician could not read</h3>
+<ul>
+  <li><strong>Settings can list them again.</strong> After the update the recovery list came up empty
+      with an error, so a conversation kept there could not be reached at all.</li>
+  <li><strong>Restoring one now sticks.</strong> It used to reappear for the rest of the session and
+      be gone at the next launch, and trying a second time failed for good. The exact original file
+      is still kept, and you can still reveal or save a copy of it instead.</li>
+</ul>
+
+<h3>Scheduled tasks</h3>
+<ul>
+  <li><strong>A scheduled task runs in the right folder with the right instructions.</strong> It was
+      reading workspace settings as they stood before the update: a workspace you edited since ran
+      with its old folder, one you created since was not found at all and ran from your home folder,
+      and one you deleted still ran.</li>
+</ul>
+
+<h3>Reclaiming the space from the migration</h3>
+<ul>
+  <li><strong>0.25.0 said your previous library's space would come back after a week. It could not.</strong>
+      The check for a verified backup looked in the wrong place and always failed, so nothing was
+      ever released. It works now, and when it runs Mechanician tells you what it released and how
+      much came back.</li>
+  <li>It releases only the rollback copy. The files your library was migrated from stay, because a
+      conversation Mechanician could not read has its only remaining copy among them.</li>
+</ul>
+
+<h3>Messages</h3>
+<ul>
+  <li><strong>Errors say what happened to your work</strong> instead of repeating the storage
+      engine's own words. If a conversation cannot be saved, the message now says your messages are
+      on screen but not yet on disk, and the technical detail goes to the log where support can read
+      it.</li>
+  <li>The same pass covered dictation, connection settings, and Keychain messages, and styled three
+      buttons that had been left with the stock system appearance.</li>
+</ul>

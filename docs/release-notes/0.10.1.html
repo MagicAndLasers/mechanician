@@ -1,0 +1,6 @@
+<h2>Runtime Service hotfix</h2>
+<ul>
+  <li><strong>Providers and terminals start again.</strong> Mechanician now recovers when macOS reports a missing Background Task Management record before the bundled Runtime Service's first registration.</li>
+  <li><strong>Damaged copies still fail closed.</strong> The recovery path first verifies that the signed LaunchAgent property list and its contained executable are physically present.</li>
+  <li><strong>Installed acceptance is now mandatory.</strong> The release pipeline refuses to publish until the exact staged build is installed and its Runtime Service is registered and live.</li>
+</ul>

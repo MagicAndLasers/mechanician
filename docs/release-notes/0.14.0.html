@@ -1,0 +1,49 @@
+<h2>What's new in 0.14.0</h2>
+
+<h3>See the whole agent conversation</h3>
+<ul>
+  <li><strong>The conversation summary now includes every agent.</strong> Delegated work is folded
+      into the active or latest turn, aliases are reconciled, and its token totals use the same
+      arithmetic as the Activity headline. A parent that launches four agents no longer looks like
+      it did nothing but call <em>Agent</em> four times.</li>
+  <li><strong>Shell work is named for the program that actually ran.</strong> Activity traces and
+      cards show names such as <em>rg</em>, <em>git</em>, <em>sed</em>, <em>find</em>, and
+      <em>swift</em> instead of a wall of <em>Bash</em>. Labels are drawn only when they fit inside
+      their spans, eliminating collisions while preserving full hover and accessibility details.</li>
+  <li><strong>The completed summary stays put.</strong> Finishing a turn no longer removes the
+      conversation strip, and narrow layouts reflow or abbreviate metrics instead of silently
+      clipping them.</li>
+</ul>
+
+<h3>AppKit agent cards reach feature parity</h3>
+<ul>
+  <li><strong>Parent and child agents are visibly related.</strong> Nested agents are indented from
+      their parent in both cards and the trace, including lifecycle events that arrive before their
+      hierarchy metadata.</li>
+  <li><strong>Cards show the model that actually ran when the provider reports it.</strong> Claude
+      and Codex children can carry a different model from their parent; Mechanician displays that
+      provider-authored model without guessing when it is absent.</li>
+  <li><strong>The AppKit panel now carries the complete working state.</strong> It uses
+      Mechanician's spinner, current work and stall presentation, metrics, summaries, errors,
+      tool composition, workflow progress, output-file actions, warnings, disclosure, and complete
+      accessibility descriptions. Background shell tasks no longer appear as phantom agents.</li>
+</ul>
+
+<h3>Stop, redirect, and recover stuck work</h3>
+<ul>
+  <li><strong>A provider failure can no longer strand delegated work.</strong> Terminal errors
+      reconcile subagents, workflows, and workflow children, stamp their end times, and close their
+      activity lanes. A normal successful parent completion still allows intentional background
+      delegates to finish.</li>
+  <li><strong>Stop remains available while any conversation work is active.</strong> It can stop a
+      root turn, a provisional start, or delegate-only work even when no active root route remains.
+      Recovery is scoped to the affected conversation and terminal state cannot be resurrected by
+      delayed provider events.</li>
+  <li><strong>Queued prompts and in-flight guidance can change direction.</strong> Edit a queued
+      prompt, cancel pending guidance, or upgrade either one to Stop and Redirect. Provisional
+      guidance remains visible before provider acknowledgement, and an unresponsive provider lane
+      cannot repeatedly resubmit the same recovered redirect.</li>
+  <li><strong>Provider switching explains and resolves blockers.</strong> Active delegated work
+      presents an actionable Stop control, duplicate transcript warnings are suppressed, and a
+      terminal usage-limit recovery frees the picker immediately.</li>
+</ul>

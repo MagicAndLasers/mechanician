@@ -1,0 +1,48 @@
+<h2>What's new in 0.12.3</h2>
+
+<h3>Managed configuration</h3>
+<ul>
+  <li><strong>Fixed: a managed deployment could select a model it never carried.</strong> Claude's
+      model list is answered by the local runtime from its own built-in list, not by your
+      deployment — so on a managed cloud route it would offer models that deployment cannot serve,
+      and every turn failed with a 404 that switching models did not fix. A route's declared models
+      are now authoritative, and the model actually sent is the one your organization declared,
+      never a provider alias the runtime re-resolves.</li>
+  <li><strong>See what your configuration is doing.</strong> Providers ▸ Show Configuration reports
+      the configuration in effect: each route with its cloud project and region, the exact values
+      the runtime is launched with, the declared models, which provider-reported models are being
+      withheld, and every MCP registry and plugin marketplace with its format, sign-in, network
+      scope and digest pin.</li>
+  <li><strong>Edit it, without breaking its signature.</strong> Correct a project or region, add a
+      model your deployment has gained, or switch a catalog off. The signed document is never
+      modified — edits are layered on top of it and every changed field can be reset to what your
+      organization published.</li>
+  <li><strong>Create one from nothing.</strong> With no configuration installed, Providers ▸ Create
+      Configuration adds a Claude connection on Google Vertex AI or AWS Bedrock. Pick the backend,
+      give it the project or region, tick the models it carries. Export the result to hand the same
+      setup to everyone else.</li>
+  <li><strong>Fixed: a managed plugin marketplace and MCP registry never loaded.</strong> Catalogs
+      that sign in with your organization's Google identity were being requested through whichever
+      provider the window happened to be showing, which cannot serve them. They now go to the
+      account that can.</li>
+  <li><strong>Fixed: managed configuration could not update itself.</strong> The address of a newer
+      signed copy was being discarded on load, so an administrator's update never arrived.</li>
+</ul>
+
+<h3>Providers</h3>
+<ul>
+  <li><strong>Claude on AWS Bedrock.</strong> A new route alongside Google Vertex AI. Credentials
+      come from your existing AWS setup — the same profile the <code>aws</code> CLI uses — so there
+      is nothing extra to sign in to and no AWS keys are stored by Mechanician or carried in a
+      configuration.</li>
+</ul>
+
+<h3>Extensions</h3>
+<ul>
+  <li><strong>Add an MCP registry that follows no published schema.</strong> The new "Other registry
+      (auto-detect)" format recognizes a catalog's shape instead of needing one written for it:
+      field names are matched ignoring case and separators, so <code>server_name</code>,
+      <code>serverName</code> and <code>Server-Name</code> are the same thing. Anything it cannot
+      recognize is skipped rather than guessed at, so a server with no usable endpoint is left out
+      instead of offered as connectable.</li>
+</ul>

@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    # Deliberately NO paths filter. A docs-only push (a release-notes commit is exactly that) would
+    # then produce no run for that commit, and the release gate would correctly refuse to publish it.
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Per-REF, so a push run and a pull-request run for the same commit stay in separate groups. While a
+# release PR is open a dev push does produce both, which is a few duplicated runner minutes for the
+# short window a PR is open. Do not "fix" that by keying the group on the head SHA: the two runs
+# would then cancel each other, and a cancelled run leaves a `cancelled` conclusion on the commit,
+# which the release gate reads as not-green. The duplicate is the cheap failure mode; a release
+# blocked by its own cancelled check is not.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: macOS 26 / Apple Silicon
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js 24.18.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.18.0
+          cache: npm
+          cache-dependency-path: agentd/package-lock.json
+
+      - name: Verify source, dependencies, and tests
+        run: ./scripts/check.sh

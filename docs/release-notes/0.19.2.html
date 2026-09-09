@@ -1,0 +1,27 @@
+<h2>What's new in 0.19.2</h2>
+
+<h3>The activity plot keeps up with the turn</h3>
+<ul>
+  <li><strong>Live plots no longer freeze while the ruler advances.</strong> The agent lanes and the
+      token graph now repaint with the timeline instead of holding stale bars until something else
+      redrew them.</li>
+  <li><strong>A running turn's timeline only moves forward.</strong> It could previously jump ahead
+      and then snap back, briefly shortening bars that were already drawn.</li>
+</ul>
+
+<h3>Faster first message</h3>
+<ul>
+  <li><strong>Opening a new conversation no longer discards a ready connection.</strong> A prepared
+      provider process is reused for any conversation that needs the same setup, so the first
+      message does not wait for one to be built from scratch.</li>
+  <li><strong>Typing prepares the connection again after a pause.</strong> Applies to Claude on a
+      subscription, an API key, Vertex, and Bedrock, and to Codex.</li>
+</ul>
+
+<h3>Fixes</h3>
+<ul>
+  <li><strong>Large files preview again in Changes.</strong> Selecting a big source file under
+      Conversation History showed an empty pane instead of its contents.</li>
+  <li><strong>A suggested follow-up is added to your message.</strong> Taking one used to replace
+      whatever you had already typed, and left the cursor outside the box.</li>
+</ul>

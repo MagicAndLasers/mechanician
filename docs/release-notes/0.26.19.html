@@ -1,0 +1,74 @@
+<h2>What's new in 0.26.19</h2>
+
+<p>Resumed Claude turns can start sooner, long conversations do less repeated work, and Codex
+provider recovery is more tightly bounded.</p>
+
+<h3>Activity timelines read consistently</h3>
+<ul>
+  <li><strong>Text inside coloured activity spans is now white throughout the timeline.</strong>
+      A subtle dark edge keeps labels readable on both quiet and saturated spans without changing
+      their phase and tool colours.</li>
+</ul>
+
+<h3>The one-time library update completes more directly</h3>
+<ul>
+  <li><strong>The migration could appear stuck at 32% while it repeated whole-library collection
+      and database checks it had just completed.</strong> It now reuses the exact verified database,
+      performs one full rollback collection, and releases import memory before that collection.</li>
+  <li>The progress window names the file, recovery, and database checks within the formerly opaque
+      phase and shows when the engine last crossed a real work boundary.</li>
+  <li>A previous refusal no longer produces a migration window with no worker behind it. Interrupted
+      cutovers always resume, while normal app updates do not repeat an unchanged refusal.</li>
+  <li>Media left behind after its Conversation was removed is now preserved as verified recovery
+      data instead of permanently refusing the migration. This was the concrete blocker reproduced
+      from the affected production library.</li>
+</ul>
+
+<h3>Resumed Claude turns can start sooner</h3>
+<ul>
+  <li><strong>Every resumed turn sampled during the performance audit repeated a live context check,
+      even when the preceding successful turn had supplied a safe measurement.</strong> Those checks
+      held prompt delivery for 486–926 milliseconds, with a median of 627 milliseconds.</li>
+  <li>Eligible turns now reuse that terminal measurement when the model, session, context window,
+      configuration, and successful completion all agree.</li>
+  <li>Anything uncertain—including compaction, retries, resets, concurrent use, or an ambiguous model
+      catalogue—still uses Claude's live check. No context or compaction safety threshold was widened.</li>
+</ul>
+
+<h3>Long conversations do less repeated work</h3>
+<ul>
+  <li><strong>As an answer streamed into a large conversation, every incoming event rescanned the
+      conversation's transcript and activity history just to assign its order.</strong> Mechanician
+      now seeds that order once and allocates subsequent events in constant time.</li>
+  <li>Large live responses update the visible transcript at an adaptive rate instead of repeatedly
+      rebuilding accumulated Markdown at display-frame speed. Provider events are still accepted
+      immediately, and tools, questions, completion, navigation, and quit boundaries still land the
+      exact pending text before proceeding.</li>
+  <li>When a completed response scrolls back into view, Mechanician can reuse its finished Markdown
+      document instead of parsing and highlighting it again. In a roughly 370 KiB benchmark, repeat
+      realisation fell from 744 milliseconds to 348 milliseconds. The cache is strictly bounded and
+      live responses never enter it.</li>
+</ul>
+
+<h3>Codex is lighter when inactive and safer when unstable</h3>
+<ul>
+  <li><strong>A Codex App Server that initialised successfully and then exited quickly could keep
+      triggering replacement processes.</strong> Restart pressure now carries across short-lived
+      handshakes, automatic replacements stop after a bounded series, and the budget returns only
+      after the replacement stays healthy.</li>
+  <li>An explicit turn or Connect action retains one recovery attempt. If Codex exits during sign-in
+      or MCP authorisation, the exact operation now finishes with an error instead of leaving a
+      browser flow or spinner waiting for minutes.</li>
+  <li>When you select another provider, an idle Codex lane releases its App Server after five
+      minutes and wakes it again on demand. The selected lane stays warm, active work postpones
+      cleanup, and the owning daemon remains alive so detached background work stays stoppable.</li>
+</ul>
+
+<h3>Stopped background work reconciles correctly</h3>
+<ul>
+  <li><strong>A background process could stop successfully while its old row remained in the Tasks
+      panel.</strong> The acknowledging provider now clears its row immediately and forces the next
+      ordinary snapshot to reconcile it.</li>
+  <li>If the process ignored the first termination signal, that snapshot shows it again with a
+      working Stop control. No additional process polling or provider constraint was introduced.</li>
+</ul>

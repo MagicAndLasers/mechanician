@@ -1,0 +1,59 @@
+<h2>What's new in 0.21.0</h2>
+
+<h3>Undo</h3>
+<ul>
+  <li><strong>⌘Z puts back anything Mechanician removed or moved</strong>, and never touches what an
+      agent did. Move a conversation or an artifact to another workspace, delete a conversation,
+      delete every conversation, delete an artifact — all of it comes back.</li>
+  <li><strong>A whole multi-selection undoes as one step.</strong> Moving twenty conversations is one
+      ⌘Z, not twenty.</li>
+  <li><strong>Deleting still asks first.</strong> The confirmation stops the accident; undo covers
+      the times you confirmed on autopilot.</li>
+  <li><strong>A restored conversation is exactly what you had</strong> — its transcript, its pasted
+      images, its attached files, and its queued prompts still paused, so nothing is sent on your
+      behalf when you open it again.</li>
+  <li>While you're typing, ⌘Z still undoes your typing.</li>
+</ul>
+
+<h3>Find in a conversation</h3>
+<ul>
+  <li><strong>⌘F searches the conversation you're reading</strong>, with a count of where you are:
+      "3 of 17". ⌘G and ⇧⌘G step through matches, and ⌘E searches for whatever you've selected.</li>
+  <li><strong>A match inside a collapsed tool group opens it</strong> rather than being skipped.</li>
+  <li>Searching your list of conversations moved to <strong>⌥⌘F</strong>.</li>
+</ul>
+
+<h3>Send things to Mechanician from anywhere</h3>
+<ul>
+  <li><strong>Services.</strong> Select text in any app and use its Services menu: start a new
+      conversation with that text, or add it to the conversation you already have open. The second
+      one leaves Mechanician in the background, so you can clip several passages while reading
+      without being pulled out of Safari each time.</li>
+  <li><strong>In Finder</strong>, open the selected folders as workspaces, or attach the selected
+      files to a conversation.</li>
+  <li><strong>Links.</strong> <code>mechanician://</code> opens a conversation, a workspace, or an
+      artifact from a note, a script, or a Shortcut. <strong>Copy Link</strong> is on the
+      Conversation menu, the sidebar, the artifact list, and the workspace cards.</li>
+  <li><strong>None of it ever sends.</strong> Text and files land in the composer and stop there,
+      for you to read before you press Return.</li>
+</ul>
+
+<h3>Your windows come back</h3>
+<ul>
+  <li><strong>Quitting and reopening restores the whole session</strong>, not one window. Every
+      workspace window returns, tab groups come back whole and in order, and focus lands on the
+      window and tab you were last in.</li>
+  <li>A workspace you deleted in the meantime isn't reopened, and a deleted conversation leaves its
+      window on that workspace rather than taking the window with it.</li>
+</ul>
+
+<h3>Fixes</h3>
+<ul>
+  <li><strong>Opening two conversations in quick succession no longer leaves one window blank.</strong></li>
+  <li><strong>Revealing an artifact works on a cold launch</strong>, and can no longer open a second
+      Artifacts window.</li>
+  <li><strong>Text pasted from another app can't smuggle in a file attachment</strong> you didn't
+      choose.</li>
+  <li><strong>Tool labels on the orange ray are legible again.</strong></li>
+  <li>Confirmation sheets no longer claim deleting can't be undone, because now it can.</li>
+</ul>

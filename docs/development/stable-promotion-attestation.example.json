@@ -1,0 +1,50 @@
+{
+  "format": "ai.mechanician.stable-promotion-attestation.v1",
+  "candidate": {
+    "version": "0.26.24",
+    "build": 239,
+    "zipSHA256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "dmgSHA256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "provenanceSHA256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "sourceCommit": "dddddddddddddddddddddddddddddddddddddddd"
+  },
+  "soak": {
+    "startedAt": "2026-08-12T14:00:00Z",
+    "completedAt": "2026-08-13T14:00:00Z"
+  },
+  "machines": [
+    {
+      "label": "machine-a",
+      "version": "0.26.24",
+      "build": 239,
+      "zipSHA256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "provenanceSHA256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "checks": {
+        "launch": "passed",
+        "update": "passed",
+        "storage": "passed",
+        "claude": "passed",
+        "codex": "passed",
+        "backgroundProcesses": "passed",
+        "crashFree": "passed"
+      }
+    },
+    {
+      "label": "machine-b",
+      "version": "0.26.24",
+      "build": 239,
+      "zipSHA256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "provenanceSHA256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "checks": {
+        "launch": "passed",
+        "update": "passed",
+        "storage": "passed",
+        "claude": "passed",
+        "codex": "passed",
+        "backgroundProcesses": "passed",
+        "crashFree": "passed"
+      }
+    }
+  ],
+  "blockers": []
+}

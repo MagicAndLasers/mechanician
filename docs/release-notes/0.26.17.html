@@ -1,0 +1,15 @@
+<h2>What's new in 0.26.17</h2>
+
+<h3>Background-process discovery no longer overwhelms the Mac</h3>
+<ul>
+  <li><strong>While looking for work an agent left running, Mechanician could start hundreds of
+      overlapping <code>lsof</code> processes.</strong> The problem became more likely the longer the
+      app stayed open, and could leave the Mac with no idle CPU.</li>
+  <li>Discovery is now strictly serialized. Each agent process can perform only one lookup at a
+      time, and the next scan starts only after the previous one has finished and waited five
+      seconds.</li>
+  <li>Processes that do not belong to a Mechanician workspace are remembered instead of being
+      checked again on every scan.</li>
+  <li>Background work remains visible and stoppable. Mechanician now also confirms that a process
+      is still the one it originally tracked immediately before stopping it.</li>
+</ul>

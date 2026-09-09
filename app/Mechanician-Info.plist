@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Mechanician</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mechanician Conversation Record</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>ai.mechanician.conversation-record</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mechanician Enterprise Configuration</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>ai.mechanician.enterprise-profile</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mechanician Composer Attachment</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.item</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>Mechanician</string>
+	<key>CFBundleIconFile</key>
+	<string>Mechanician</string>
+	<key>CFBundleIdentifier</key>
+	<string>ai.mechanician.app</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Mechanician</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.26.53</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>Mechanician Link</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mechanician</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>268</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>26.0</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Mechanician runs capabilities that control your Mac apps (Reminders, Mail, Notes, Calendar, Messages, and more) on your behalf.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Mechanician uses the camera when you take a photo to add to a conversation.</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2026 Magic &amp; Lasers</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Mechanician uses the microphone for voice dictation in the message composer.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Mechanician shows your recent photos in the add menu so you can attach one to a conversation. Choosing photos with the picker does not require this.</string>
+	<key>NSServices</key>
+	<array>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Mechanician/New Conversation With Selection</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>newConversationWithSelection</string>
+			<key>NSPortName</key>
+			<string>Mechanician</string>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Mechanician/Add Selection to Conversation</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>addSelectionToConversation</string>
+			<key>NSPortName</key>
+			<string>Mechanician</string>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Mechanician/Open as Workspace</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>openFolderAsWorkspace</string>
+			<key>NSPortName</key>
+			<string>Mechanician</string>
+			<key>NSSendFileTypes</key>
+			<array>
+				<string>public.folder</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Mechanician/Add Files to Conversation</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>addFilesToConversation</string>
+			<key>NSPortName</key>
+			<string>Mechanician</string>
+			<key>NSSendFileTypes</key>
+			<array>
+				<string>public.data</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Mechanician transcribes your speech on-device to let you dictate messages.</string>
+	<key>SUEnableAutomaticChecks</key>
+	<false/>
+	<key>SUFeedURL</key>
+	<string>https://storage.googleapis.com/mechanician-updates/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>aeb5wi9PLO5XAycE9+ubqSEF34S9nrBByfAQjyZ8Aak=</string>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Mechanician Enterprise Configuration</string>
+			<key>UTTypeIdentifier</key>
+			<string>ai.mechanician.enterprise-profile</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mechanician-profile</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.mechanician.enterprise-profile+json</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Mechanician Artifact Reference</string>
+			<key>UTTypeIdentifier</key>
+			<string>ai.mechanician.artifact-reference</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Mechanician Conversation Record</string>
+			<key>UTTypeIdentifier</key>
+			<string>ai.mechanician.conversation-record</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>convrec</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

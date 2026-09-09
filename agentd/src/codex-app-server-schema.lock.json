@@ -1,0 +1,38 @@
+{
+  "codexVersion": "0.148.0",
+  "schemaVariant": "experimental-v2",
+  "schemaSHA256": "a3ac7c2a851388f477de486ceb3ad59bf1754c25d798997b5b6ef99f5a1cb5a1",
+  "requiredTurnStatuses": [
+    "completed",
+    "interrupted",
+    "failed",
+    "inProgress"
+  ],
+  "requiredThreadStatuses": [
+    "notLoaded",
+    "idle",
+    "systemError",
+    "active"
+  ],
+  "requiredActiveFlags": [
+    "waitingOnApproval",
+    "waitingOnUserInput"
+  ],
+  "requiredMcpStartupStates": [
+    "starting",
+    "ready",
+    "failed",
+    "cancelled"
+  ],
+  "requiredMcpAuthStatuses": [
+    "unsupported",
+    "notLoggedIn",
+    "bearerToken",
+    "oAuth"
+  ],
+  "requiredMcpElicitationActions": [
+    "accept",
+    "decline",
+    "cancel"
+  ]
+}

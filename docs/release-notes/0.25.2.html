@@ -1,0 +1,29 @@
+<h2>What's new in 0.25.2</h2>
+
+<p>A fix for an update that could not finish. If 0.25.1 stopped partway through moving your library
+and asked you to quit and try again, this release lets it finish. Your library was never changed.</p>
+
+<h3>The update could stop on a shared attachment</h3>
+<ul>
+  <li><strong>Copying a conversation that contains an image made the update refuse to run.</strong>
+      The copy points at the same image file as the original, and Mechanician treated that as a
+      reason to stop rather than something ordinary. One copied conversation was enough to hold up
+      the whole library, on every attempt.</li>
+  <li>It is now recorded and carried across. The image stays exactly where it is, both conversations
+      still show it, and the update continues.</li>
+  <li>The same thing prevented that conversation from saving after a successful update. That is
+      fixed too.</li>
+</ul>
+
+<h3>When an update cannot finish, it now says why</h3>
+<ul>
+  <li><strong>The message names what stopped it</strong> instead of restating the rule it was
+      checking. The old wording could not be acted on, by you or by us, and the only machine with
+      the answer was the one that could not start.</li>
+</ul>
+
+<h3>Launch timing</h3>
+<ul>
+  <li>Settings, under Advanced, now breaks the wait for your conversation into the work it is made
+      of, rather than reporting it as one number.</li>
+</ul>

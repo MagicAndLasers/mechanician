@@ -1,0 +1,33 @@
+<h2>What's new in 0.26.3</h2>
+
+<p>The context meter now counts toward the point where a conversation actually gets summarized.
+There is no migration in this update and nothing changes about your library.</p>
+
+<h3>The context meter was measuring against the wrong number</h3>
+<ul>
+  <li><strong>The meter showed how full a conversation was against the model's maximum, but
+      summarizing happens at a lower point that Mechanician was never told about.</strong> So the
+      meter could read 40% and the conversation would summarize itself anyway, which looked like
+      something had gone wrong when nothing had.</li>
+  <li>On one real conversation the meter never went past 52% of a one million token window, and it
+      summarized 85 times. Against the number that actually governs, the same conversation reads
+      nearly full, which is the truth.</li>
+  <li>The meter now counts toward that number when the provider reports one, and the tooltip says
+      what it is. Providers that report no such number, including Claude on Google Vertex AI and
+      the OpenAI and Codex lanes, are unchanged.</li>
+</ul>
+
+<p>Nothing about when conversations are summarized has changed in this update. Only what the meter
+shows you, so that a full meter and a summarization now mean the same thing.</p>
+
+<h3>A fresh conversation could stop on its second message</h3>
+<ul>
+  <li><strong>0.26.2 changed Mechanician to carry on through most failures to summarize, the way
+      Claude Code does. That went too far.</strong> A failure whose description is not a simple
+      code word is reported only as "summarizing failed", and treating that unknown case as safe
+      meant an oversized request reached the model and came back rejected, on the second message of
+      a brand new conversation.</li>
+  <li>Mechanician now stops and recovers unless a failure is specifically known to be safe to
+      continue through. Because 0.26.2 also added a retry in the same session, the common case
+      still costs you nothing and stays invisible.</li>
+</ul>

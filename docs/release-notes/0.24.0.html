@@ -1,0 +1,55 @@
+<h2>What's new in 0.24.0</h2>
+
+<h3>Conversations stay where you put them</h3>
+<ul>
+  <li><strong>Mechanician reliably returns to the conversation you left open.</strong> Provider
+      warm-up can no longer replace it with a blank conversation, and the first sidebar click made
+      during launch is retained instead of ignored.</li>
+  <li><strong>Pin, Unpin, Mark Read, and Mark Unread work again</strong> from the Conversation panel,
+      including pinned-row ordering.</li>
+  <li>The composer no longer shifts or bounces the transcript when the first character is typed.</li>
+</ul>
+
+<h3>See agent work when it begins</h3>
+<ul>
+  <li><strong>The Agents panel opens when a workflow or subagent first starts.</strong> Live workflow
+      children appear without duplicate mirror rows, so the panel reflects the work actually in
+      flight.</li>
+  <li>Forked and replayed conversations disclose their local provenance and any replay limitations
+      instead of silently implying an exact continuation.</li>
+</ul>
+
+<h3>Large libraries use less of the foreground</h3>
+<ul>
+  <li>After its disposable summary cache is populated, the Conversation sidebar can paint while
+      recovery continues off the main thread, and full-text search now finds terms inside tool
+      output.</li>
+  <li>Workspace moves, exports, and related multi-conversation work hydrate off the main thread
+      instead of blocking the interface.</li>
+  <li>The opening state now uses Mechanician's accessible three-dot mark instead of a generic large
+      progress indicator.</li>
+</ul>
+
+<h3>Durability and storage diagnostics</h3>
+<ul>
+  <li><strong>Your prompt is persisted before the provider receives it.</strong> A crash during turn
+      startup restores it visibly and paused rather than losing or silently resending it.</li>
+  <li>Conversation and Workspace save failures now remain visible, retry safely, and never update
+      search indexes before the authoritative write succeeds.</li>
+  <li>The in-progress <code>library.db</code> shadow migration remains isolated to signed dogfood
+      builds. Public builds do not create or reconcile that shadow library before it provides a
+      product read path.</li>
+</ul>
+
+<h3>Experimental Conversation Records</h3>
+<ul>
+  <li>File-menu tools can export and inspect a provisional <code>.convrec</code> snapshot. Inspection
+      is inert and read-only; importing or resuming work from a record is not supported yet.</li>
+</ul>
+
+<h3>Known limitation</h3>
+<ul>
+  <li>Initial Conversation readiness still performs complete legacy-library recovery. This release
+      makes that wait accurate and visible; selected-first startup acceleration is the next
+      performance checkpoint.</li>
+</ul>

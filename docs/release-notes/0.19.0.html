@@ -1,0 +1,39 @@
+<h2>What's new in 0.19.0</h2>
+
+<h3>Attachments the agent — and VoiceOver — can actually read</h3>
+<ul>
+  <li><strong>Attachments announce themselves while you write.</strong> Every attachment in the
+      message box now reads as what it is — <em>Attached file, Quarterly report.pdf</em>,
+      <em>Mail message, Budget approval</em>, <em>Artifact, Sales chart, html</em> — in the same
+      words the transcript uses after you send. Previously they were silent while composing.</li>
+  <li><strong>Dragging an artifact out gives it the right name.</strong> Artifacts dropped into the
+      Finder or another app arrive as <code>Badge.svg</code> rather than <code>Badge.svg.svg</code>.</li>
+</ul>
+
+<h3>Drag and drop that finishes the job</h3>
+<ul>
+  <li><strong>The Files tab springs open.</strong> Hold an artifact over Files and the browser opens
+      so you can drop it into a specific folder. This never worked before.</li>
+  <li><strong>Drag a file from the browser to the Trash.</strong> The Trash used to refuse the drop
+      entirely. Removal is recoverable, exactly as it is in the Finder.</li>
+</ul>
+
+<h3>Readable in Light Mode</h3>
+<ul>
+  <li><strong>Renaming a conversation is visible again.</strong> The inline title editor showed white
+      text on a white background, so you could not see what you were typing.</li>
+  <li><strong>The context meter reads at a glance.</strong> Its empty track was nearly as dark as the
+      blue fill; the filled portion now stands clearly apart from the rest.</li>
+  <li><strong>Tool activity labels are legible.</strong> Names on tool spans in the timeline sit on a
+      deeper orange and are drawn in white rather than black.</li>
+</ul>
+
+<h3>Corrected behaviour</h3>
+<ul>
+  <li><strong>Delete no longer acts without a selection.</strong> In the conversation list, pressing
+      Delete with nothing selected could act on the row you had last right-clicked.</li>
+  <li><strong>Any private MCP registry works without a custom build.</strong> An organization's own
+      catalog is now read by the general registry adapter and described entirely in its managed
+      configuration, so supporting one no longer requires a new version of Mechanician. Existing
+      registries keep working and migrate themselves.</li>
+</ul>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Microphone for voice dictation (SpeechDictation). This is the resource-access key Xcode
+         adds for audio input; it's strictly required only under the App Sandbox (we're hardened-
+         runtime, not sandboxed). For a non-sandboxed app the mic is gated by TCC via the embedded
+         NSMicrophoneUsageDescription, and the app registers in Privacy ▸ Microphone on the first
+         AVCaptureDevice.requestAccess call (see SpeechDictation, which now requests the mic FIRST
+         so registration happens even if speech auth is declined). We keep this entitlement as
+         correct belt-and-suspenders and to stay right if we ever sandbox. -->
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+    <!-- Camera for Take Photo in the composer's add menu (CameraCapture), including a nearby
+         iPhone acting as a Continuity Camera. Same reasoning as audio-input above: we are
+         hardened-runtime and not sandboxed, so TCC is what actually gates this via the embedded
+         NSCameraUsageDescription, and the app registers in Privacy ▸ Camera on the first
+         AVCaptureDevice.requestAccess call. Kept correct in case we ever sandbox. -->
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    <!-- Photo library for the recent-photos strip only. The PHPickerViewController path runs out of
+         process and needs neither this nor the usage description. -->
+    <key>com.apple.security.personal-information.photos-library</key>
+    <true/>
+</dict>
+</plist>

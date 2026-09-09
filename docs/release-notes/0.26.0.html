@@ -1,0 +1,50 @@
+<h2>What's new in 0.26.0</h2>
+
+<p>Search now puts the best match first and shows you the text that matched. There is no migration
+in this update and nothing changes about your library.</p>
+
+<h3>Search ranks by relevance</h3>
+<ul>
+  <li><strong>Results are ordered by how well they match, not by what happens to be pinned or
+      recent.</strong> A conversation that mentions your term once no longer sits above the one the
+      term is really about.</li>
+  <li>A title match comes first, because that is the most direct answer to what you typed. Pinned
+      and Previous stay as separate sections, so the list keeps its shape.</li>
+</ul>
+
+<h3>Each result shows the text that matched</h3>
+<ul>
+  <li><strong>The row shows the matching passage instead of the conversation's newest
+      message.</strong> Search reads tool output as well as what you and the agent wrote, so a
+      conversation could match on a command result from weeks ago while the row showed something
+      unrelated. Now you can see why it is in the list.</li>
+  <li>When a match sits deep inside a very large result, Mechanician shows no excerpt rather than
+      showing you the beginning of something else and implying that is the match.</li>
+</ul>
+
+<h3>Plainer wording, and error messages you can act on</h3>
+<ul>
+  <li><strong>Nine places that showed raw text from the storage engine or the web renderer now say
+      what happened and what to do about it.</strong> Saving a conversation, exporting a PDF,
+      creating an instructions file, and writing a diagnostics file all report in ordinary language.
+      The technical detail still goes to the system log for diagnosis.</li>
+  <li>"Chat" is gone from the interface. Conversations are called conversations, and a workspace
+      without a folder is described as exactly that.</li>
+  <li>Punctuation across roughly 150 messages, labels and tooltips is plainer.</li>
+</ul>
+
+<h3>One more folder permission that could have stopped Mechanician</h3>
+<ul>
+  <li>The rule that keeps your library readable only by you was written in four separate places.
+      Two of them were taught to correct the folder after a refusal stranded people at launch in
+      0.24.2 and 0.25.3. The remaining copies now do the same.</li>
+  <li>When Mechanician does decline, because a folder it does not own is open to other accounts on
+      the Mac, it now names the folder and the permissions it found instead of restating the rule.</li>
+</ul>
+
+<h3>Groundwork for other languages</h3>
+<ul>
+  <li>Mechanician now carries a string catalogue, so translating it later is a translation job
+      rather than an engineering one. No new language ships in this update and nothing looks
+      different.</li>
+</ul>

@@ -1,0 +1,63 @@
+<h2>What's new in 0.13.0</h2>
+
+<h3>See what your agents are actually doing</h3>
+<ul>
+  <li><strong>New: an Activity panel in the Agents tab.</strong> A profiler-style execution trace
+      with one lane per agent, showing model work and tool calls as intervals over time. You can see
+      at a glance whether delegated agents really ran in parallel, how long the root waited on them,
+      and where compaction or one of your own messages landed. Time runs at a fixed scale and the
+      view scrolls, so a two-second call looks the same at minute one and minute forty — a long turn
+      no longer squeezes every label into an unreadable smear. Lane labels stay pinned while you
+      scroll back, and <em>Fit</em> still shows the whole turn when you want it.</li>
+  <li><strong>New: a Usage view for tokens and context.</strong> Context fill with a headroom gauge
+      and a 90% mark, plus new tokens per interval. Cached input is drawn behind the bars but never
+      sets the scale — on a long turn it dwarfs everything else, and letting it drive the chart hid
+      the work you were trying to see.</li>
+  <li><strong>New: what each running agent is doing right now.</strong> Agent cards show the current
+      step, what the tool is acting on, and how long it has been there — the figure that separates
+      slow work from a stuck agent. An agent that stalls is flagged against its own typical pace, so
+      a build agent and a search agent are each judged fairly. A tool-mix bar shows which tools an
+      agent actually used, and a compact row mode fits the whole fleet on screen at once.</li>
+  <li><strong>Fixed: the Agents panel no longer interrupts you.</strong> When an agent starts, the
+      inspector stays on whatever tab you were reading; the Agents tab badge tells you instead. If
+      you close the inspector yourself, nothing reopens it on your behalf.</li>
+</ul>
+
+<h3>Signing in</h3>
+<ul>
+  <li><strong>Fixed: an expired Claude sign-in left you stuck.</strong> When a Claude session expired
+      and could not be refreshed, the error said only "Claude request failed" and offered a Retry
+      that could not work. Mechanician still believed the account was connected, so every following
+      message failed the same way with no way out. It is now recognized as a sign-in problem: the
+      account shows as disconnected and the error offers Reconnect.</li>
+  <li><strong>Better: expiry is caught before you send.</strong> The Claude subscription now verifies
+      its credentials ahead of a turn, the way the Google Vertex route already did, so a dead session
+      is reported before your message goes out rather than after.</li>
+</ul>
+
+<h3>Artifacts</h3>
+<ul>
+  <li><strong>New: sort and group artifacts.</strong> Both the Artifacts window and the inspector
+      panel now sort by name, modified date, created date, kind, or size, with clickable column
+      headers that behave the way Finder's do. Group by conversation, workspace, kind, or origin;
+      switch between compact and detailed rows. Each surface remembers its own arrangement.</li>
+  <li>The Artifacts window gained kind, size, and modified columns.</li>
+</ul>
+
+<h3>Workspaces</h3>
+<ul>
+  <li><strong>New: move a conversation into a new workspace.</strong> Right-click any conversation
+      and choose <em>Move to Workspace ▸ New Workspace…</em>. The workspace editor opens so you can
+      name it, describe it, and pick a folder; when you create it, the conversation moves in and the
+      new workspace opens with that conversation already showing.</li>
+</ul>
+
+<h3>The control bar</h3>
+<ul>
+  <li><strong>Fixed: the background-work chip now tells you what it means.</strong> It reads
+      "1 process running" rather than a bare "Background work", and it counts work started by the
+      conversation you are reading instead of everything the window has ever seen. Anything an agent
+      left running anywhere is still listed in the Scheduled &amp; Ambient Tasks window.</li>
+  <li><strong>Better: the controls line up.</strong> When the bar wraps onto two lines, both rows now
+      share the same edges instead of stepping diagonally across the window.</li>
+</ul>

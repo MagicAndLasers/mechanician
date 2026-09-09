@@ -1,0 +1,21 @@
+<h2>What's new in 0.26.6</h2>
+
+<p>Checking a managed configuration for updates now says you are up to date when you are. This
+affects organizations that use a managed configuration; everything else is unchanged.</p>
+
+<h3>Check for Updates reported a difference that was not there</h3>
+<ul>
+  <li><strong>On a Mac where any part of the managed configuration had been changed locally, every
+      check reported that your organization had published something.</strong> It had not. The
+      difference being detected was your own local change.</li>
+  <li>Mechanician was comparing what your organization publishes against your configuration with
+      your local edits already applied. Those two can never match once you have edited anything, so
+      the check could never come out clean.</li>
+  <li>It now compares against your configuration as your organization signed it, which is what the
+      feed actually serves. A machine with local edits can report being up to date again, and a real
+      change from your organization is still detected and installed exactly as before.</li>
+</ul>
+
+<p>This matters more after 0.26.5, which rewrote that message to name a cause. On an affected Mac it
+would have told you to ask your administrator to republish something they had already published
+correctly.</p>

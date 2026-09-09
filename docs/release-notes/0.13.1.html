@@ -1,0 +1,21 @@
+<h2>What's new in 0.13.1</h2>
+
+<h3>The Activity panel</h3>
+<ul>
+  <li><strong>New: see what this conversation's own agent is doing.</strong> The Agents tab tracked
+      delegated agents only, so a turn that delegated nothing showed an empty panel while the
+      conversation's own agent did all the work. A summary strip now sits above the list showing its
+      current step, what it is acting on, how long it has been there, how much it has processed, and
+      which tools it has used.</li>
+  <li><strong>Fixed: the Usage charts now have labelled axes.</strong> Both charts showed a single
+      number in a corner with no unit and nothing to measure against, and the context chart had no
+      time axis at all — you could watch context climb but not see when. Both now carry value and
+      elapsed-time labels.</li>
+  <li><strong>Fixed: a bar's height finally means something.</strong> The token chart's header states
+      the span each bar covers (for example "tokens per 491ms"), so a bar can be read as a rate and
+      compared against another turn instead of only against its neighbours.</li>
+  <li><strong>Fixed: context usage was invisible on a large window.</strong> The context chart was
+      scaled to the whole context window, so a conversation using a small share of a large one drew a
+      flat line along the bottom and its shape could not be seen at all. It now scales to the context
+      actually measured; the gauge in the header still shows how close you are to the limit.</li>
+</ul>

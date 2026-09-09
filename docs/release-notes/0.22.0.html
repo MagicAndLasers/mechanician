@@ -1,0 +1,30 @@
+<h2>What's new in 0.22.0</h2>
+
+<h3>Print a conversation</h3>
+<ul>
+  <li><strong>⌘P prints the conversation you're reading.</strong> The title goes at the top, and the
+      standard Mac header and footer carry the job name, the date, and "Page 2 of 12" — so a printed
+      transcript is dated and paginated without you setting anything up.</li>
+  <li><strong>The page is always light with black ink</strong>, whatever appearance the app is in.
+      Rendering for paper is not rendering for a screen.</li>
+  <li>What reaches the page is what was said: your messages and the replies. Tool calls print as one
+      compact line each rather than dumping their output, and anything the model withdrew never
+      prints at all — the same rule that keeps it out of Copy Transcript.</li>
+  <li>Print, or use the PDF button in the print panel to keep a copy.</li>
+</ul>
+
+<h3>Fixes</h3>
+<ul>
+  <li><strong>Save as PDF no longer comes out dark.</strong> Exporting an artifact while the app was
+      in Dark Mode produced light text on a dark background — a page of solid ink on paper. Exports
+      are always light now, while the preview panels still follow the app.</li>
+  <li><strong>The agent activity chart stays inside its panel.</strong> Cards no longer overflow at
+      wide or narrow inspector widths, the live edge follows the pixels that actually mean "now"
+      instead of stopping short of them, and a short running turn no longer stretches to fill the
+      viewport.</li>
+</ul>
+
+<h3>Known limitations</h3>
+<ul>
+  <li>Printing does not include images from a conversation yet.</li>
+</ul>

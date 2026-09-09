@@ -1,0 +1,43 @@
+<h2>What's new in 0.15.0</h2>
+
+<h3>Standing instructions for each workspace</h3>
+<ul>
+  <li><strong>Every workspace can carry its own standing instructions.</strong> Set them once and
+      each conversation in that workspace starts with them, so the context you would otherwise
+      retype belongs to the workspace instead of to a single conversation.</li>
+  <li><strong>Home gets the same treatment.</strong> Loose conversations that live outside any
+      folder can hold standing instructions too, rather than being the one place without them.</li>
+  <li><strong>Scheduled runs read the current instructions.</strong> The background scheduler can
+      outlive the app, so it re-reads the instructions immediately before each run instead of
+      acting on a copy that may be days old.</li>
+</ul>
+
+<h3>The activity timeline tells the truth about compaction</h3>
+<ul>
+  <li><strong>Compaction is drawn for the time it actually took.</strong> It used to appear as a
+      few-pixel stub at the moment it began, with the completion flag stranded far to the right and
+      ordinary model work drawn across the gap between them. A 31-second compaction is now a
+      31-second block that ends exactly on its completion marker.</li>
+  <li><strong>The block spans the whole lane.</strong> Nothing else runs while a conversation is
+      compacting, so it reads as the agent's whole state rather than a minor sub-activity, and it
+      shows the before and after context size when the provider reports them.</li>
+</ul>
+
+<h3>Agent cards stop cutting off what matters</h3>
+<ul>
+  <li><strong>Model names are no longer clipped.</strong> The pills sat in a fixed share of the
+      header, so they were trimmed mid-word while empty space sat beside a short title — and
+      because everything shrank in proportion, the widest pill lost the most, which was always the
+      model version. The route and agent type now give up room first.</li>
+  <li><strong>Start times are readable again.</strong> Timestamps were being trimmed from the left
+      even with room to spare, turning <code>11:21 AM</code> into <code>…:21 AM</code>.</li>
+</ul>
+
+<h3>Pinned conversations look pinned</h3>
+<ul>
+  <li><strong>The pin marker now uses the app's own blue</strong> instead of the same grey as every
+      other glyph in the row, so a pinned conversation is identifiable at a glance.</li>
+  <li><strong>Pin and Unpin swipe actions wear the Magic &amp; Lasers violet</strong> in place of
+      the dark amber that read as mustard, and stay clearly distinct from the blue Mark Unread
+      action beside them.</li>
+</ul>

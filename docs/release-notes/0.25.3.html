@@ -1,0 +1,22 @@
+<h2>What's new in 0.25.3</h2>
+
+<p>A small safety fix. There is no migration in this update and nothing changes about your library.</p>
+
+<h3>One more place a folder permission could stop Mechanician</h3>
+<ul>
+  <li><strong>0.24.2 fixed a bug where Mechanician refused to start if its own folder was readable by
+      other accounts on the Mac, instead of simply correcting it.</strong> That rule was written in
+      three places and only two of them were fixed. The third runs at the very end of the one-time
+      library update.</li>
+  <li>It could not be reached in practice, because the earlier steps had already corrected the
+      folder by the time it ran. Relying on that is what went wrong the first time, so it now
+      corrects the folder itself like the others do.</li>
+</ul>
+
+<p>If Mechanician has ever shown you a "Storage Recovery Required" screen, you are on a version
+older than 0.24.2. Update to this one, and if it still appears, quit Mechanician and open Terminal
+and run:</p>
+
+<pre>chmod 700 ~/Library/Application\ Support/Mechanician</pre>
+
+<p>Then open Mechanician again.</p>

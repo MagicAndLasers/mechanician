@@ -1,0 +1,17 @@
+#!/bin/sh
+# Run the npm CLI shipped inside Mechanician's signed resource bundle with the app's pinned Node
+# runtime. Keeping this wrapper beside `node` and `npx` means command-based npm MCP servers and an
+# agent's own `npm` calls work on a stock Mac without Homebrew, Xcode, Command Line Tools, or a
+# system Node installation.
+#
+# npm's own `bin/npm` shim cannot be used: it resolves its CLI relative to a Node install prefix
+# (`../node_modules/npm`), a layout the bundle does not have.
+set -eu
+RUNTIME_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+RESOURCE_DIR="$(CDPATH= cd -- "$RUNTIME_DIR/.." && pwd)"
+# npm derives its global prefix from the Node executable's grandparent, which here is the signed,
+# read-only `Mechanician.app/Contents`. Left alone, the first `npm install -g` either fails with
+# EPERM — which reads to an agent as a permission problem — or writes into a sealed bundle.
+: "${MECHANICIAN_SUPPORT_DIR:=$HOME/Library/Application Support/Mechanician}"
+export npm_config_prefix="${npm_config_prefix:-$MECHANICIAN_SUPPORT_DIR/npm-global}"
+exec "$RESOURCE_DIR/node" "$RESOURCE_DIR/npm/bin/npm-cli.js" "$@"

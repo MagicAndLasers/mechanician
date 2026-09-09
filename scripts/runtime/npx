@@ -1,0 +1,10 @@
+#!/bin/sh
+# Run the npm executor shipped inside Mechanician's signed resource bundle with the app's pinned
+# Node runtime. Keeping this wrapper beside `node` means command-based npm MCP servers work on a
+# stock Mac without Homebrew, Xcode, Command Line Tools, or a system Node installation.
+set -eu
+RUNTIME_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+RESOURCE_DIR="$(CDPATH= cd -- "$RUNTIME_DIR/.." && pwd)"
+: "${MECHANICIAN_SUPPORT_DIR:=$HOME/Library/Application Support/Mechanician}"
+export npm_config_prefix="${npm_config_prefix:-$MECHANICIAN_SUPPORT_DIR/npm-global}"
+exec "$RESOURCE_DIR/node" "$RESOURCE_DIR/npm/bin/npx-cli.js" "$@"

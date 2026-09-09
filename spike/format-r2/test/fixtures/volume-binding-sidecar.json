@@ -1,0 +1,93 @@
+{
+  "id": "10000000-0000-4000-A000-000000000001",
+  "title": "Deterministic volume-binding fixture",
+  "titleSource": "synthetic-test-fixture",
+  "updatedAt": "2026-08-03T12:00:00.000Z",
+  "messages": [
+    {
+      "id": "10000000-0000-4000-A000-000000000002",
+      "kind": "user",
+      "text": "Exercise both incremental bindings deterministically.",
+      "observedAt": "2026-08-03T12:00:01.000Z",
+      "captureOrdinal": 1
+    },
+    {
+      "id": "10000000-0000-4000-A000-000000000003",
+      "kind": "assistant",
+      "text": "I will inspect a synthetic source.",
+      "observedAt": "2026-08-03T12:00:02.000Z",
+      "captureOrdinal": 2
+    },
+    {
+      "id": "10000000-0000-4000-A000-000000000004",
+      "kind": "tool",
+      "toolUseId": "synthetic-tool-1",
+      "toolName": "Read",
+      "text": "Read deterministic-fixture.txt",
+      "toolResult": "Synthetic fixture contents retained for round-trip validation.",
+      "toolIsError": false,
+      "toolOwnerAgentID": "root",
+      "observedAt": "2026-08-03T12:00:03.000Z",
+      "captureOrdinal": 3,
+      "toolResultCaptureOrdinal": 4
+    },
+    {
+      "id": "10000000-0000-4000-A000-000000000005",
+      "kind": "compaction",
+      "compactionTrigger": "auto",
+      "compactionPreTokens": 120000,
+      "compactionPostTokens": 32000,
+      "observedAt": "2026-08-03T12:00:04.000Z",
+      "captureOrdinal": 5
+    },
+    {
+      "id": "10000000-0000-4000-A000-000000000006",
+      "kind": "permission",
+      "permName": "Bash",
+      "permDecided": true,
+      "permAllowed": true,
+      "permAlways": false,
+      "interactionResponseStatus": "accepted",
+      "observedAt": "2026-08-03T12:00:05.000Z",
+      "captureOrdinal": 6,
+      "interactionResponseObservedAt": "2026-08-03T12:00:06.000Z",
+      "interactionResponseCaptureOrdinal": 7
+    },
+    {
+      "id": "10000000-0000-4000-A000-000000000007",
+      "kind": "question",
+      "questions": [
+        {
+          "header": "Fixture",
+          "question": "Retain the deterministic event?",
+          "options": [
+            {
+              "label": "Retain",
+              "description": "Exercise an answered interaction."
+            }
+          ]
+        }
+      ],
+      "questionDecided": true,
+      "questionAnswers": {
+        "Fixture": "Retain"
+      },
+      "interactionResponseStatus": "accepted",
+      "observedAt": "2026-08-03T12:00:07.000Z",
+      "captureOrdinal": 8,
+      "interactionResponseObservedAt": "2026-08-03T12:00:08.000Z",
+      "interactionResponseCaptureOrdinal": 9
+    },
+    {
+      "id": "10000000-0000-4000-A000-000000000008",
+      "kind": "assistant",
+      "text": "The deterministic binding fixture is complete.",
+      "observedAt": "2026-08-03T12:00:09.000Z",
+      "captureOrdinal": 10
+    }
+  ],
+  "subagents": {},
+  "agentActivity": [],
+  "workflowRuns": {},
+  "artifacts": []
+}

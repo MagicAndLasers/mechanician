@@ -1,0 +1,24 @@
+<h2>What's new in 0.26.20</h2>
+
+<p>This follow-up makes the one-time library update complete reliably and explains its result in
+plain language.</p>
+
+<h3>A real library-update flow</h3>
+<ul>
+  <li><strong>The update now has its own dedicated window.</strong> It no longer opens or renames a
+      Workspaces window, and an old saved migration scene cannot reappear beside it.</li>
+  <li>A stopped update is visibly stopped: the animation, percentage, and elapsed timer go away,
+      and the window offers <strong>Try Again</strong>. When the previous library is still provably
+      safe, <strong>Use Previous Library for Now</strong> is available for that session.</li>
+  <li>A previous failed attempt can no longer suppress migration on later launches. Every still-
+      unmigrated library retries, while interrupted committed work resumes safely.</li>
+</ul>
+
+<h3>Completion you can verify</h3>
+<ul>
+  <li>Mechanician reports completion only after reopening the new library and matching its authority
+      marker, database identity, schema, writer, and exact committed sequence.</li>
+  <li>After reopening, a one-time banner says <strong>Library update complete</strong>.</li>
+  <li>Settings → General now permanently shows the verified Library update status, so nobody needs
+      Terminal commands or developer help to know which library is in use.</li>
+</ul>

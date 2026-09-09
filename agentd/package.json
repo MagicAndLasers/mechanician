@@ -1,0 +1,32 @@
+{
+  "name": "@mechanician/agentd",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Headless multi-provider agent daemon for Mechanician.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magicandlasers/mechanician"
+  },
+  "bin": {
+    "mechaniciand": "./src/agentd.mjs"
+  },
+  "scripts": {
+    "start": "node src/agentd.mjs",
+    "test": "npm run verify:codex-schema && node --test test/*.test.mjs",
+    "soak:codex": "node scripts/soak-codex-lifecycle.mjs",
+    "verify:codex-schema": "node scripts/verify-codex-schema.mjs",
+    "update:codex-schema": "node scripts/verify-codex-schema.mjs --write",
+    "postinstall": "chmod +x node_modules/node-pty/prebuilds/darwin-*/spawn-helper 2>/dev/null || true"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "0.3.257",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@openai/codex": "0.148.0",
+    "diff": "9.0.0",
+    "isomorphic-git": "1.38.7",
+    "node-pty": "1.1.0",
+    "zod": "4.4.3"
+  }
+}

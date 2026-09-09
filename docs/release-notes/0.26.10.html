@@ -1,0 +1,21 @@
+<h2>What's new in 0.26.10</h2>
+
+<p>Mechanician now tells you which configuration it is running. This affects organizations that use
+a managed configuration; everything else is unchanged.</p>
+
+<h3>You could not tell whether a published change had arrived</h3>
+<ul>
+  <li><strong>When your organization published a change to your configuration, nothing in the app
+      said which version you actually had.</strong> If a newly added model did not appear, there was
+      no way to tell whether the update had not arrived yet, or had arrived and something else was
+      wrong.</li>
+  <li>The model picker now names the configuration and its revision underneath the list. On a
+      managed setup that list is the configuration, so this answers the question in the place you
+      notice it.</li>
+  <li>Settings, under Managed Configuration, now shows the revision this launch is using. If a newer
+      one is already installed on the Mac, it says so and tells you to quit and reopen, because a
+      configuration only takes effect on a fresh launch.</li>
+  <li>Those two cases look identical from the outside and need opposite responses: one is "restart",
+      the other is "the update never reached this Mac". They are now distinguishable without opening
+      a support ticket.</li>
+</ul>

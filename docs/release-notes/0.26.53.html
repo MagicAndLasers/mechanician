@@ -1,0 +1,13 @@
+<h2>What's new in 0.26.53</h2>
+
+<p>This Stable prevents a rare Agents-panel hang from saturating the Mac's CPU during large,
+agent-heavy workflows.</p>
+
+<ul>
+  <li><strong>Agent presentation now pauses while macOS is tracking a menu or drag</strong>, then
+  catches up once when normal interaction resumes.</li>
+  <li>Large failed workflows no longer repeatedly sort and remeasure every agent card for each
+  activity update. Updates recalculate only the affected rows.</li>
+  <li>The activity timeline reuses its processed ledger while drawing, and leaving Mechanician
+  ends any stranded menu-tracking session.</li>
+</ul>

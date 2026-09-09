@@ -1,0 +1,436 @@
+{
+  "schemaVersion": 1,
+  "corpusID": "mechanician.public",
+  "corpusSchemaVersion": 4,
+  "searchContract": {
+    "mode": "question",
+    "limit": 6
+  },
+  "questions": [
+    {
+      "id": "redirect-running-turn",
+      "category": "retrieval",
+      "question": "How do I stop and redirect a running turn?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "composer.steering-a-running-turn"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "composer.steering-a-running-turn": [
+          "guide-composer"
+        ]
+      }
+    },
+    {
+      "id": "workspace-instructions",
+      "category": "retrieval",
+      "question": "Where do I edit standing workspace instructions?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "conversations.workspaces"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "conversations.workspaces": [
+          "guide-workspace-window"
+        ]
+      }
+    },
+    {
+      "id": "bypass-write-containment",
+      "category": "retrieval",
+      "question": "Why can Claude ask for approval in Bypass permissions when a symlinked path resolves outside my workspace, and what does Always allow cover?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "approvals.write-containment"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "approvals.write-containment": [
+          "guide-approvals"
+        ]
+      }
+    },
+    {
+      "id": "signed-help-search",
+      "category": "retrieval",
+      "question": "How does signed Help search show evidence and history?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "mechanician-help.search"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "mechanician-help.search": [
+          "help-agent-boundary"
+        ]
+      }
+    },
+    {
+      "id": "guided-help-tour",
+      "category": "retrieval",
+      "question": "How can Mechanician walk me through Help?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "mechanician-help.guided-tours"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "mechanician-help.guided-tours": [
+          "help-agent-boundary"
+        ]
+      }
+    },
+    {
+      "id": "product-authority",
+      "category": "retrieval",
+      "question": "Which database is the product authority and which search projection is disposable?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "architecture.durable-and-derived-data"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "architecture.durable-and-derived-data": [
+          "storage-authority"
+        ]
+      }
+    },
+    {
+      "id": "bounded-bug-evidence",
+      "category": "retrieval",
+      "question": "How should I diagnose a novel defect without exporting raw prompts?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "diagnosing-bugs.gather-bounded-evidence"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "diagnosing-bugs.gather-bounded-evidence": [
+          "diagnostic-map"
+        ]
+      }
+    },
+    {
+      "id": "mac-automation",
+      "category": "retrieval",
+      "question": "Can the agent use Shortcuts and AppleScript to drive the Mac?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "mac.overview"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "mac.overview": [
+          "guide-mac"
+        ]
+      }
+    },
+    {
+      "id": "runtime-service-current-only",
+      "category": "lifecycle",
+      "question": "XPC collision writers reverted",
+      "includeHistory": false,
+      "expectedClaimKeys": [],
+      "excludedClaimKeys": [
+        "history.the-runtime-service"
+      ],
+      "expectedEvidenceByClaim": {}
+    },
+    {
+      "id": "runtime-service-with-history",
+      "category": "lifecycle",
+      "question": "XPC collision writers reverted",
+      "includeHistory": true,
+      "expectedClaimKeys": [
+        "history.the-runtime-service"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "history.the-runtime-service": [
+          "runtime-service-history"
+        ]
+      }
+    },
+    {
+      "id": "explain-walk-show-boundaries",
+      "category": "retrieval",
+      "question": "Compare the Help agent's closed tool surface, native guided tour, and unsent workflow demonstration.",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "mechanician-help.tool-surface",
+        "mechanician-help.guided-tours",
+        "mechanician-help.show-me"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "mechanician-help.tool-surface": [
+          "help-agent-boundary"
+        ],
+        "mechanician-help.guided-tours": [
+          "help-agent-boundary"
+        ],
+        "mechanician-help.show-me": [
+          "help-agent-boundary"
+        ]
+      }
+    },
+    {
+      "id": "unsupported-physics",
+      "category": "abstention",
+      "question": "Calculate the neutrino oscillation cross section for argon-40.",
+      "includeHistory": false,
+      "expectedClaimKeys": [],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {}
+    },
+    {
+      "id": "unsupported-commercial-policy",
+      "category": "abstention",
+      "question": "What is the price of the unlimited SCIM compliance tier?",
+      "includeHistory": false,
+      "expectedClaimKeys": [],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {}
+    },
+    {
+      "id": "show-changes-panel",
+      "category": "retrieval",
+      "question": "Show me the Changes panel.",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "inspector.changes"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "inspector.changes": [
+          "guide-inspector"
+        ]
+      },
+      "expectedGuideIDs": [
+        "inspector.changes-tour"
+      ]
+    },
+    {
+      "id": "show-delegated-agents",
+      "category": "retrieval",
+      "question": "Show me the agents this conversation delegated work to.",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "inspector.agents"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "inspector.agents": [
+          "guide-inspector"
+        ]
+      },
+      "expectedGuideIDs": [
+        "inspector.agents-tour"
+      ]
+    },
+    {
+      "id": "show-conversation-controls",
+      "category": "retrieval",
+      "question": "Show me the model and reasoning effort controls for this conversation.",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "composer.conversation-controls"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "composer.conversation-controls": [
+          "guide-composer"
+        ]
+      },
+      "expectedGuideIDs": [
+        "composer.controls-tour"
+      ]
+    },
+    {
+      "id": "conversation-sidebar-filters",
+      "category": "retrieval",
+      "question": "How do All Conversations, Unread, Working, and Select All interact in the sidebar?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "conversations.sidebar-filters"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "conversations.sidebar-filters": [
+          "guide-workspace-window"
+        ]
+      }
+    },
+    {
+      "id": "new-conversation-model-inheritance",
+      "category": "retrieval",
+      "question": "Which provider and model do Command-N and Command-T inherit for a new conversation?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "conversations.model-inheritance"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "conversations.model-inheritance": [
+          "guide-workspace-window"
+        ]
+      }
+    },
+    {
+      "id": "workspace-launcher-scroll",
+      "category": "retrieval",
+      "question": "Do the compact Home and Help rows scroll with cards in the Workspaces launcher?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "conversations.workspace-launcher"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "conversations.workspace-launcher": [
+          "guide-workspace-window"
+        ]
+      }
+    },
+    {
+      "id": "codex-generated-images",
+      "category": "retrieval",
+      "question": "Where do Codex generated images appear, and do they remain after relaunch?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "conversations.generated-images"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "conversations.generated-images": [
+          "guide-transcript"
+        ]
+      }
+    },
+    {
+      "id": "mermaid-rendering-boundary",
+      "category": "retrieval",
+      "question": "How is a Mermaid diagram rendered, sanitized, frozen, and shown without scripts?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "inspector.mermaid-rendering"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "inspector.mermaid-rendering": [
+          "guide-inspector"
+        ]
+      }
+    },
+    {
+      "id": "background-agent-outlives-turn",
+      "category": "retrieval",
+      "question": "What happens if delegated background agents are still active when their root turn ends?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "inspector.background-work-outlives-turn"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "inspector.background-work-outlives-turn": [
+          "guide-inspector"
+        ]
+      }
+    },
+    {
+      "id": "scheduled-provider-routes",
+      "category": "retrieval",
+      "question": "Can a subscription run unattended, or do scheduled tasks need an API-key or managed Vertex route?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "scheduled-tasks.provider-routes"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "scheduled-tasks.provider-routes": [
+          "background-unattended",
+          "guide-scheduled-tasks"
+        ]
+      }
+    },
+    {
+      "id": "scheduled-untrusted-triggers",
+      "category": "retrieval",
+      "question": "Should I use Trust all for a scheduled task triggered by new mail or by a file another process can write?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "scheduled-tasks.overview"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "scheduled-tasks.overview": [
+          "security-unattended",
+          "background-unattended",
+          "guide-scheduled-tasks"
+        ]
+      }
+    },
+    {
+      "id": "managed-bedrock-provider",
+      "category": "retrieval",
+      "question": "How does a managed AWS Bedrock route authenticate, and does Mechanician store AWS access keys?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "accounts.managed-providers"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "accounts.managed-providers": [
+          "guide-accounts",
+          "source-bedrock-route"
+        ]
+      }
+    },
+    {
+      "id": "run-when-closed",
+      "category": "retrieval",
+      "question": "What does Run when closed change, and do enabled tasks run while Mechanician is open?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "scheduled-tasks.run-when-closed"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "scheduled-tasks.run-when-closed": [
+          "guide-scheduled-tasks"
+        ]
+      }
+    },
+    {
+      "id": "help-plan-tool-surface",
+      "category": "retrieval",
+      "question": "Which exact Help tools are exposed in Plan, and when is OperateMechanician available?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "mechanician-help.tool-surface"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "mechanician-help.tool-surface": [
+          "help-agent-boundary"
+        ]
+      }
+    },
+    {
+      "id": "verification-citation",
+      "category": "citation",
+      "question": "What must I run before calling an app change complete?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "extending-mechanician.verification"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "extending-mechanician.verification": [
+          "contributor-verification"
+        ]
+      }
+    }
+  ]
+}

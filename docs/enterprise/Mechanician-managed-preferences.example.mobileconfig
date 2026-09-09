@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>PayloadContent</key>
+			<dict>
+				<!-- This release's MDM target is the standard app's exact CFBundleIdentifier. -->
+				<key>ai.mechanician.app</key>
+				<dict>
+					<key>Forced</key>
+					<array>
+						<dict>
+							<key>mcx_preference_settings</key>
+							<dict>
+								<key>MechanicianManagedConfiguration</key>
+								<dict>
+									<key>schemaVersion</key>
+									<integer>1</integer>
+									<key>policyIdentifier</key>
+									<string>com.example.mechanician.baseline</string>
+									<key>revision</key>
+									<integer>1</integer>
+									<!--
+									Add signedProfile here as a data value only after replacing it
+									with the base64 representation of exact signed profile bytes.
+									The field is optional, so this example remains operational without
+									an invalid placeholder signature.
+									-->
+									<key>policy</key>
+									<dict>
+										<key>allowedProviderAccesses</key>
+										<array>
+											<string>claude_subscription</string>
+											<string>anthropic_api</string>
+											<string>codex_subscription</string>
+											<string>openai_api</string>
+										</array>
+										<key>maximumInteractivePermissionMode</key>
+										<string>acceptEdits</string>
+										<key>allowUnattendedTasks</key>
+										<false/>
+										<key>allowLocalProfile</key>
+										<false/>
+										<key>allowLocalConfigurationOverrides</key>
+										<false/>
+										<key>allowUserConfiguredExtensions</key>
+										<true/>
+										<key>allowPublicExtensionDiscovery</key>
+										<false/>
+										<key>updateAuthority</key>
+										<string>sparkle</string>
+									</dict>
+								</dict>
+							</dict>
+						</dict>
+					</array>
+				</dict>
+			</dict>
+			<key>PayloadDisplayName</key>
+			<string>Mechanician Managed Preferences</string>
+			<key>PayloadIdentifier</key>
+			<string>com.example.mechanician.managed-preferences</string>
+			<key>PayloadType</key>
+			<string>com.apple.ManagedClient.preferences</string>
+			<key>PayloadUUID</key>
+			<string>2B94799C-D032-4F9F-8ECF-DA5C01FA08D7</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>PayloadDescription</key>
+	<string>Applies forced enterprise policy to Mechanician.</string>
+	<key>PayloadDisplayName</key>
+	<string>Mechanician Enterprise Configuration</string>
+	<key>PayloadIdentifier</key>
+	<string>com.example.mechanician.configuration</string>
+	<key>PayloadOrganization</key>
+	<string>Example Organization</string>
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+	<key>PayloadScope</key>
+	<string>System</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>A5116C17-829D-4845-AB7E-280B635CEEA8</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>

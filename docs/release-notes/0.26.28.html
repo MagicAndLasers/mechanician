@@ -1,0 +1,22 @@
+<h2>What's new in 0.26.28</h2>
+
+<p>This Daily build makes Mechanician start conversations on the largest context window your account
+actually offers, and stops a new installation from blocking on a provider you never connected.</p>
+
+<ul>
+  <li>New conversations now use the biggest context window available for the model you are on. Where
+      an account offers the same model at two sizes, the larger one becomes the default instead of
+      the smaller. This applies to managed deployments, including Google Vertex, where the larger
+      variant was previously never chosen automatically.</li>
+  <li>Only accounts that genuinely publish a larger variant are affected. Nothing is assumed on your
+      behalf, and an administrator can still limit a deployment to the smaller window. Conversations
+      you already started keep the model they are on, and choosing a model yourself always wins.</li>
+  <li>Connecting a provider now also makes it the one new conversations use, when the current default
+      cannot be used. Previously a new installation kept starting conversations on an unconnected
+      account, so each new conversation asked you to connect again.</li>
+  <li>Double-clicking a conversation opens that conversation, in the workspace you are already in. It
+      previously opened an empty conversation in Home when the one you clicked was already on screen
+      somewhere.</li>
+  <li>When a connected provider does not resume a waiting conversation, the reason is now recorded in
+      the log instead of failing silently.</li>
+</ul>

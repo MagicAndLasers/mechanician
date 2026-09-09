@@ -1,0 +1,25 @@
+<h2>What's new in 0.26.27</h2>
+
+<p>This Daily build makes the context window something Mechanician measures rather than assumes, and
+shows it to you before a model change costs you one.</p>
+
+<ul>
+  <li>The context window is now taken from what the provider actually served on a completed turn,
+      per account and model, instead of being derived from the model name. This works on Google
+      Vertex, where Mechanician previously had no way to check its own answer, and it is the only
+      way to be right about a model your organization added after the app shipped.</li>
+  <li>Each model in the picker shows its context window, dimmed until this account has been observed
+      using it. Two models from the same family can differ fivefold and be named almost identically,
+      and that difference is now visible before you choose.</li>
+  <li>Switching to a much smaller context window now asks first, when the conversation would not fit
+      in it. Changing models starts a fresh provider session, so the conversation continues from a
+      short summary; that is now stated rather than discovered.</li>
+  <li>Managed deployments that offer a large-context model variant keep it. An earlier rule assumed
+      those variants were unavailable on Vertex and Bedrock; that assumption was wrong, and a
+      declared variant is now honored on any route.</li>
+  <li>Every turn records which model ran it and the size of its context window, so a stalled
+      conversation can be diagnosed from a support bundle without reproducing it.</li>
+  <li>A scheduled task publishing a new version of an artifact in the same instant that you rename,
+      favorite, or move it no longer has its update refused. That update previously went missing
+      without any indication.</li>
+</ul>

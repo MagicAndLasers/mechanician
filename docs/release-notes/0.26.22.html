@@ -1,0 +1,17 @@
+<h2>What's new in 0.26.22</h2>
+
+<p>This update makes the completed SQLite library transition permanent and adds native multiple
+selection to the workspace file browser.</p>
+
+<ul>
+  <li>The retired migration window, shadow-copy coordinator, legacy read rehearsal, and reverse
+      migration generator have been removed. Existing libraries now open directly from
+      <code>library.db</code>; new installations create an empty SQLite library directly.</li>
+  <li>Uncertain or genuinely unmigrated libraries fail closed into Storage Recovery instead of
+      silently reopening retired writers. Backups and the delayed cleanup of rollback evidence
+      remain intact.</li>
+  <li>The file browser now supports Command-click, Shift-click, Select All, multi-item drag, batch
+      context actions, and Command-Delete.</li>
+  <li>Switching model providers now dismisses and retires the model picker before its toolbar
+      updates, avoiding a macOS 27 ViewBridge crash caused by the picker’s remote text service.</li>
+</ul>

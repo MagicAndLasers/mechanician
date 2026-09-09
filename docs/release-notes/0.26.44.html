@@ -1,0 +1,24 @@
+<h2>What's new in 0.26.44</h2>
+
+<p>Mechanician now uses far less disk. On a library of about a hundred conversations this update
+returns roughly two thirds of the space the app was holding, without deleting a single message.</p>
+
+<h3>A much smaller search index</h3>
+<ul>
+  <li><strong>Long tool output is no longer indexed in full.</strong> A single command could put a megabyte of output into the search index, so the index grew with how much your tools printed rather than with how much you had said. It is now bounded per message.</li>
+  <li>Your own messages and Mechanician's answers are still indexed generously. Only bulk output, such as a long file listing or build log, is shortened for search.</li>
+  <li><strong>Search will no longer match text buried deep inside a very large tool output.</strong> The complete text is still in the conversation itself, and searching for the command, the file path, or anything you wrote works exactly as before.</li>
+  <li>The index is rebuilt in the background after this update, so conversation search may return fewer results for a short while on the first launch.</li>
+</ul>
+
+<h3>Conversations take less room</h3>
+<ul>
+  <li><strong>Large tool results are now stored compressed.</strong> Nothing is removed and nothing is summarised; the same text is simply kept in less space, and it is decompressed whenever it is read.</li>
+  <li>Existing conversations are compressed as they are next written. Your messages, answers and everything visible in a transcript are unchanged.</li>
+</ul>
+
+<h3>Space is actually returned</h3>
+<ul>
+  <li>Databases do not normally shrink when their contents do. This update compacts the search cache once, on the first launch, so the space really comes back to your disk rather than being held for later.</li>
+  <li>Your conversations, memory library and workspace settings are untouched by that step, and your memory profile is not re-read.</li>
+</ul>

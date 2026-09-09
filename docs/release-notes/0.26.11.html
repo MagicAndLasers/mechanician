@@ -1,0 +1,25 @@
+<h2>What's new in 0.26.11</h2>
+
+<p>A change your organization publishes now takes effect even if you had edited that setting on your
+own Mac. This affects organizations that use a managed configuration; everything else is
+unchanged.</p>
+
+<h3>Your local edits could outrank your organization, permanently</h3>
+<ul>
+  <li><strong>Editing the model list in Managed Configuration replaced the published list for good.</strong>
+      A model your organization later withdrew kept being offered, and a model they added never
+      appeared, no matter how many times the configuration updated.</li>
+  <li>This was hard to spot because the app was right about everything else. Settings correctly
+      reported the new revision, and the update had genuinely arrived. Only the list itself was
+      still the old one, and nothing said so.</li>
+  <li>Your edits are still yours. They are kept for as long as your organization leaves that setting
+      alone, which is the reason to make one: your deployment may not carry a model the profile
+      names. When your organization changes the same setting, theirs is used again, and the app
+      tells you which of your edits were replaced and by which revision.</li>
+  <li>This applies to the model list, the project, the region, and a source's address. Turning a
+      managed source off stays your choice, because a published update says nothing about it.</li>
+  <li>The model picker now says when the list you are looking at is a local edit rather than the one
+      your organization published.</li>
+  <li>If a Mac is already in this state, open Settings, choose Show Configuration, then Reset All to
+      Profile and Save. Quit and reopen to finish.</li>
+</ul>

@@ -1,0 +1,19 @@
+<h2>What's new in 0.19.1</h2>
+
+<h3>Faster, steadier Claude turns</h3>
+<ul>
+  <li><strong>Managed Vertex connections no longer stall on an unsupported context check.</strong>
+      A healthy provider session is retained between turns instead of waiting and rebuilding.</li>
+  <li><strong>Safe chained turns avoid an unnecessary round trip.</strong> Supported Claude
+      connections can reuse recent provider context evidence when the session is comfortably below
+      its limit. Uncertain, changed, or near-limit contexts still take the authoritative path.</li>
+</ul>
+
+<h3>Agent activity that stays truthful as it moves</h3>
+<ul>
+  <li><strong>Tool colors now mean the same thing everywhere.</strong> A tool keeps the color it has
+      in the agent card's tool mix when it appears in Activity Trace. The key shows the complete
+      palette and explains it to VoiceOver.</li>
+  <li><strong>The live token graph no longer slides backward.</strong> Completed activity stays
+      anchored while a turn grows, and older bars merge predictably only when the time scale changes.</li>
+</ul>

@@ -1,0 +1,27 @@
+<h2>What's new in 0.26.16</h2>
+
+<h3>The library update no longer stops on a file it cannot read</h3>
+<ul>
+  <li><strong>0.26.15 fixed this for images and artifacts, and the update then stopped on a different
+      kind of file instead.</strong> The rule was written separately for each kind, so fixing one left
+      the others.</li>
+  <li>There is now one rule for all of them. Any file Mechanician cannot read is recorded and the
+      update carries on, whether it is an image, an artifact, a workspace, or a scheduled task.</li>
+  <li>Nothing is thrown away. The exact bytes of every unreadable file are kept in the rollback copy
+      beside your library.</li>
+  <li>This does not lose anything you could otherwise see. A file Mechanician cannot read now is a
+      file it could not read before the update either.</li>
+</ul>
+
+<h3>The update window closes when it should</h3>
+<ul>
+  <li>If the update stopped, Mechanician opened your library but left the progress window sitting on
+      top of it, which looked like it was still running and still failing. That window now closes.</li>
+</ul>
+
+<h3>What still stops the update</h3>
+<ul>
+  <li>A conversation that cannot be read, or a scan that cannot be completed. Those decide what you
+      see, so continuing without them could quietly change your library rather than skip one file
+      nobody can open.</li>
+</ul>

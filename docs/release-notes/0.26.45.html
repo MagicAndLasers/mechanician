@@ -1,0 +1,12 @@
+<h2>What's new in 0.26.45</h2>
+
+<p>A fix for 0.26.44. That update reclaimed disk space correctly, but it rebuilt more of the search
+cache than it needed to, which made Mechanician re-read your conversations once to rebuild its memory
+profile. Upgrading from 0.26.44 or earlier now keeps that work.</p>
+
+<h3>Upgrading no longer re-reads your conversations</h3>
+<ul>
+  <li><strong>The record of which conversations memory has already read is now preserved through the update.</strong> In 0.26.44 it was discarded, so a profile refresh re-read everything once.</li>
+  <li>The oversized search index is still discarded and the space still reclaimed. That part worked and is unchanged.</li>
+  <li>Nothing was ever at risk: everything involved is rebuilt from your conversations and memory library, which are untouched.</li>
+</ul>

@@ -1,0 +1,35 @@
+<h2>What's new in 0.12.4</h2>
+
+<h3>Extensions</h3>
+<ul>
+  <li><strong>MCP servers can ask you a question mid-task on Claude, not just Codex.</strong> A
+      server that needs input it could not know in advance — a choice, a confirmation, a value —
+      now shows you a form and waits for your answer. Previously every one of those requests was
+      declined on the Claude side, so any extension that asks a question simply failed there with
+      no explanation.</li>
+</ul>
+
+<h3>Providers</h3>
+<ul>
+  <li><strong>Claude on AWS Bedrock now asks your account which models it has</strong> rather than
+      relying on a list built into the app. Which models a Bedrock account can use varies by
+      account and region, so a fixed list is wrong for almost everyone — it offered names AWS has
+      never heard of, and every turn failed. Your account is now the source of truth, and if it
+      cannot be reached the app falls back to a usable list rather than an empty one.</li>
+  <li><strong>Fixed: the Bedrock model names the app shipped with were wrong.</strong> They have
+      been corrected to the identifiers AWS actually accepts, confirmed by running real
+      requests.</li>
+</ul>
+
+<h3>Window</h3>
+<ul>
+  <li><strong>Work you can't see is now visible in the toolbar.</strong> Background processes the
+      agent started, and conversations parked waiting for something to happen, are counted beside
+      running turns. Waiting is shown separately from running, because a conversation waiting on a
+      trigger is idle, not busy — clicking either takes you to where you can inspect, resume or
+      stop it.</li>
+  <li><strong>Fixed: the context and token readings no longer wrap onto two lines</strong> when the
+      window is narrow. They stay on one line and the least important reading drops out first,
+      instead of the most important one being cut in half.</li>
+  <li><strong>Fixed: a waiting conversation no longer says "Waiting waiting for…".</strong></li>
+</ul>

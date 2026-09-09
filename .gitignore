@@ -1,0 +1,39 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Swift / Xcode
+.build/
+*.dia
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+DerivedData/
+
+# Build output
+dist/
+release/
+
+# Secrets / local config
+.env
+.env.*
+!.env.example
+
+# Local tenant-name denylist for scripts/check.sh, for a maintainer without the private
+# tenant configuration checked out. Never commit it: the names are the thing it protects.
+scripts/tenant-denylist.local.txt
+
+
+# Local agent/editor config (never publish — may hold personal paths)
+.claude/
+.playwright-mcp/
+
+# macOS
+.DS_Store
+
+# App bundle output
+build/
+agentd/bin/
+
+# Python bytecode from repo scripts
+__pycache__/
+*.pyc

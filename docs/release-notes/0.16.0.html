@@ -1,0 +1,56 @@
+<h2>What's new in 0.16.0</h2>
+
+<h3>Install Claude plugins from archive registries</h3>
+<ul>
+  <li><strong>Add HTTPS archive registries as Claude marketplaces.</strong> Organization-managed
+      and user-added catalogs appear alongside native Claude marketplaces, with each plugin's
+      capabilities, provenance, and context cost visible before installation.</li>
+  <li><strong>Manage archive plugins in the Claude Plugins browser.</strong> Installed plugins
+      survive relaunch and can be enabled, disabled, updated, or uninstalled like native
+      marketplace plugins.</li>
+  <li><strong>Downloads are installed defensively.</strong> Mechanician bounds downloads and
+      expanded archives, verifies declared SHA-256 digests, rejects unsafe paths and mismatched
+      manifests, and publishes verified content atomically. Plugins can contain executable hooks
+      and MCP servers, so review their contents and install only from sources you trust.</li>
+</ul>
+
+<h3>Recover oversized Claude conversations</h3>
+<ul>
+  <li><strong>Large conversations recover instead of getting stuck after compaction fails.</strong>
+      When replay is still safe, Mechanician retries once in a fresh Claude session with the newest
+      durable history that fits and explains when older context was reduced.</li>
+  <li><strong>The current prompt is never silently truncated.</strong> If the prompt itself is too
+      large, clear <strong>Edit Prompt</strong> and <strong>Start Fresh</strong> actions help you
+      shorten it or move it without pretending that reconnecting will solve a context limit.</li>
+  <li><strong>Pasted images stay attached during recovery.</strong> App-owned images are copied
+      safely when a rejected draft moves to a fresh conversation, while unavailable attachments
+      are called out explicitly.</li>
+</ul>
+
+<h3>MCP sign-in failures explain the next step</h3>
+<ul>
+  <li><strong>Authorization errors are stage-aware and actionable.</strong> The Extensions window
+      distinguishes retryable network or VPN failures, endpoint configuration problems, denied
+      access, token exchange failures, and servers that need a manually configured token.</li>
+  <li><strong>Cancel really cancels.</strong> Pending browser state clears immediately, and a late
+      result from an older attempt cannot overwrite a newer sign-in.</li>
+  <li><strong>Diagnostics remain privacy-safe.</strong> Raw OAuth responses, URLs, credentials,
+      and tokens stay out of the app-facing failure details.</li>
+</ul>
+
+<h3>More reliable extension catalogs</h3>
+<ul>
+  <li><strong>Catalog responses are bounded and validated as JSON.</strong> Oversized feeds,
+      malformed JSON, and proxy or login pages now produce a useful error instead of being parsed
+      as a catalog.</li>
+  <li><strong>Managed Google-authenticated catalogs offer recovery.</strong> Expired or denied
+      Google identity is identified as an account issue with <strong>Reconnect Google</strong> and
+      <strong>Retry Catalog</strong> actions in the Claude plugin catalog.</li>
+</ul>
+
+<h3>Clearer help</h3>
+<ul>
+  <li><strong>In-app help is organized around tasks.</strong> The internal-sounding Composer topic
+      is now Writing a Message, and the workspace guide reflects the current Workspace menu and
+      instruction entry points.</li>
+</ul>

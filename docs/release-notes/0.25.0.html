@@ -1,0 +1,59 @@
+<h2>What's new in 0.25.0</h2>
+
+<h3>Your library moves to a database</h3>
+<ul>
+  <li><strong>The first launch after this update performs a one-time migration.</strong> Mechanician
+      shows its progress and reopens by itself when it finishes. On a large library this takes a few
+      minutes; on a small one it is quick. It happens once, not on every launch.</li>
+  <li><strong>Make sure you have free disk space first.</strong> The migration writes a full backup
+      and a copy it can roll back to before it changes anything, so it needs roughly twice the size
+      of your attachments. If there is not enough room it says so and does nothing.</li>
+  <li>Your previous library is kept, untouched, for a week afterwards. Once the new one has run for
+      that long and proved itself, Mechanician moves the leftovers to the Trash and the space comes
+      back. Nothing is released while anything about the new library is unproven.</li>
+  <li>A conversation Mechanician cannot read is carried across rather than left behind. Its exact
+      file is preserved alongside the library, with a note recording what it was and what went
+      wrong.</li>
+</ul>
+
+<h3>Mechanician starts faster</h3>
+<ul>
+  <li><strong>Opening the app is about twice as quick.</strong> On a 96-conversation library the
+      sidebar became usable in 1.2 seconds instead of 2.5, and the conversation appeared in 2.9
+      seconds instead of 4.1.</li>
+  <li>Most of that came from one thing: launch was reading every finished subagent and workflow in
+      the whole library, 104 MB of it, to answer one question about which conversations still had
+      work running.</li>
+  <li>Settings, under Advanced, now reports how long the last few launches took and where the time
+      went.</li>
+</ul>
+
+<h3>Connections</h3>
+<ul>
+  <li><strong>A server that cannot use browser sign-in now says so and offers a token.</strong>
+      Signing in to one that does not support automatic registration used to fail with a Try Again
+      button that could never succeed.</li>
+  <li><strong>Tools appear right after you connect a server.</strong> They used to show up only
+      sometimes, and asking again was what made the difference.</li>
+  <li>Reauthorizing while a message is already running now tells you it cannot reach that turn,
+      instead of showing Connected with no tools available.</li>
+</ul>
+
+<h3>Windows and agents</h3>
+<ul>
+  <li><strong>Choosing a workspace acts on the window you opened the gallery from</strong>, rather
+      than whichever window was last in front. It no longer pulls focus across Spaces or leaves two
+      windows showing the same workspace.</li>
+  <li>The Agents panel section for failed work is now called <strong>Didn't finish</strong> and shows
+      the agents that actually failed. One failed child used to bring its whole tree along, which
+      made a single failure look like a widespread one.</li>
+</ul>
+
+<h3>Recovery</h3>
+<ul>
+  <li><strong>Check for Updates is always available</strong>, including when Mechanician cannot open
+      your library. A build that will not start can now take the update that fixes it.</li>
+  <li>Mechanician repairs its own library folder permissions instead of refusing to open.</li>
+  <li>The message shown when a conversation's history could not be measured now says what happened
+      to your conversation rather than describing the machinery.</li>
+</ul>

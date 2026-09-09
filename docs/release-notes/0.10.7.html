@@ -1,0 +1,8 @@
+<h2>What's new in 0.10.7</h2>
+<ul>
+  <li>Updates the Runtime Service without disconnecting Claude and Codex from an older helper indefinitely.</li>
+  <li>Finishes active work before handoff and safely queues new prompts for the replacement service.</li>
+  <li>Closes persistent terminal sessions visibly during an update instead of letting them block every future upgrade.</li>
+  <li>Pins each running service to verified per-build runtime resources while the app updates.</li>
+  <li>Strengthens release checks so the helper answering the app must match the installed build exactly.</li>
+</ul>

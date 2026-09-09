@@ -1,0 +1,12 @@
+<h2>What's new in 0.12.5</h2>
+
+<h3>Conversations</h3>
+<ul>
+  <li><strong>Fixed: a deleted conversation could come back.</strong> If a second copy of a
+      conversation's file existed alongside the original — left by duplicating it in Finder,
+      restoring from a backup, or another tool writing into the conversations folder — deleting the
+      conversation removed it from the sidebar but not from disk, so it reappeared the next time you
+      opened Mechanician. In some cases it returned within seconds, while you were still looking at
+      the window. Deleting now removes the file the conversation actually lives in, and a
+      conversation you have deleted cannot be read back in.</li>
+</ul>

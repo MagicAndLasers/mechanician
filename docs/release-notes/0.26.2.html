@@ -1,0 +1,28 @@
+<h2>What's new in 0.26.2</h2>
+
+<p>A failed summarization no longer costs you the conversation's session. There is no migration in
+this update and nothing changes about your library.</p>
+
+<h3>Conversations should restart far less often</h3>
+<ul>
+  <li><strong>When a conversation gets long, earlier messages are summarized so it can keep going.
+      If that summarizing failed, Mechanician used to abandon the session and start a new one with
+      your most recent messages.</strong> That is what showed as "Mechanician started a new session"
+      and read as the conversation restarting.</li>
+  <li>Mechanician now retries in the same session first. Summarizing that fails once usually works
+      on the retry, and when it does you see nothing at all: the conversation carries on.</li>
+  <li>Only the one failure known to cause a worse error afterwards still ends the turn. Every other
+      kind is now handled the way Claude Code handles it, by carrying on.</li>
+</ul>
+
+<p>If the retry also fails, the older behaviour still applies and Mechanician rebuilds the session,
+so nothing is lost that was previously kept.</p>
+
+<h3>For anyone helping to diagnose this</h3>
+<p>Summarizing is now logged in detail, including the reason for each failure and how it was
+resolved. If you have been asked for that output, quit Mechanician and run:</p>
+
+<pre>grep '\[context\]\[compaction\]' ~/Library/Application\ Support/Mechanician/logs/agentd-*.log</pre>
+
+<p>The files are per provider, so <code>agentd-claude_vertex.log</code> is the one for Claude on
+Google Vertex AI. They contain no message text.</p>

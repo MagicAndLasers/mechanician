@@ -1,0 +1,27 @@
+<h2>What's new in 0.16.3</h2>
+
+<h3>Conversation titles make tabs useful</h3>
+<ul>
+  <li><strong>Native tabs now show conversation names.</strong> The workspace remains the window
+      title, while each tab follows its selected conversation and updates after a rename or an
+      automatically generated title.</li>
+  <li><strong>Generated titles no longer compete with the first answer.</strong> Apple Intelligence
+      title generation begins only after the response finishes, and malformed labels, Markdown,
+      code, multiline output, and refusal text are filtered before a title is saved.</li>
+  <li><strong>Existing titles can be repaired safely.</strong> Regenerate Title replaces an old
+      malformed name on demand, while delayed generation never overwrites a title you chose.</li>
+</ul>
+
+<h3>Home is one shortcut away</h3>
+<ul>
+  <li><strong>Press ⇧⌘H to go Home from any workspace.</strong> Mechanician focuses an existing
+      Home window when possible and otherwise reuses the current window, so a tangent is quick to
+      capture without creating duplicate windows.</li>
+</ul>
+
+<h3>Builds coordinate per project</h3>
+<ul>
+  <li><strong>Unrelated project builds can run concurrently.</strong> Builds for the same project
+      queue in order instead of reporting a false failure, while separate build roots no longer
+      block one another.</li>
+</ul>

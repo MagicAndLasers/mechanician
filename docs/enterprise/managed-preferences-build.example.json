@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "bundleIdentifier": "ai.mechanician.app",
+  "payloadIdentifier": "com.example.mechanician.configuration",
+  "payloadUUID": "A5116C17-829D-4845-AB7E-280B635CEEA8",
+  "managedPreferencesIdentifier": "com.example.mechanician.managed-preferences",
+  "managedPreferencesUUID": "2B94799C-D032-4F9F-8ECF-DA5C01FA08D7",
+  "displayName": "Mechanician Enterprise Configuration",
+  "organization": "Example Organization",
+  "removalDisallowed": false,
+  "managedConfiguration": {
+    "schemaVersion": 1,
+    "policyIdentifier": "com.example.mechanician.baseline",
+    "revision": 1,
+    "policy": {
+      "allowedProviderAccesses": [
+        "claude_subscription",
+        "anthropic_api",
+        "codex_subscription",
+        "openai_api"
+      ],
+      "maximumInteractivePermissionMode": "acceptEdits",
+      "allowUnattendedTasks": false,
+      "allowLocalProfile": false,
+      "allowLocalConfigurationOverrides": false,
+      "allowUserConfiguredExtensions": true,
+      "allowPublicExtensionDiscovery": false,
+      "updateAuthority": "sparkle"
+    }
+  }
+}

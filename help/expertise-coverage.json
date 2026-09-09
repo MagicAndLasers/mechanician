@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "corpusID": "mechanician.public",
+  "corpusSchemaVersion": 4,
+  "statusDefinitions": {
+    "covered": "The signed corpus answers the common questions inside the subsystem scope; this does not imply exhaustive internal or troubleshooting knowledge.",
+    "partial": "The signed corpus supports part of the subsystem scope and the remaining gaps are named explicitly.",
+    "gap": "The subsystem is important to product expertise but has no signed claim that supports an answer yet."
+  },
+  "summary": {
+    "coveredSubsystems": 4,
+    "partialSubsystems": 13,
+    "gapSubsystems": 1
+  },
+  "subsystems": [
+    {
+      "id": "onboarding-and-mental-model",
+      "title": "Onboarding and mental model",
+      "scope": "The app's basic conversation, workspace, Home, first-turn, and output-location concepts.",
+      "status": "covered",
+      "claimKeys": [
+        "getting-started.overview",
+        "getting-started.two-nouns",
+        "getting-started.your-first-turn",
+        "getting-started.where-things-appear",
+        "conversations.overview"
+      ],
+      "knownGaps": []
+    },
+    {
+      "id": "conversations-and-workspaces",
+      "title": "Conversations and workspaces",
+      "scope": "Creating, restoring, organizing, filtering, searching, printing, moving, deleting, model inheritance, generated images, launcher behavior, and undoing conversations and workspaces.",
+      "status": "covered",
+      "claimKeys": [
+        "conversations.conversations",
+        "conversations.workspaces",
+        "conversations.what-is-remembered",
+        "conversations.undo",
+        "conversations.finding-text",
+        "conversations.printing",
+        "conversations.sidebar-filters",
+        "conversations.model-inheritance",
+        "conversations.workspace-launcher",
+        "conversations.generated-images"
+      ],
+      "knownGaps": []
+    },
+    {
+      "id": "composer-and-turn-control",
+      "title": "Composer and turn control",
+      "scope": "Writing, attaching inputs, sending, steering, queuing, interrupting, and redirecting an interactive turn.",
+      "status": "covered",
+      "claimKeys": [
+        "composer.overview",
+        "composer.getting-things-into-it",
+        "composer.conversation-controls",
+        "composer.steering-a-running-turn"
+      ],
+      "knownGaps": []
+    },
+    {
+      "id": "inspector-artifacts-agents-and-skills",
+      "title": "Inspector, artifacts, agents, and skills",
+      "scope": "The workspace and conversation inspector tabs, including files, changes, artifacts, delegated agents, and skills.",
+      "status": "partial",
+      "claimKeys": [
+        "inspector.overview",
+        "inspector.files",
+        "inspector.changes",
+        "inspector.artifacts",
+        "inspector.agents",
+        "inspector.skills",
+        "inspector.global-records",
+        "inspector.mermaid-rendering",
+        "inspector.background-work-outlives-turn"
+      ],
+      "knownGaps": [
+        "There is no signed end-to-end troubleshooting guidance for artifact rendering, agent activity, or skill discovery failures."
+      ]
+    },
+    {
+      "id": "extensions-and-plugins",
+      "title": "Extensions and plugins",
+      "scope": "MCP servers, Claude plugins, Codex plugins, marketplaces, installation surfaces, and extension trust.",
+      "status": "partial",
+      "claimKeys": [
+        "extensions.overview",
+        "extensions.mcp-servers",
+        "extensions.claude-plugins-codex-plugins"
+      ],
+      "knownGaps": [
+        "The corpus does not cover extension authentication failures, marketplace refresh failures, or provider-specific compatibility diagnosis."
+      ]
+    },
+    {
+      "id": "approvals-and-interactive-trust",
+      "title": "Approvals and interactive trust",
+      "scope": "Permission, write-containment, plan, question, extension, provider-access, and wait-mode interactions.",
+      "status": "partial",
+      "claimKeys": [
+        "approvals.overview",
+        "approvals.write-containment"
+      ],
+      "knownGaps": [
+        "There is no complete signed matrix for permission modes, remembered approvals, macOS TCC state, and provider-specific approval behavior."
+      ]
+    },
+    {
+      "id": "scheduled-and-ambient-work",
+      "title": "Scheduled and ambient work",
+      "scope": "Task triggers, unattended permission modes, background execution, results, and menu-bar controls.",
+      "status": "partial",
+      "claimKeys": [
+        "scheduled-tasks.overview",
+        "scheduled-tasks.provider-routes",
+        "scheduled-tasks.run-when-closed"
+      ],
+      "knownGaps": [
+        "The corpus lacks task-by-task authoring walkthroughs and structured diagnosis for triggers, background helpers, delivery, and missed runs."
+      ]
+    },
+    {
+      "id": "mac-automation-and-app-integration",
+      "title": "Mac automation and app integration",
+      "scope": "AppleScript, JXA, Shortcuts, App Intents discovery, saved capabilities, computer use, Services, and mechanician links.",
+      "status": "partial",
+      "claimKeys": [
+        "mac.overview",
+        "mac.getting-things-in-from-other-apps",
+        "mac.what-it-can-do"
+      ],
+      "knownGaps": [
+        "The reviewed automation set is narrow, and no native guide yet teaches an automated Mac-app workflow or detailed TCC troubleshooting."
+      ]
+    },
+    {
+      "id": "accounts-providers-and-enterprise-configuration",
+      "title": "Accounts, providers, and enterprise configuration",
+      "scope": "Claude and Codex authentication, model lanes, Keychain ownership, and signed Vertex or Bedrock enterprise provider configuration.",
+      "status": "partial",
+      "claimKeys": [
+        "accounts.overview",
+        "accounts.managed-providers"
+      ],
+      "knownGaps": [
+        "Provider recovery, model availability, Vertex and Bedrock operation, enterprise policy applicability, and managed-profile troubleshooting are not covered in depth."
+      ]
+    },
+    {
+      "id": "keyboard-and-text-scaling",
+      "title": "Keyboard and text scaling",
+      "scope": "The documented conversation, window, utility, work-state, search, printing, Quick Look, and text-size shortcuts.",
+      "status": "covered",
+      "claimKeys": [
+        "keyboard.overview",
+        "keyboard.conversations-windows",
+        "keyboard.while-working",
+        "keyboard.windows",
+        "keyboard.text-size"
+      ],
+      "knownGaps": []
+    },
+    {
+      "id": "mechanician-help-system",
+      "title": "Mechanician Help system",
+      "scope": "Signed product authority, Ask Mechanician, the Help inspector, search, manual and agent-directed native guides, demonstrations, and the closed expert boundary.",
+      "status": "partial",
+      "claimKeys": [
+        "mechanician-help.overview",
+        "mechanician-help.ask-mechanician",
+        "mechanician-help.workspace-inspector",
+        "mechanician-help.search",
+        "mechanician-help.guided-tours",
+        "mechanician-help.conversation-guides",
+        "mechanician-help.operating-the-app",
+        "mechanician-help.show-me",
+        "mechanician-help.limits",
+        "mechanician-help.tool-surface"
+      ],
+      "knownGaps": [
+        "There is no typed known-issue catalogue, Help-consumable cross-subsystem diagnostic snapshot, or independently updated and rollback-safe online corpus."
+      ]
+    },
+    {
+      "id": "runtime-routing-and-security-architecture",
+      "title": "Runtime, routing, and security architecture",
+      "scope": "The app/daemon boundary, exact provider-lane ownership, tool profiles, persistence ownership, and retrieved-data trust.",
+      "status": "partial",
+      "claimKeys": [
+        "architecture.overview",
+        "architecture.windows-and-provider-lanes",
+        "architecture.trust-boundaries"
+      ],
+      "knownGaps": [
+        "The signed corpus is an architectural map, not a complete protocol, session-recovery, subagent, or event-attribution reference."
+      ]
+    },
+    {
+      "id": "storage-persistence-and-recovery",
+      "title": "Storage, persistence, and recovery",
+      "scope": "Authoritative and derived databases, storage-root admission, uncertainty, and safe recovery boundaries.",
+      "status": "partial",
+      "claimKeys": [
+        "architecture.durable-and-derived-data",
+        "diagnosing-bugs.storage-uncertainty"
+      ],
+      "knownGaps": [
+        "Schema evolution, backup and restore, import and export, corruption triage, and legacy recovery are not complete user-facing procedures."
+      ]
+    },
+    {
+      "id": "source-extension-points",
+      "title": "Source extension points",
+      "scope": "Finding subsystem owners and adding tools, provider lanes, and native surfaces.",
+      "status": "partial",
+      "claimKeys": [
+        "architecture.where-to-start-in-the-source",
+        "extending-mechanician.overview",
+        "extending-mechanician.adding-a-built-in-tool",
+        "extending-mechanician.adding-a-provider-lane",
+        "extending-mechanician.adding-a-native-surface"
+      ],
+      "knownGaps": [
+        "The corpus does not provide complete subsystem checklists, API contracts, schema recipes, or runnable extension examples."
+      ]
+    },
+    {
+      "id": "diagnostics-and-known-issues",
+      "title": "Diagnostics and known issues",
+      "scope": "Reproduction context, owning-boundary identification, bounded evidence, falsification, and fix verification.",
+      "status": "partial",
+      "claimKeys": [
+        "diagnosing-bugs.overview",
+        "diagnosing-bugs.find-the-owning-boundary",
+        "diagnosing-bugs.gather-bounded-evidence",
+        "diagnosing-bugs.try-to-falsify-the-first-explanation"
+      ],
+      "knownGaps": [
+        "No typed, version-applicable known-issue records or opt-in redacted live diagnostic snapshot ship in the authority."
+      ]
+    },
+    {
+      "id": "history-and-origin",
+      "title": "History and origin",
+      "scope": "Selected historical architecture and storage lessons that must not be mistaken for current specifications.",
+      "status": "partial",
+      "claimKeys": [
+        "history.overview",
+        "history.the-runtime-service",
+        "history.the-storage-migration-lesson",
+        "history.durable-product-rules"
+      ],
+      "knownGaps": [
+        "The corpus preserves selected lessons but not a complete origin, product chronology, release history, or decision record index."
+      ]
+    },
+    {
+      "id": "release-updates-and-packaging",
+      "title": "Release, updates, and packaging",
+      "scope": "Development packaging plus Daily and Stable channels, versioning, signing, notarization, Sparkle feeds and deltas, publication, rollback, and provenance.",
+      "status": "partial",
+      "claimKeys": [
+        "extending-mechanician.verification"
+      ],
+      "knownGaps": [
+        "The corpus names development verification and dogfood packaging, but not release-channel operation, update diagnosis, signing, notarization, publication, provenance, or rollback."
+      ]
+    },
+    {
+      "id": "accessibility-and-localization",
+      "title": "Accessibility and localization",
+      "scope": "VoiceOver, keyboard focus, reduced motion, contrast, text scaling beyond shortcuts, localization, and assistive input behavior.",
+      "status": "gap",
+      "claimKeys": [],
+      "knownGaps": [
+        "No signed Help claim currently supports a complete accessibility or localization answer."
+      ]
+    }
+  ]
+}

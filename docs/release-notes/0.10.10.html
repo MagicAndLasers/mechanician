@@ -1,0 +1,8 @@
+<h2>Provider login and event recovery</h2>
+<ul>
+  <li>Prevents Claude startup discovery, model loading, and account controls from racing the shared subscription credential.</li>
+  <li>Updates the bundled Claude runtime with Anthropic's latest parallel-session authentication fixes.</li>
+  <li>Keeps in-app Claude reconnect active across its expected provider restarts.</li>
+  <li>Projects Runtime Service events in order and prevents stale replay cursors from duplicating or disconnecting provider lanes.</li>
+  <li>Preserves verified API-key configuration during a transient Runtime Service reconnect.</li>
+</ul>

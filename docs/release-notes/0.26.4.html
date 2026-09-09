@@ -1,0 +1,30 @@
+<h2>What's new in 0.26.4</h2>
+
+<p>Questions about the Claude API could end with a failure and no answer at all. They now get an
+answer. There is no migration in this update and nothing changes about your library.</p>
+
+<h3>Asking about Claude models could fail instead of answering</h3>
+<ul>
+  <li><strong>The built-in Claude API reference is larger than some models can hold, so loading it
+      filled the whole context window and ended the turn with no answer.</strong> The reference
+      runs to roughly two hundred thousand words of source text, and it arrives in one piece. On a
+      model with a two hundred thousand token window there is no room left for the conversation, or
+      for the answer.</li>
+  <li>Summarizing could not rescue it. The reference lands in the newest part of the conversation,
+      which summarizing always keeps, so there was nothing older to compress and the turn stopped.</li>
+  <li>On the affected models the reference is no longer loaded on its own. You can still type
+      <strong>/claude-api</strong> at any time to load the whole thing yourself.</li>
+  <li>Mechanician now tells the model the reference is not loaded, and to check the current
+      documentation rather than answer about model names, prices, or limits from memory. Without
+      that, answers were confidently out of date.</li>
+</ul>
+
+<h3>Which models this affects</h3>
+<ul>
+  <li>Only models that cannot hold the reference. Opus on Google Vertex AI is the main one, because
+      the one million token variant is not requested there, so it runs with the smaller window even
+      though the same model has a larger one elsewhere.</li>
+  <li>On a model with a one million token window, including Opus on a Claude subscription and every
+      Claude 5 model, nothing changes at all. The reference loads as it always has and the model
+      uses it directly.</li>
+</ul>

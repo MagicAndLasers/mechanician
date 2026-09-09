@@ -1,0 +1,24 @@
+<h2>What's new in 0.26.5</h2>
+
+<p>Checking a managed configuration for updates no longer reports a failure when nothing needed
+updating. This affects organizations that use a managed configuration; everything else is
+unchanged.</p>
+
+<h3>Check for Updates said it failed when it had worked</h3>
+<ul>
+  <li><strong>Pressing Check for Updates in the Providers window could say "Could not check for a
+      configuration update", in the colour used for problems, after a check that had gone
+      perfectly.</strong> The configuration had been fetched and verified, and was correctly found
+      to be no newer than the one already installed. That is the ordinary answer, not a fault.</li>
+  <li>The message also named an internal version counter, which told you nothing you could act
+      on.</li>
+  <li>Each case now says what happened and who can resolve it. If your organization has published
+      changes without marking them as a new version, it says so and tells you to ask them to publish
+      a new version. If this Mac is ahead of what your organization is serving, it says that
+      instead.</li>
+  <li>A configuration you imported by hand no longer claims to be up to date after a check, since it
+      has no feed to check against.</li>
+</ul>
+
+<p>What gets installed has not changed. A configuration that is not newer was left alone before and
+is left alone now.</p>

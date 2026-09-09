@@ -1,0 +1,20 @@
+<h2>What's new in 0.26.15</h2>
+
+<h3>The library update finishes instead of stopping</h3>
+<ul>
+  <li><strong>A single file Mechanician could not read stopped the one-time library update, and there
+      was no way past it.</strong> The screen offered only Quit, and reopening Mechanician stopped in
+      the same place every time.</li>
+  <li>Those files were already unreadable before the update started, so stopping never recovered
+      them. The update now records each one and carries on. Their exact bytes are kept in the
+      rollback copy alongside your library, so nothing is thrown away.</li>
+  <li>If the update ever does stop, Mechanician now opens anyway and works normally, instead of
+      leaving you on a screen with nothing but a Quit button.</li>
+</ul>
+
+<h3>What still stops the update</h3>
+<ul>
+  <li>A conversation, workspace, or scan that cannot be completed still stops it, and that is
+      deliberate. Those decide what you see, so continuing without them could quietly reorganize
+      your library rather than skip one file nobody can open.</li>
+</ul>

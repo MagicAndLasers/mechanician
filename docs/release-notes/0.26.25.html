@@ -1,0 +1,11 @@
+<h2>What's new in 0.26.25</h2>
+
+<p>This Daily build fixes a crash that could occur when changing model providers on macOS 27.</p>
+
+<ul>
+  <li>The model picker now retires its exact native text editor and waits until the popover window
+      is offscreen before publishing a new provider selection. This prevents SwiftUI from trying
+      to re-present the old popover during AppKit layout.</li>
+  <li>A delayed selection is discarded if a different conversation or workspace is active when
+      dismissal completes, and neighboring controls remain inactive during the transition.</li>
+</ul>

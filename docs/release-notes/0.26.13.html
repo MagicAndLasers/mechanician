@@ -1,0 +1,30 @@
+<h2>What's new in 0.26.13</h2>
+
+<h3>An agent that stops reporting no longer runs forever</h3>
+<ul>
+  <li><strong>A workflow or subagent whose work ended without saying so was counted as running
+      indefinitely.</strong> One was still shown as active eighteen hours later, with its timer
+      still climbing, while the conversation that started it had long since finished.</li>
+  <li>It also distorted the Activity trace. The timeline stretched to cover those eighteen hours, so
+      the real work of the turn was squeezed into a sliver too small to read.</li>
+  <li>Mechanician now notices when delegated work has stopped reporting and marks it stopped. Work
+      that is genuinely still running is untouched: anything reporting progress keeps going, and a
+      single active agent keeps the others in its conversation running too.</li>
+  <li>A conversation already showing a stuck agent clears itself once you are on this version.</li>
+</ul>
+
+<h3>Codex can run automations, not just list them</h3>
+<ul>
+  <li>Codex could already see your Apple Shortcuts and the actions your apps publish, but could not
+      run any of them, so it would name a shortcut and stop.</li>
+  <li>It can now run a shortcut, run AppleScript to drive a Mac app, and build a Swift project. Each
+      one asks for your approval first, exactly as it does with Claude, and all three stay
+      unavailable in Plan mode.</li>
+</ul>
+
+<h3>Reasoning levels and managed configurations</h3>
+<ul>
+  <li>The Opus 5 advisor and Fast mode are now correctly withheld on AWS Bedrock and Azure Foundry,
+      matching Vertex AI. They were already hidden in the app; the underlying check disagreed and
+      would have allowed them through.</li>
+</ul>

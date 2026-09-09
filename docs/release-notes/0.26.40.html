@@ -1,0 +1,27 @@
+<h2>What's new in 0.26.40</h2>
+
+<p>Memory starts learning from what actually happened during your work, not only from what you say
+about it. The first thing it does with that is speak up when you have declined the same tool in the
+same workspace several times.</p>
+
+<h3>When you keep declining the same thing, Mechanician says so</h3>
+<ul>
+  <li><strong>Decline the same tool three times in one workspace and Mechanician tells the model, in the middle of the turn, that this keeps being refused here.</strong> It arrives while the work is still running, so you do not have to answer the same question a fourth time.</li>
+  <li>The note appears in the conversation as its own card, headed "From your memory", so it is never mistaken for something you typed.</li>
+  <li>It counts one tool in one workspace. Declining something else, or the same thing somewhere else, is a separate history and does not add to it.</li>
+  <li>A tool that merely failed is not counted. Only you declining it is.</li>
+  <li>Nothing is blocked. You already declined, and Mechanician already obeyed. This only carries the history the model cannot see, because that history lives in your other turns and conversations.</li>
+</ul>
+
+<h3>Memory notices outcomes, quietly</h3>
+<ul>
+  <li>Mechanician now records the shape of what happened on a turn: a declined permission, guidance you sent mid-turn, a tool that errored, a build that passed or failed, a turn that failed or that you stopped.</li>
+  <li><strong>It records no content.</strong> No prompt text, no command, no file path, no diagnostic message. Only which kind of thing happened, to which named tool, and on which provider. There is nothing in the record that could be sent anywhere.</li>
+  <li>This lives in the disposable search cache alongside your other derived data, not in your memory library. Deleting it costs nothing and loses no statement.</li>
+</ul>
+
+<h3>Your own words stay your own</h3>
+<ul>
+  <li>Anything Mechanician says into a turn is marked as written by Mechanician, and is kept out of the material Memory quotes from when it learns about you.</li>
+  <li>A remembered note can never become a statement in your wiki attributed to you, and it is never counted as you correcting the work.</li>
+</ul>

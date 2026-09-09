@@ -1,0 +1,52 @@
+<h2>What's new in 0.26.8</h2>
+
+<p>Always allow now remembers the command you approved rather than the whole tool, scheduled tasks
+can no longer read your credentials, and two small things that used to do nothing when you clicked
+them now work.</p>
+
+<h3>Always allow was broader than it looked</h3>
+<ul>
+  <li><strong>Approving a shell command with "Always allow" approved every shell command in that
+      folder, from then on, whatever it was.</strong> The approval was remembered against the tool,
+      not against the command you were shown, so a single yes to <code>npm test</code> also covered
+      anything that came later.</li>
+  <li>An approval is now remembered as the command it was: allowing <code>npm test</code> covers
+      running the tests again, and nothing else. Something different asks again.</li>
+  <li>Expect a few more approval requests than before in a folder where you have already said
+      "always". That is the point: each one is a command you have actually seen. Approvals you made
+      before this update are left exactly as they were, and are still listed and removable under
+      Settings, Permissions.</li>
+  <li>The wording on a saved approval is now accurate too. A capability marked destructive is never
+      remembered, because it re-confirms every time, but the card still said "Always allowed". It
+      now says what was really saved.</li>
+</ul>
+
+<h3>Scheduled tasks and your credentials</h3>
+<ul>
+  <li><strong>A scheduled task set to "Trust all" could read credential files, such as a stored API
+      key or your AWS credentials, into the conversation.</strong> The rule that prevents this in
+      your own conversations was not being applied to tasks that run in the background.</li>
+  <li>It now applies everywhere. A background task is refused those files no matter how it is
+      configured, exactly as a conversation is.</li>
+  <li>A background task also no longer receives the tool that asks you a question. There is nobody
+      at the keyboard when it runs, so a question could only ever leave the task waiting until it
+      timed out.</li>
+</ul>
+
+<h3>Retry after a rate limit</h3>
+<ul>
+  <li><strong>When a provider rate limit stopped a turn, there was no Retry button</strong>, so you
+      had to re-send by hand even after the limit had passed.</li>
+  <li>When the provider tells us when the limit resets, Retry now appears once that moment has
+      arrived. When the provider says nothing about a reset, the button stays away rather than
+      offering something that would fail again immediately.</li>
+</ul>
+
+<h3>Return did nothing while a provider was starting up</h3>
+<ul>
+  <li><strong>Pressing Return in the first moments after opening a conversation could do nothing at
+      all</strong>, silently discarding what you had typed.</li>
+  <li>The message is now queued and sent as soon as the provider is ready, and the conversation says
+      so. If the provider still needs to be set up, the composer waits as before, because in that
+      case there is a Connect banner to act on instead.</li>
+</ul>

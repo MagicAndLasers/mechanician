@@ -1,0 +1,1861 @@
+{
+  "schemaVersion": 4,
+  "corpusID": "mechanician.public",
+  "sections": [
+    {
+      "id": "using",
+      "title": "Using Mechanician",
+      "ordinal": 0
+    },
+    {
+      "id": "building",
+      "title": "Understanding & Extending",
+      "ordinal": 1
+    },
+    {
+      "id": "history",
+      "title": "History",
+      "ordinal": 2
+    }
+  ],
+  "articles": [
+    {
+      "id": "getting-started",
+      "title": "Getting Started",
+      "icon": "sparkles",
+      "blurb": "The shape of the app in five minutes",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "aliases": [
+        "first conversation",
+        "two nouns",
+        "home"
+      ],
+      "markdown": "# Getting Started\n\nMechanician is a native Mac app for working with Claude and Codex. It is not a wrapper around a website. It is an AppKit/SwiftUI application that happens to have an agent at its centre.\n\n## Two nouns\n\nThere are only two things to understand.\n\nA **conversation** is the spine: a thread with a model, its transcript, its artifacts and its own settings. A **workspace** is a container for conversations, usually a folder on disk. **Home** is the default workspace, for everything that does not belong to a project.\n\nThat is the whole structure. There are no modes, no projects-versus-chats distinction, and nothing else to learn before you can use the app.\n\n## Your first turn\n\nType in the message box and press **Return**. ⇧Return makes a newline instead.\n\nWhile the agent is working the message box becomes a steering console: you can guide the running turn, queue a follow-up, or stop and redirect. You never have to wait in silence for something going wrong.\n\n## Where things appear\n\nCode and files change on disk, and you see them in **Changes**. Things the agent *makes* for you to look at, such as a chart, a diagram, or a document, appear as **artifacts** in the preview pane. The terminal at the bottom is a real terminal, and it is yours.",
+      "evidence": [
+        {
+          "id": "guide-mental-model",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "# Part I — The mental model",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "getting-started.overview",
+          "heading": "Getting Started",
+          "body": "Mechanician is a native Mac app for working with Claude and Codex. It is not a wrapper around a website. It is an AppKit/SwiftUI application that happens to have an agent at its centre.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-mental-model"
+          ]
+        },
+        {
+          "key": "getting-started.two-nouns",
+          "heading": "Two nouns",
+          "body": "There are only two things to understand.\n\nA **conversation** is the spine: a thread with a model, its transcript, its artifacts and its own settings. A **workspace** is a container for conversations, usually a folder on disk. **Home** is the default workspace, for everything that does not belong to a project.\n\nThat is the whole structure. There are no modes, no projects-versus-chats distinction, and nothing else to learn before you can use the app.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-mental-model"
+          ]
+        },
+        {
+          "key": "getting-started.your-first-turn",
+          "heading": "Your first turn",
+          "body": "Type in the message box and press **Return**. ⇧Return makes a newline instead.\n\nWhile the agent is working the message box becomes a steering console: you can guide the running turn, queue a follow-up, or stop and redirect. You never have to wait in silence for something going wrong.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-mental-model"
+          ]
+        },
+        {
+          "key": "getting-started.where-things-appear",
+          "heading": "Where things appear",
+          "body": "Code and files change on disk, and you see them in **Changes**. Things the agent *makes* for you to look at, such as a chart, a diagram, or a document, appear as **artifacts** in the preview pane. The terminal at the bottom is a real terminal, and it is yours.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "guide-mental-model"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conversations",
+      "title": "Conversations & Workspaces",
+      "icon": "bubble.left.and.bubble.right",
+      "blurb": "Organising work without inventing a filing system",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 1,
+      "aliases": [
+        "projects",
+        "folders",
+        "tabs",
+        "printing",
+        "undo",
+        "unread",
+        "working",
+        "model inheritance",
+        "workspace launcher",
+        "generated images"
+      ],
+      "markdown": "# Conversations & Workspaces\n\nConversations are durable threads with their own transcripts and settings. Workspaces organize conversations around Home or a folder on disk.\n\n## Conversations\n\n**⌘N** starts a fresh conversation in the current workspace. **⌘T** opens one in a new native tab of the same window.\n\nEach conversation owns its model, effort and permission settings, and its draft. Switch away and back and your half-typed message is still there, including across a relaunch.\n\n### Models for new conversations\n\n**⌘N** and **⌘T** in the same workspace inherit the exact provider and model from the conversation currently displayed. A saved workspace or app default is used only when there is no eligible same-workspace source, and a model is never inherited across workspace boundaries.\n\n### Sidebar filters\n\nThe sidebar groups conversations by recency and lets you pin the ones you keep returning to. Its persistent filter offers **All Conversations**, **Unread**, and **Working**; Working includes an in-flight root turn or nonterminal delegated work. **Select All** selects only rows exposed by the current search and filter. Renaming is inline: click the title.\n\n## Workspaces\n\nA workspace is normally a folder. Opening one (**⌘O**) gives it its own window, so two projects are two windows and never two modes inside one.\n\n**⇧⌘N** opens the workspace chooser. An already-open workspace is focused rather than opened twice. The app will not quietly give you a second window onto the same folder.\n\nA workspace with no folder is fine. **Home** is exactly that: a place for conversations that are not about a codebase. In a folder-less workspace the Files and Changes panels are hidden, because there is nothing for them to describe.\n\nUse the **Workspace** menu, or the ••• button beside the workspace name, to edit standing instructions, add or change its folder, reveal that folder in Finder, or edit workspace details. **⇧⌘I** opens Workspace Instructions directly.\n\n### Workspace launcher\n\nIn the Workspaces launcher, **Home** and **Help** are compact full-width destination rows above the favorites-first workspace grid. They share the same scroll view, so both rows scroll out of the way with the workspace cards in a short window.\n\n## What is remembered\n\nThe app reopens the session you left, not just one window. Every workspace window comes back, tab groups come back whole and in order, and the window you were last in has focus, on the tab you left showing. Losing your place is treated as a bug, not a compromise.\n\n## Generated images\n\nImages generated by Codex appear directly in the transcript as primary content and remain visible after relaunch; they are not hidden inside a collapsed diagnostic row.\n\n## Undo\n\n**⌘Z puts back anything Mechanician removed or moved.** It never touches what an agent did.\n\nThat covers moving a conversation or an artifact to another workspace, including a whole multi-selection as one step, and deleting a conversation, all conversations, or an artifact. It does not cover renaming, favouriting, or reordering, and it cannot retract a message you sent or a file an agent wrote: those already left the machine.\n\nDeleting still asks first. The confirmation stops the accident; undo covers confirming on autopilot. A conversation comes back with its transcript, its pasted images, its attached files, and its queued prompts still paused, so nothing is sent for you when you open it.\n\nWhile you are typing, ⌘Z undoes your typing, and only reaches the library once the composer has nothing left to undo.\n\n## Finding text\n\n**⌘F** searches the conversation you are reading, and the bar counts your place as \"3 of 17\". **⌘G** and **⇧⌘G** step, wrapping at the ends, and **⌘E** searches for whatever you have selected. A match inside a collapsed tool group expands it. Searching the conversation list itself moved to **⌥⌘F**.\n\n## Printing\n\n**⌘P** prints the conversation you are reading. The title goes at the top, and the standard Mac header and footer carry the job name, the date, and \"Page 2 of 12\", so a printed transcript is dated and paginated without setting anything up.\n\nThe page is always light with black ink, whatever appearance the app is in — rendering for paper is not rendering for a screen.\n\nWhat reaches the page is what was said. Tool calls print as one compact line each rather than dumping their output, images are not included yet, and anything the provider withdrew never prints at all.",
+      "evidence": [
+        {
+          "id": "guide-workspace-window",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "## 2. The workspace window",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        },
+        {
+          "id": "guide-transcript",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "## 3. The transcript",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "conversations.overview",
+          "heading": "Conversations & Workspaces",
+          "body": "Conversations are durable threads with their own transcripts and settings. Workspaces organize conversations around Home or a folder on disk.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.conversations",
+          "heading": "Conversations",
+          "body": "**⌘N** starts a fresh conversation in the current workspace. **⌘T** opens one in a new native tab of the same window.\n\nEach conversation owns its model, effort and permission settings, and its draft. Switch away and back and your half-typed message is still there, including across a relaunch.\n\nThe sidebar groups conversations by recency and lets you pin the ones you keep returning to. Renaming is inline: click the title.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.workspaces",
+          "heading": "Workspaces",
+          "body": "A workspace is normally a folder. Opening one (**⌘O**) gives it its own window, so two projects are two windows and never two modes inside one.\n\n**⇧⌘N** opens the workspace chooser. An already-open workspace is focused rather than opened twice. The app will not quietly give you a second window onto the same folder.\n\nA workspace with no folder is fine. **Home** is exactly that: a place for conversations that are not about a codebase. In a folder-less workspace the Files and Changes panels are hidden, because there is nothing for them to describe.\n\nUse the **Workspace** menu, or the ••• button beside the workspace name, to edit standing instructions, add or change its folder, reveal that folder in Finder, or edit workspace details. **⇧⌘I** opens Workspace Instructions directly.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.what-is-remembered",
+          "heading": "What is remembered",
+          "body": "The app reopens the session you left, not just one window. Every workspace window comes back, tab groups come back whole and in order, and the window you were last in has focus, on the tab you left showing. Losing your place is treated as a bug, not a compromise.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.undo",
+          "heading": "Undo",
+          "body": "**⌘Z puts back anything Mechanician removed or moved.** It never touches what an agent did.\n\nThat covers moving a conversation or an artifact to another workspace, including a whole multi-selection as one step, and deleting a conversation, all conversations, or an artifact. It does not cover renaming, favouriting, or reordering, and it cannot retract a message you sent or a file an agent wrote: those already left the machine.\n\nDeleting still asks first. The confirmation stops the accident; undo covers confirming on autopilot. A conversation comes back with its transcript, its pasted images, its attached files, and its queued prompts still paused, so nothing is sent for you when you open it.\n\nWhile you are typing, ⌘Z undoes your typing, and only reaches the library once the composer has nothing left to undo.",
+          "lifecycle": "current",
+          "ordinal": 4,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.finding-text",
+          "heading": "Finding text",
+          "body": "**⌘F** searches the conversation you are reading, and the bar counts your place as \"3 of 17\". **⌘G** and **⇧⌘G** step, wrapping at the ends, and **⌘E** searches for whatever you have selected. A match inside a collapsed tool group expands it. Searching the conversation list itself moved to **⌥⌘F**.",
+          "lifecycle": "current",
+          "ordinal": 5,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.printing",
+          "heading": "Printing",
+          "body": "**⌘P** prints the conversation you are reading. The title goes at the top, and the standard Mac header and footer carry the job name, the date, and \"Page 2 of 12\", so a printed transcript is dated and paginated without setting anything up.\n\nThe page is always light with black ink, whatever appearance the app is in — rendering for paper is not rendering for a screen.\n\nWhat reaches the page is what was said. Tool calls print as one compact line each rather than dumping their output, images are not included yet, and anything the provider withdrew never prints at all.",
+          "lifecycle": "current",
+          "ordinal": 6,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.sidebar-filters",
+          "heading": "Sidebar filters",
+          "body": "The conversation sidebar has a persistent filter with **All Conversations**, **Unread**, and **Working**. Working includes both an in-flight root turn and nonterminal delegated work. **Select All** selects only the rows exposed by the current search and filter.",
+          "lifecycle": "current",
+          "ordinal": 7,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.model-inheritance",
+          "heading": "Models for new conversations",
+          "body": "**⌘N** and **⌘T** in the same workspace inherit the exact provider and model from the conversation currently displayed. A saved workspace or app default is used only when there is no eligible same-workspace source, and a model is never inherited across workspace boundaries.",
+          "lifecycle": "current",
+          "ordinal": 8,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.workspace-launcher",
+          "heading": "Workspace launcher",
+          "body": "In the Workspaces launcher, **Home** and **Help** are compact full-width destination rows above the favorites-first workspace grid. They share the same scroll view, so both rows scroll out of the way with the workspace cards in a short window.",
+          "lifecycle": "current",
+          "ordinal": 9,
+          "evidenceIDs": [
+            "guide-workspace-window"
+          ]
+        },
+        {
+          "key": "conversations.generated-images",
+          "heading": "Generated images",
+          "body": "Images generated by Codex appear directly in the transcript as primary content and remain visible after relaunch; they are not hidden inside a collapsed diagnostic row.",
+          "lifecycle": "current",
+          "ordinal": 10,
+          "evidenceIDs": [
+            "guide-transcript"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "composer",
+      "title": "Writing a Message",
+      "icon": "text.cursor",
+      "blurb": "Attachments, @-paths, dictation, and steering a running turn",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 2,
+      "aliases": [
+        "message box",
+        "composer",
+        "attachments",
+        "steering",
+        "queue",
+        "dictation",
+        "model",
+        "reasoning effort",
+        "permissions"
+      ],
+      "markdown": "# Writing a Message\n\n**Return** sends. **⇧Return** makes a newline.\n\n## Getting things into it\n\n- **Attachments**: paste images or files, drag them anywhere onto the chat, or use the paperclip. Files are copied into the conversation and appear as named previews in both the message box and transcript. Drag a preview within the message box to put it before, between, or after your text and other attachments. Copying a mixed selection into another conversation keeps its text, previews, and order while giving the destination its own durable copies. Pasting a large block of text collapses it into a single pill so the box stays readable.\n- **Artifact references**: drag an artifact from either Artifacts view into the message box. It becomes an editable reference pill, so the agent receives the artifact's current source and can revise that same durable artifact. Dragging it to Finder exports a normal file.\n- **@-paths**: type `@` to autocomplete files and folders, drilling into directories as you accept each part.\n- **Slash commands**: type `/` for the conversation's skills. The Skills tab in the inspector lists them all, grouped by the plugin that supplied them; Help → What it can do also offers Insert and Run.\n- **Dictation**: the mic button starts on-device-first voice input with a live waveform. If the on-device recognizer is unavailable, Mechanician falls back to Apple's server-backed speech recognition. It can stay live across several sends.\n\n## Steering a running turn\n\nThis is the part most chat apps do not have. While a turn is in flight, the send button gains a mode menu:\n\n- **Guide current turn**: inject guidance into the *running* turn. It is delivered at the provider's next natural boundary and confirmed with a chip, so you know it landed.\n- **Send next**: queue your message behind the current turn.\n- **Stop and redirect** (⌥Return): interrupt and send this instead. A **Resume** chip offers to re-run whatever you interrupted.\n\n**⌘.** stops the turn outright.\n\n`/btw <message>` is the shortcut for an aside: it interrupts, runs your message, then automatically re-sends the original prompt.\n\n## The controls under the message box\n\nA row of controls sits under the message box, and they belong to the conversation rather than to the window, so two conversations can run on two different models at once. The model control names the model this conversation runs on, from the lane it is authenticated against. Reasoning effort offers the levels the provider reported for that selected model; when a provider reports no adjustable levels there is nothing to choose. Permissions decides how much the agent may do on its own, and a level chosen while a turn is running is marked NEXT because it applies from the next turn onward. The readouts to the right report background work, context capacity, and the tokens in and out for this conversation.\n",
+      "evidence": [
+        {
+          "id": "guide-composer",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "## 4. The composer",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "composer.overview",
+          "heading": "Writing a Message",
+          "body": "**Return** sends. **⇧Return** makes a newline.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-composer"
+          ]
+        },
+        {
+          "key": "composer.getting-things-into-it",
+          "heading": "Getting things into it",
+          "body": "- **Attachments**: paste images or files, drag them anywhere onto the chat, or use the paperclip. Files are copied into the conversation and appear as named previews in both the message box and transcript. Drag a preview within the message box to put it before, between, or after your text and other attachments. Copying a mixed selection into another conversation keeps its text, previews, and order while giving the destination its own durable copies. Pasting a large block of text collapses it into a single pill so the box stays readable.\n- **Artifact references**: drag an artifact from either Artifacts view into the message box. It becomes an editable reference pill, so the agent receives the artifact's current source and can revise that same durable artifact. Dragging it to Finder exports a normal file.\n- **@-paths**: type `@` to autocomplete files and folders, drilling into directories as you accept each part.\n- **Slash commands**: type `/` for the conversation's skills. The Skills tab in the inspector lists them all, grouped by the plugin that supplied them; Help → What it can do also offers Insert and Run.\n- **Dictation**: the mic button starts on-device-first voice input with a live waveform. If the on-device recognizer is unavailable, Mechanician falls back to Apple's server-backed speech recognition. It can stay live across several sends.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-composer"
+          ]
+        },
+        {
+          "key": "composer.steering-a-running-turn",
+          "heading": "Steering a running turn",
+          "body": "This is the part most chat apps do not have. While a turn is in flight, the send button gains a mode menu:\n\n- **Guide current turn**: inject guidance into the *running* turn. It is delivered at the provider's next natural boundary and confirmed with a chip, so you know it landed.\n- **Send next**: queue your message behind the current turn.\n- **Stop and redirect** (⌥Return): interrupt and send this instead. A **Resume** chip offers to re-run whatever you interrupted.\n\n**⌘.** stops the turn outright.\n\n`/btw <message>` is the shortcut for an aside: it interrupts, runs your message, then automatically re-sends the original prompt.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-composer"
+          ]
+        },
+        {
+          "key": "composer.conversation-controls",
+          "heading": "The controls under the message box",
+          "body": "A row of controls sits under the message box, and they belong to the conversation rather than to the window, so two conversations can run on two different models at once. The model control names the model this conversation runs on, from the lane it is authenticated against. Reasoning effort offers the levels the provider reported for that selected model; when a provider reports no adjustable levels there is nothing to choose. Permissions decides how much the agent may do on its own, and a level chosen while a turn is running is marked NEXT because it applies from the next turn onward. The readouts to the right report background work, context capacity, and the tokens in and out for this conversation.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "guide-composer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inspector",
+      "title": "The Inspector",
+      "icon": "sidebar.right",
+      "blurb": "Files, Changes, Artifacts, Agents, Skills and Help",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 3,
+      "aliases": [
+        "files",
+        "changes",
+        "artifacts",
+        "agents",
+        "skills",
+        "help inspector",
+        "Mermaid",
+        "background agents"
+      ],
+      "markdown": "# The Inspector\n\nThe right-hand panel is one configurable tool area with several possible tabs. Folder-backed workspaces start with Files, Changes, Artifacts, Agents, and Skills. Home and other folderless workspaces omit Files and Changes. A fresh Help workspace starts with the inspector closed; when opened, its only inspector tab is the signed product reader. Eligible tabs can be customized per workspace.\n\n## Workspace\n\n### Files\n\nThe **Files** tab browses the workspace folder. A workspace without a folder, such as Home, has no Files tab, because there is nothing beneath it to browse. Hover an artifact drag over Files to open that tab before dropping the artifact into a folder.\n\n### Changes\n\nThe **Changes** tab is what actually changed on disk in this checkout, and which Conversation did it. In a repository you get the branch with ahead and behind counts, staging, click-to-view diffs, a commit bar and Push; outside one you still see which files were touched, reported as observations rather than commits.\n\nWork is grouped by Conversation. **Current Conversation** holds this one's work record, and **Other Conversations** lists the ones exactly linked to the same repository; opening one of those does not navigate away from where you are. Every file says how Mechanician knows about it: a successful file tool named it, a Git observation saw it, or it was seen while a tool was running and the attribution is unverified. A file the agent only read stays marked as read, because a file the agent read is not a file the agent modified.\n\nAny entry opens to its evidence: the exact transcript entry behind it, before and after digests, and the captured patch where there is one. A capture too large to keep whole is bounded and says so. A file already in history reads as committed in that commit.\n\nWhat the panel refuses to do is as deliberate as what it shows. A clean worktree does not prove that Conversation work reached the target branch, and Mechanician will not infer intent, authorship, or inclusion from one. An agent's own account of what it changed is labelled an agent claim rather than Git evidence. A Conversation with nothing captured says it has no work record instead of being shown as one that did nothing.\n\n## Conversation\n\n### Artifacts\n\nThe **Artifacts** tab collects the things the agent made for you to look at: HTML, SVG, Mermaid diagrams, tables, documents. They render in the preview pane and can be popped out, shared, saved, copied, revealed in Finder, moved to another workspace, or dragged into the message box for another revision. HTML artifacts can also be saved as rendered PDFs. The global Artifacts window (⌥⌘Y) keeps the library across conversations and adds range and multiple selection plus bulk Favorite, Move, and Delete. Move to Workspace offers Home, every existing workspace, and New Workspace. Moving a conversation moves all of its artifacts with it.\n\n### Mermaid rendering\n\nA Mermaid artifact is laid out once with the pinned bundled renderer in a throwaway offscreen web view, sanitized, and frozen to SVG. Its visible preview remains script-free. If rendering fails, the preview shows escaped source and the renderer error instead of an empty pane.\n\n### Agents\n\nThe **Agents** tab shows the subagents and workflows this conversation delegated work to, arranged as a tree under Active, Didn’t finish and Completed. Cards show the fields actually observed, including current step, optional target, time in step, model, metrics and tool mix; select one for its available task, result or error and tool timeline. The resizable Activity pane puts the root and reported delegate activity on one clock: Trace shows model work, tools, waits, native compaction, provider-visible history reduction and guidance; Path marks the chain calculated from their timing; Usage shows provider-reported tokens and context pressure. Running standalone agents can be stopped individually; a workflow Stop ends the workflow.\n\nModern Claude keeps its response cycle open while authoritative provider state says visible delegated work is still active. If another route nevertheless ends with delegates outstanding — such as Codex, a legacy Claude runtime, or a missing provider signal — Mechanician adds a durable transcript warning rather than implying they contributed to the finished reply. The Agents tab keeps tracking them, but later tool calls may be refused; ask again in a turn that stays open until they finish.\n\n### Skills\n\nThe **Skills** tab lists every skill available to this conversation, grouped by the plugin that supplied it. Selecting one arms it for your next message: a removable pill appears above the message box, and the message is sent as that skill’s command. Groups are collapsed by default and show a summary of what is inside, because the list grows with every plugin you install; searching expands everything. Claude Code’s own terminal commands are hidden here, meaning things that configure a terminal UI this app does not have, or that duplicate a control the app already gives you. They still work if you type them, and the footer offers to show them.\n\n## Global records\n\nHelp holds a record that is the same wherever you are: the signed product guide for the running build. It sits after its own divider because its scope is global, not this workspace and not this conversation.\n",
+      "evidence": [
+        {
+          "id": "guide-inspector",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "## 5. The inspector",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "inspector.overview",
+          "heading": "The Inspector",
+          "body": "The right-hand panel is one configurable tool area with several possible tabs. Folder-backed workspaces start with Files, Changes, Artifacts, Agents, and Skills. Home and other folderless workspaces omit Files and Changes. A fresh Help workspace starts with the inspector closed; when opened, its only inspector tab is the signed product reader. Eligible tabs can be customized per workspace.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.files",
+          "heading": "Files",
+          "body": "The **Files** tab browses the workspace folder. A workspace without a folder, such as Home, has no Files tab, because there is nothing beneath it to browse. Hover an artifact drag over Files to open that tab before dropping the artifact into a folder.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.changes",
+          "heading": "Changes",
+          "body": "The **Changes** tab is what actually changed on disk in this checkout, and which Conversation did it. In a repository you get the branch with ahead and behind counts, staging, click-to-view diffs, a commit bar and Push; outside one you still see which files were touched, reported as observations rather than commits.\n\nWork is grouped by Conversation. **Current Conversation** holds this one's work record, and **Other Conversations** lists the ones exactly linked to the same repository; opening one of those does not navigate away from where you are. Every file says how Mechanician knows about it: a successful file tool named it, a Git observation saw it, or it was seen while a tool was running and the attribution is unverified. A file the agent only read stays marked as read, because a file the agent read is not a file the agent modified.\n\nAny entry opens to its evidence: the exact transcript entry behind it, before and after digests, and the captured patch where there is one. A capture too large to keep whole is bounded and says so. A file already in history reads as committed in that commit.\n\nWhat the panel refuses to do is as deliberate as what it shows. A clean worktree does not prove that Conversation work reached the target branch, and Mechanician will not infer intent, authorship, or inclusion from one. An agent's own account of what it changed is labelled an agent claim rather than Git evidence. A Conversation with nothing captured says it has no work record instead of being shown as one that did nothing.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.artifacts",
+          "heading": "Artifacts",
+          "body": "The **Artifacts** tab collects the things the agent made for you to look at: HTML, SVG, Mermaid diagrams, tables, documents. They render in the preview pane and can be popped out, shared, saved, copied, revealed in Finder, moved to another workspace, or dragged into the message box for another revision. HTML artifacts can also be saved as rendered PDFs. The global Artifacts window (⌥⌘Y) keeps the library across conversations and adds range and multiple selection plus bulk Favorite, Move, and Delete. Move to Workspace offers Home, every existing workspace, and New Workspace. Moving a conversation moves all of its artifacts with it.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.agents",
+          "heading": "Agents",
+          "body": "The **Agents** tab shows the subagents and workflows this conversation delegated work to, arranged as a tree under Active, Didn’t finish and Completed. Cards show the fields actually observed, including current step, optional target, time in step, model, metrics and tool mix; select one for its available task, result or error and tool timeline. The resizable Activity pane puts the root and reported delegate activity on one clock: Trace shows model work, tools, waits, native compaction, provider-visible history reduction and guidance; Path marks the chain calculated from their timing; Usage shows provider-reported tokens and context pressure. Running standalone agents can be stopped individually; a workflow Stop ends the workflow.",
+          "lifecycle": "current",
+          "ordinal": 4,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.skills",
+          "heading": "Skills",
+          "body": "The **Skills** tab lists every skill available to this conversation, grouped by the plugin that supplied it. Selecting one arms it for your next message: a removable pill appears above the message box, and the message is sent as that skill’s command. Groups are collapsed by default and show a summary of what is inside, because the list grows with every plugin you install; searching expands everything. Claude Code’s own terminal commands are hidden here, meaning things that configure a terminal UI this app does not have, or that duplicate a control the app already gives you. They still work if you type them, and the footer offers to show them.",
+          "lifecycle": "current",
+          "ordinal": 5,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.global-records",
+          "heading": "Global records",
+          "body": "Help holds a record that is the same wherever you are: the signed product guide for the running build. It sits after its own divider because its scope is global, not this workspace and not this conversation.",
+          "lifecycle": "current",
+          "ordinal": 6,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.mermaid-rendering",
+          "heading": "Mermaid rendering",
+          "body": "A Mermaid artifact is laid out once with the pinned bundled renderer in a throwaway offscreen web view, sanitized, and frozen to SVG. Its visible preview remains script-free. If rendering fails, the preview shows escaped source and the renderer error instead of an empty pane.",
+          "lifecycle": "current",
+          "ordinal": 7,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        },
+        {
+          "key": "inspector.background-work-outlives-turn",
+          "heading": "When delegated work outlives a turn",
+          "body": "Modern Claude keeps its response cycle open while authoritative provider state says user-visible delegated work is still active. If another route nevertheless ends with delegates outstanding — such as Codex, a legacy Claude runtime, or a missing provider signal — Mechanician adds a durable transcript warning rather than implying they contributed to the finished reply. The Agents tab keeps tracking them, but later tool calls may be refused; ask again in a turn that stays open until they finish.",
+          "lifecycle": "current",
+          "ordinal": 8,
+          "evidenceIDs": [
+            "guide-inspector"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extensions",
+      "title": "Extensions",
+      "icon": "puzzlepiece.extension",
+      "blurb": "MCP servers, Claude plugins and Codex plugins",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 4,
+      "aliases": [
+        "MCP",
+        "plugins",
+        "marketplaces"
+      ],
+      "markdown": "# Extensions\n\n**⌥⌘E** opens Extensions. It has three destinations, because they are three different things and a plugin for one provider cannot install into the other.\n\n## MCP Servers\n\nServers both providers can use. Three tabs: **Browse**, **Configured**, and **Add Server**.\n\nBrowse is the live feed from vendor-operated, curated registries (Microsoft Azure and GitHub by default) grouped by the registry that supplied each entry. Filter it by remote, local or first-party servers, and search the complete feeds rather than only the visible cards.\n\nDeliberately **not** included are the open MCP registry and third-party aggregators. Those list tens of thousands of servers with no review, and the open registry's own documentation says host applications should not consume it directly. Every card names its source, so you always know who is being trusted.\n\nConfigured separates remote and local servers. Choose the provider lane whose status or authentication you want to inspect; each server shows what it connects to, what it is doing now, and where it came from. Credentials are shown by name only, never by value. Add Server accepts a remote HTTP endpoint or an exact local launch command. Mechanician shows that command and asks before recording or starting it; non-npm servers may need the named runtime such as `uvx` or Docker.\n\n## Claude Plugins & Codex Plugins\n\nMarketplaces are the tabs, with a separate Installed tab for each provider. Search and category filters help with large catalogs, and you can add another marketplace by repository, URL or local path. Claude also accepts HTTPS plugin archive registries. Opening a plugin shows the description, publisher and the components or services it adds.\n\nClaude plugin details also show their skills, commands, agents, hooks and MCP servers by name, plus any *always-on* context cost. That cost is spent on every turn just for being installed, whether or not you use it.\n\nClaude plugins can be disabled, updated or uninstalled. Codex plugins can be removed. Extension changes apply on the next message.",
+      "evidence": [
+        {
+          "id": "guide-extensions",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "- **Extensions (⌥⌘E)**",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "extensions.overview",
+          "heading": "Extensions",
+          "body": "**⌥⌘E** opens Extensions. It has three destinations, because they are three different things and a plugin for one provider cannot install into the other.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-extensions"
+          ]
+        },
+        {
+          "key": "extensions.mcp-servers",
+          "heading": "MCP Servers",
+          "body": "Servers both providers can use. Three tabs: **Browse**, **Configured**, and **Add Server**.\n\nBrowse is the live feed from vendor-operated, curated registries (Microsoft Azure and GitHub by default) grouped by the registry that supplied each entry. Filter it by remote, local or first-party servers, and search the complete feeds rather than only the visible cards.\n\nDeliberately **not** included are the open MCP registry and third-party aggregators. Those list tens of thousands of servers with no review, and the open registry's own documentation says host applications should not consume it directly. Every card names its source, so you always know who is being trusted.\n\nConfigured separates remote and local servers. Choose the provider lane whose status or authentication you want to inspect; each server shows what it connects to, what it is doing now, and where it came from. Credentials are shown by name only, never by value. Add Server accepts a remote HTTP endpoint or an exact local launch command. Mechanician shows that command and asks before recording or starting it; non-npm servers may need the named runtime such as `uvx` or Docker.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-extensions"
+          ]
+        },
+        {
+          "key": "extensions.claude-plugins-codex-plugins",
+          "heading": "Claude Plugins & Codex Plugins",
+          "body": "Marketplaces are the tabs, with a separate Installed tab for each provider. Search and category filters help with large catalogs, and you can add another marketplace by repository, URL or local path. Claude also accepts HTTPS plugin archive registries. Opening a plugin shows the description, publisher and the components or services it adds.\n\nClaude plugin details also show their skills, commands, agents, hooks and MCP servers by name, plus any *always-on* context cost. That cost is spent on every turn just for being installed, whether or not you use it.\n\nClaude plugins can be disabled, updated or uninstalled. Codex plugins can be removed. Extension changes apply on the next message.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-extensions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "approvals",
+      "title": "Approvals & Questions",
+      "icon": "checkmark.shield",
+      "blurb": "How the agent and its extensions ask before proceeding",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 5,
+      "aliases": [
+        "permissions",
+        "questions",
+        "trust",
+        "wait mode",
+        "bypass permissions",
+        "write containment",
+        "outside workspace",
+        "symlink",
+        "always allow"
+      ],
+      "markdown": "# Approvals & Questions\n\nMechanician keeps requests attributed and actionable instead of leaving them in raw tool output.\n\n- **Permission cards** name the command or file operation and offer Deny, Always allow and Allow once. A remembered answer is scoped to the provider and workspace folder.\n- **Plan cards** let you keep planning or approve the plan and proceed.\n- **Agent questions** render choices, multiple selections and an Other field.\n- **Extension questions** come from MCP servers. The sheet names the server before showing its confirmation, form or full HTTPS address; choose Deny or Not Now if you do not want to answer.\n- **Provider-access cards** preserve the task when another provider family is needed, while leaving subscription-versus-API-key choice to you.\n\n## Writes outside the workspace\n\nClaude's **Bypass permissions** mode suppresses ordinary tool approval prompts, but it does not remove the workspace write boundary. If a path the agent requests resolves outside the current workspace — including after following a symlink — Mechanician asks before writing in every permission mode, including Bypass. The permission card names the requested path, the resolved target when it differs, and the current workspace. It also says that **Always allow** covers everything in the resolved target's containing folder, because a containment grant is remembered for that folder rather than only that file.\n\nA task waiting on a real external event uses **wait mode** instead of pretending to watch. The conversation shows ⏳ and resumes when the trigger fires; Resume Now and Cancel remain available.",
+      "evidence": [
+        {
+          "id": "guide-approvals",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "## 8. Approvals, questions, and trust",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "approvals.overview",
+          "heading": "Approvals & Questions",
+          "body": "Mechanician keeps requests attributed and actionable instead of leaving them in raw tool output.\n\n- **Permission cards** name the command or file operation and offer Deny, Always allow and Allow once. A remembered answer is scoped to the provider and workspace folder.\n- **Plan cards** let you keep planning or approve the plan and proceed.\n- **Agent questions** render choices, multiple selections and an Other field.\n- **Extension questions** come from MCP servers. The sheet names the server before showing its confirmation, form or full HTTPS address; choose Deny or Not Now if you do not want to answer.\n- **Provider-access cards** preserve the task when another provider family is needed, while leaving subscription-versus-API-key choice to you.\n\nA task waiting on a real external event uses **wait mode** instead of pretending to watch. The conversation shows ⏳ and resumes when the trigger fires; Resume Now and Cancel remain available.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-approvals"
+          ]
+        },
+        {
+          "key": "approvals.write-containment",
+          "heading": "Writes outside the workspace",
+          "body": "Claude's **Bypass permissions** mode suppresses ordinary tool approval prompts, but it does not remove the workspace write boundary. If a path the agent requests resolves outside the current workspace — including after following a symlink — Mechanician asks before writing in every permission mode, including Bypass. The permission card names the requested path, the resolved target when it differs, and the current workspace. It also says that **Always allow** covers everything in the resolved target's containing folder, because a containment grant is remembered for that folder rather than only that file.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-approvals"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scheduled-tasks",
+      "title": "Scheduled & Ambient Tasks",
+      "icon": "clock",
+      "blurb": "Work that runs later or when something changes",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 6,
+      "aliases": [
+        "ambient",
+        "background",
+        "automation",
+        "trust all",
+        "read only",
+        "run when closed",
+        "Vertex",
+        "prompt injection",
+        "untrusted trigger"
+      ],
+      "markdown": "# Scheduled & Ambient Tasks\n\n**⌥⌘T** opens the Tasks window. A task is a standing instruction triggered once, on a repeating schedule, when a file or folder changes, or when new mail arrives.\n\nResults return as conversations you can continue, notifications, and, when requested, artifacts that update over time. The calendar shows upcoming and past runs, and every task can be run immediately or paused.\n\nScheduled tasks cannot pause to ask permission. They use read-only workspace access by default; actions that would need approval are withheld. Trust all is a separate full-Mac-access option that you must choose explicitly. Use only workspaces, triggers, and instructions you trust. Keep Mail triggers and file or folder triggers that another process or person can write read-only unless you have independently secured that input boundary: their contents are untrusted input, and Trust all would let that input drive full-Mac actions without a prompt.\n\n## Provider routes\n\nScheduled runs need a metered provider route: an API-key lane in the standard app, or an eligible managed Vertex route. Subscription lanes cannot run unattended.\n\n## Run when closed\n\nWhile Mechanician is open, an enabled task with a connected eligible lane runs from the scheduler the app starts. **Run when closed** separately installs a background runner so tasks continue after Mechanician quits; it is opt-in and off until enabled.\n\nThe bowler-hat menu-bar item lists tasks, lets you run or pause them, and opens Tasks, Artifacts, Extensions or a new conversation without first opening a workspace window.",
+      "evidence": [
+        {
+          "id": "security-unattended",
+          "kind": "architecture",
+          "path": "docs/architecture/SECURITY-AND-PERMISSIONS.md",
+          "anchor": "## 8. Unattended authorization: withheld, not denied",
+          "sourceSHA256": "b495b3318d0aa9a943b55a083b70e0fa823e441759824e84d094d9e9291a32dd"
+        },
+        {
+          "id": "background-unattended",
+          "kind": "architecture",
+          "path": "docs/architecture/BACKGROUND-WORK.md",
+          "anchor": "## 4. Unattended authorization",
+          "sourceSHA256": "737b5da91eb8ae591046b4b428ddfdc4d34ea1b80566c5e9c03a7c6876d4ab69"
+        },
+        {
+          "id": "guide-scheduled-tasks",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "- **Scheduled & Ambient Tasks (⌥⌘T)**",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "scheduled-tasks.overview",
+          "heading": "Scheduled & Ambient Tasks",
+          "body": "**⌥⌘T** opens the Tasks window. A task is a standing instruction triggered once, on a repeating schedule, when a file or folder changes, or when new mail arrives.\n\nResults return as conversations you can continue, notifications, and, when requested, artifacts that update over time. The calendar shows upcoming and past runs, and every task can be run immediately or paused.\n\nScheduled tasks cannot pause to ask permission. They use read-only workspace access by default; actions that would need approval are withheld. Trust all is a separate full-Mac-access option that you must choose explicitly. Use only workspaces, triggers, and instructions you trust. Keep Mail triggers and file or folder triggers that another process or person can write read-only unless you have independently secured that input boundary: their contents are untrusted input, and Trust all would let that input drive full-Mac actions without a prompt.\n\nThe bowler-hat menu-bar item lists tasks, lets you run or pause them, and opens Tasks, Artifacts, Extensions or a new conversation without first opening a workspace window.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "security-unattended",
+            "background-unattended",
+            "guide-scheduled-tasks"
+          ]
+        },
+        {
+          "key": "scheduled-tasks.provider-routes",
+          "heading": "Provider routes",
+          "body": "Scheduled runs need a metered provider route: an API-key lane in the standard app, or an eligible managed Vertex route. Subscription lanes cannot run unattended.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "background-unattended",
+            "guide-scheduled-tasks"
+          ]
+        },
+        {
+          "key": "scheduled-tasks.run-when-closed",
+          "heading": "Run when closed",
+          "body": "While Mechanician is open, an enabled task with a connected eligible lane runs from the scheduler the app starts. **Run when closed** separately installs a background runner so tasks continue after Mechanician quits; it is opt-in and off until enabled.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-scheduled-tasks"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mac",
+      "title": "The Mac Integration",
+      "icon": "macwindow",
+      "blurb": "AppleScript, Shortcuts, computer use and capabilities",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 7,
+      "aliases": [
+        "AppleScript",
+        "JXA",
+        "Shortcuts",
+        "computer use",
+        "capabilities"
+      ],
+      "markdown": "# The Mac Integration\n\nIn a standard conversation, the agent can drive this Mac when the exact bridge and provider route advertise these tools. Workflow advice must consult that route's live inventory instead of assuming they are available.\n\n- **AppleScript and JXA**: automate any scriptable Mac app: Mail, Finder, Notes, Calendar, Reminders, Music, Messages, Safari and more.\n- **Shortcuts**: your Shortcuts are available as tools, which is the bridge to App Intents.\n- **Computer use**: the agent can see the screen and drive the pointer and keyboard for anything that is not scriptable.\n- **Capabilities**: when an automation works and you want to keep it, it can be saved as a named, reusable tool. Saved capabilities appear in Help → What it can do.\n\nWhen advertised, these integrations are gated: macOS asks permission the first time an app is automated, and the app asks before it runs anything with real side effects.\n\n## Getting things in from other apps\n\n- **Services**: select text anywhere and use that app's Services menu. **New Conversation With Selection** starts a conversation with the text in the composer and brings this app forward; **Add Selection to Conversation** adds it to the conversation you have open and stays out of your way, so you can clip several passages while reading. In Finder, **Open as Workspace** and **Add Files to Conversation** do the same for folders and files.\n- **Links**: `mechanician://` opens a conversation, a workspace, or an artifact from a note, a script, or a Shortcut. **Copy Link** is on the Conversation menu, the sidebar row menu, the artifact row menu, and both launcher cards.\n\nNeither one ever sends. They put text and files in the composer and stop there, for you to read before you press Return.\n\n## What it can do\n\nThe **What it can do** topic shows capabilities only for the exact selected conversation, provider route, accepted turn, and tool profile. During an active turn, its captured permission mode and tool surface remain authoritative even if the toolbar already shows a different choice marked **NEXT**. After the turn completes, its last-observed inventory remains eligible only while the current picker still matches. This remains advisory evidence: it never grants approval, proves that a live resource exists, or limits what you can ask.",
+      "evidence": [
+        {
+          "id": "guide-mac",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "## 9. The Mac integration layer",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "mac.overview",
+          "heading": "The Mac Integration",
+          "body": "In a standard conversation, the agent can drive this Mac when the exact bridge and provider route advertise these tools. Workflow advice must consult that route's live inventory instead of assuming they are available.\n\n- **AppleScript and JXA**: automate any scriptable Mac app: Mail, Finder, Notes, Calendar, Reminders, Music, Messages, Safari and more.\n- **Shortcuts**: your Shortcuts are available as tools, which is the bridge to App Intents.\n- **Computer use**: the agent can see the screen and drive the pointer and keyboard for anything that is not scriptable.\n- **Capabilities**: when an automation works and you want to keep it, it can be saved as a named, reusable tool. Saved capabilities appear in Help → What it can do.\n\nWhen advertised, these integrations are gated: macOS asks permission the first time an app is automated, and the app asks before it runs anything with real side effects.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-mac"
+          ]
+        },
+        {
+          "key": "mac.getting-things-in-from-other-apps",
+          "heading": "Getting things in from other apps",
+          "body": "- **Services**: select text anywhere and use that app's Services menu. **New Conversation With Selection** starts a conversation with the text in the composer and brings this app forward; **Add Selection to Conversation** adds it to the conversation you have open and stays out of your way, so you can clip several passages while reading. In Finder, **Open as Workspace** and **Add Files to Conversation** do the same for folders and files.\n- **Links**: `mechanician://` opens a conversation, a workspace, or an artifact from a note, a script, or a Shortcut. **Copy Link** is on the Conversation menu, the sidebar row menu, the artifact row menu, and both launcher cards.\n\nNeither one ever sends. They put text and files in the composer and stop there, for you to read before you press Return.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-mac"
+          ]
+        },
+        {
+          "key": "mac.what-it-can-do",
+          "heading": "What it can do",
+          "body": "The **What it can do** topic shows capabilities only for the exact selected conversation, provider route, accepted turn, and tool profile. During an active turn, its captured permission mode and tool surface remain authoritative even if the toolbar already shows a different choice marked **NEXT**. After the turn completes, its last-observed inventory remains eligible only while the current picker still matches. This remains advisory evidence: it never grants approval, proves that a live resource exists, or limits what you can ask.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-mac"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "accounts",
+      "title": "Accounts & Providers",
+      "icon": "person.crop.circle",
+      "blurb": "Claude and Codex, subscription or API key",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 8,
+      "aliases": [
+        "Claude",
+        "Codex",
+        "ChatGPT",
+        "API key",
+        "subscription",
+        "provider lane",
+        "Google Vertex AI",
+        "AWS Bedrock",
+        "AWS profile",
+        "enterprise profile"
+      ],
+      "markdown": "# Accounts & Providers\n\nMechanician's four built-in lanes cover Claude and Codex, with a **subscription** and an **API-key** lane for each provider family. **⌥⌘A** opens Providers, the one place to connect, reconnect and choose the default lane for new conversations.\n\nThese are separate lanes with separate credentials. Signing into one does not sign you into the other, and a conversation belongs to the lane its model comes from.\n\nThe model picker under the message box shows every model you have access to, grouped by provider, with which account each would use. Switching a conversation's model switches its lane.\n\nAPI keys and app-owned tokens live in the macOS Keychain. Removing a key deletes it from this Mac; disconnecting a subscription disconnects Mechanician without claiming to revoke the provider account or destroy Claude Code's global login.\n\n## Managed providers\n\n**Providers** can also import signed enterprise configurations. A verified profile can add managed Claude routes on **Google Vertex AI** or **AWS Bedrock**, plus managed extension catalogs; replacing or removing one takes effect after Mechanician restarts. A Bedrock route names an AWS region and may select one of your existing AWS profiles. The Claude engine resolves the ordinary AWS credential chain, including AWS SSO or an instance role. Mechanician does not store AWS access keys or put them in the route configuration.",
+      "evidence": [
+        {
+          "id": "guide-accounts",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "## 10. Accounts and providers",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        },
+        {
+          "id": "source-bedrock-route",
+          "kind": "source",
+          "path": "app/Sources/Mechanician/TenantProfile.swift",
+          "anchor": "struct Bedrock: Codable, Equatable {",
+          "sourceSHA256": "bca18105493351a72b9abf270fb9c1d26bd1eaf50f37c9ba70c0e20b8cd35c67"
+        }
+      ],
+      "claims": [
+        {
+          "key": "accounts.overview",
+          "heading": "Accounts & Providers",
+          "body": "Mechanician's four built-in lanes cover Claude and Codex, with a **subscription** and an **API-key** lane for each provider family. **⌥⌘A** opens Providers, the one place to connect, reconnect and choose the default lane for new conversations.\n\nThese are separate lanes with separate credentials. Signing into one does not sign you into the other, and a conversation belongs to the lane its model comes from.\n\nThe model picker under the message box shows every model you have access to, grouped by provider, with which account each would use. Switching a conversation's model switches its lane.\n\nAPI keys and app-owned tokens live in the macOS Keychain. Removing a key deletes it from this Mac; disconnecting a subscription disconnects Mechanician without claiming to revoke the provider account or destroy Claude Code's global login.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-accounts"
+          ]
+        },
+        {
+          "key": "accounts.managed-providers",
+          "heading": "Managed providers",
+          "body": "**Providers** can also import signed enterprise configurations. A verified profile can add managed Claude routes on **Google Vertex AI** or **AWS Bedrock**, plus managed extension catalogs; replacing or removing one takes effect after Mechanician restarts. A Bedrock route names an AWS region and may select one of your existing AWS profiles. The Claude engine resolves the ordinary AWS credential chain, including AWS SSO or an instance role. Mechanician does not store AWS access keys or put them in the route configuration.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-accounts",
+            "source-bedrock-route"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Keyboard Shortcuts",
+      "icon": "keyboard",
+      "blurb": "The ones worth memorising",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 9,
+      "aliases": [
+        "shortcuts",
+        "hotkeys"
+      ],
+      "markdown": "# Keyboard Shortcuts\n\nMechanician provides keyboard shortcuts for conversations, active work, utility windows, and text scaling.\n\n## Conversations & windows\n\n| Shortcut | Action |\n|---|---|\n| ⌘N | New conversation |\n| ⌘T | New tab |\n| ⇧⌘N | Open Workspace in New Window… |\n| ⌘O | Open a folder as a workspace |\n| ⇧⌘H | Open Home |\n| ⇧⌘I | Workspace Instructions |\n| ⌘F | Find in this conversation |\n| ⌘P | Print this conversation |\n| ⌘G | Find next |\n| ⇧⌘G | Find previous |\n| ⌥⌘F | Find conversations |\n| ⌘W | Close |\n\n## While working\n\n| Shortcut | Action |\n|---|---|\n| Return | Send |\n| ⇧Return | Newline |\n| ⌥Return | Stop and redirect |\n| ⌘. | Stop the turn |\n| ⌃⌘S | Show or hide the sidebar |\n| ⌥⌘I | Show or hide the inspector |\n| ⌃⌘T | Show or hide the terminal |\n\n## Windows\n\n| Shortcut | Action |\n|---|---|\n| ⌘? | This help window |\n| ⌘, | Settings |\n| ⌥⌘E | Extensions |\n| ⌥⌘A | Providers |\n| ⇧⌘P | Workspaces |\n| ⌥⌘Y | Artifacts |\n| ⌥⌘T | Scheduled & ambient tasks |\n\n## Text size\n\n⌘+ and ⌘− scale the interface text; ⌘0 returns to the default.\n\nIn the Files tab, **Space** opens Quick Look.",
+      "evidence": [
+        {
+          "id": "guide-keyboard",
+          "kind": "canonicalDoc",
+          "path": "docs/GUIDE.md",
+          "anchor": "# Part V — Keyboard shortcuts",
+          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+        }
+      ],
+      "claims": [
+        {
+          "key": "keyboard.overview",
+          "heading": "Keyboard Shortcuts",
+          "body": "Mechanician provides keyboard shortcuts for conversations, active work, utility windows, and text scaling.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "guide-keyboard"
+          ]
+        },
+        {
+          "key": "keyboard.conversations-windows",
+          "heading": "Conversations & windows",
+          "body": "| Shortcut | Action |\n|---|---|\n| ⌘N | New conversation |\n| ⌘T | New tab |\n| ⇧⌘N | Open Workspace in New Window… |\n| ⌘O | Open a folder as a workspace |\n| ⇧⌘H | Open Home |\n| ⇧⌘I | Workspace Instructions |\n| ⌘F | Find in this conversation |\n| ⌘P | Print this conversation |\n| ⌘G | Find next |\n| ⇧⌘G | Find previous |\n| ⌥⌘F | Find conversations |\n| ⌘W | Close |",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "guide-keyboard"
+          ]
+        },
+        {
+          "key": "keyboard.while-working",
+          "heading": "While working",
+          "body": "| Shortcut | Action |\n|---|---|\n| Return | Send |\n| ⇧Return | Newline |\n| ⌥Return | Stop and redirect |\n| ⌘. | Stop the turn |\n| ⌃⌘S | Show or hide the sidebar |\n| ⌥⌘I | Show or hide the inspector |\n| ⌃⌘T | Show or hide the terminal |",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "guide-keyboard"
+          ]
+        },
+        {
+          "key": "keyboard.windows",
+          "heading": "Windows",
+          "body": "| Shortcut | Action |\n|---|---|\n| ⌘? | This help window |\n| ⌘, | Settings |\n| ⌥⌘E | Extensions |\n| ⌥⌘A | Providers |\n| ⇧⌘P | Workspaces |\n| ⌥⌘Y | Artifacts |\n| ⌥⌘T | Scheduled & ambient tasks |",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "guide-keyboard"
+          ]
+        },
+        {
+          "key": "keyboard.text-size",
+          "heading": "Text size",
+          "body": "⌘+ and ⌘− scale the interface text; ⌘0 returns to the default.\n\nIn the Files tab, **Space** opens Quick Look.",
+          "lifecycle": "current",
+          "ordinal": 4,
+          "evidenceIDs": [
+            "guide-keyboard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mechanician-help",
+      "title": "Mechanician Help",
+      "icon": "questionmark.bubble",
+      "blurb": "The signed product expert, its chat, demonstrations, and safety boundary",
+      "section": "using",
+      "kind": "howTo",
+      "lifecycle": "current",
+      "ordinal": 11,
+      "aliases": [
+        "Ask Mechanician",
+        "SearchMechanicianHelp",
+        "ShowMechanician",
+        "OperateMechanician",
+        "RecommendMechanicianWorkflow",
+        "help expert",
+        "help workspace",
+        "help inspector",
+        "product guide",
+        "product knowledge",
+        "Guided Help",
+        "Walk me through",
+        "Show me"
+      ],
+      "markdown": "# Mechanician Help\n\nMechanician Help is the product's signed, build-matched knowledge system. It powers both this reader and agent answers about how Mechanician works, why it has its current design, how to extend it, and how to troubleshoot it.\n\n## Ask Mechanician\n\nChoose **Ask Mechanician** to open a dedicated, folderless Help workspace. Its chats are ordinary durable conversations, with the same history, transcript, composer, copying, steering, cancellation, forking, and native window behavior as other conversations.\n\nThe Help agent uses a closed profile on Claude, OpenAI, and Codex. In Plan it exposes exactly **SearchMechanicianHelp** and the signed, bounded **ShowMechanician** guide request. In every other permission mode it exposes exactly those two plus **OperateMechanician**, whose app-owned vocabulary performs bounded visible operations inside Mechanician. It cannot read a checkout, search the web, run shell commands, call external extensions, or perform arbitrary app automation.\n\n## Help inspector\n\nA Help window with no restored layout begins with the inspector closed. When the person opens it, it is a document-width Help inspector beside the conversation. Restored visible or hidden state and later choices in that window win, so focusing Help does not change a panel the person has already chosen. The inspector contains the same signed topics, claim-level search, optional history, evidence, and reviewed automation handoffs as the standalone reader. It omits the redundant Ask Mechanician action and live capability inventory. Browsing or selecting an article never injects hidden context into the transcript or widens the Help agent. Press the active Help tab again to return to the topic list.\n\n## Show me in Mechanician\n\nAsk the Help agent to show you a current Mechanician feature and it can request a matching signed guide returned with the relevant Help claims. The app resolves that exact guide, opens or ensures only its named surface, highlights approved semantic controls, and waits for Back, Next, Done, or Exit. The Help-inspector **Start tour** control is one example. Most guides cross into the app itself rather than staying in Help: a conversation guide presents the Changes, Agents, Artifacts, Skills and Files panels and the model, reasoning effort and permission controls in your own conversation window. A conversation guide uses the window you are already talking in when that window is an ordinary workspace, and otherwise the frontmost one that is. It never opens a workspace for a conversation guide.\n\nA guide never sends a message, calls an external tool, synthesizes input, accepts a workspace, window, or conversation identifier, guesses a coordinate, or widens the Help profile. If a target is missing or ambiguous, the step stops visibly.\n\n## Operating the app\n\nAsking Mechanician to open something is different from asking to be shown where it is. The agent can operate the app itself from a closed vocabulary the app owns: open an inspector tab, hide the inspector, open the Help, Artifacts, Tasks, Extensions, Providers and Settings windows, put the cursor in the message box, start an empty conversation, and set this conversation’s model or reasoning effort. Panel and setting changes are visible as they happen and reversible from the same control. Starting a new conversation creates an empty, unsent conversation that can be removed normally. The vocabulary is the whole boundary: there is no operation for permission mode, for connecting or disconnecting an account, for sending a message, or for deleting anything, so operating the app can never widen what the agent is allowed to do next. A model or effort target is re-resolved against what the account actually reported, and refusals say which. Nothing runs while the conversation is in Plan mode, and a scheduled task has no interface to operate. It can also turn a configured connection on or off, and that one is different: a connection every conversation shares is not the asking conversation’s to change, so Mechanician shows a card composed from its own state saying what is true now and what would become true, and nothing moves until the person presses the confirming button. Declining is reported as their decision; a turn that ends under an unanswered card is reported as unanswered; and a proposal that arrives while another card is already waiting is reported as never put to them at all. Only the first of those is a decision, and they are kept apart so a repeated request cannot come back sounding like a refusal nobody made. The agent supplies no wording on that card.\n\n## What the agent consults\n\nSearchMechanicianHelp reads only the immutable Help corpus included with the running build. Its `mechanician.help.v2` result returns a bounded ranked set of complete claims with article, lifecycle, and evidence labels plus provider-safe summaries of current guides grounded in those matched claims. Guide steps, reveal actions, targets, and geometry stay app-private. Current product facts are the default; history is included only for a question about origin or change. A concise transcript receipt appears only after the provider accepts a non-empty result.\n\n## Automation handoffs and workflow advice\n\nSome Help articles also offer reviewed automation demonstrations. Those do not run from the closed Help profile. The reader prepares an unsent draft in a standard conversation, where you can review the outcome, required tools, risks, confirmation, verification, reversal, and fallback before sending it. After you send, the standard agent calls **RecommendMechanicianWorkflow** for that exact signed demonstration. Continue only when the returned ID matches and its app-owned label is **Ready to try here**; **Switch out of Plan**, **Not available in this conversation**, and **Not verified yet** stop the demonstration. Readiness is advice, not authorization; confirmation, approval, macOS permission, and verification may still be required in any mode.\n\n## Limits and handoff\n\nThe shipped corpus can explain current behavior, documented issue claims, invariants, history, and extension points, but it does not yet include a complete typed, version-applicable known-issue catalogue. It cannot identify a novel bug in a particular checkout from static product facts alone. Reading live source, collecting diagnostics, changing code, or running external automation requires an explicit handoff to a normal conversation; Help never silently widens its own authority.",
+      "evidence": [
+        {
+          "id": "help-package-identity",
+          "kind": "architecture",
+          "path": "docs/architecture/MECHANICIAN-HELP.md",
+          "anchor": "## 3. Package identity and launch admission",
+          "sourceSHA256": "ce77646d2053eacfec35b1af95dd4ef29d77ab44be55bcbe9be2c2f9fae68dd1"
+        },
+        {
+          "id": "help-agent-boundary",
+          "kind": "architecture",
+          "path": "docs/architecture/MECHANICIAN-HELP.md",
+          "anchor": "## 6. Agent-facing retrieval and Help workspace",
+          "sourceSHA256": "ce77646d2053eacfec35b1af95dd4ef29d77ab44be55bcbe9be2c2f9fae68dd1"
+        }
+      ],
+      "claims": [
+        {
+          "key": "mechanician-help.overview",
+          "heading": "Mechanician Help",
+          "body": "Mechanician Help is the product's signed, build-matched knowledge system. It powers both the Help reader and agent answers about how Mechanician works, why it has its current design, how to extend it, and how to troubleshoot it.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "help-package-identity",
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.ask-mechanician",
+          "heading": "Ask Mechanician",
+          "body": "Ask Mechanician opens a dedicated, folderless Help workspace whose chats are ordinary durable conversations with the same transcript, composer, history, steering, cancellation, and window behavior as other conversations.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.workspace-inspector",
+          "heading": "Help inspector",
+          "body": "A Help window with no restored layout begins with the inspector closed. When the person opens it, it is a document-width Help inspector beside the conversation. Restored visible or hidden state and later choices in that window win, so focusing Help does not change a panel the person has already chosen. The inspector contains the same signed topics, claim-level search, optional history, evidence, manual Help-local tours, and reviewed automation handoffs as the standalone reader, while omitting the redundant Ask Mechanician action and live capability inventory. Browsing or selecting an article never injects hidden context into the transcript or widens the Help agent's closed profile. Pressing the active Help tab again returns the reader to its topic root.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.guided-tours",
+          "heading": "Show me and walk-through guides",
+          "body": "The user can ask the Help agent to walk them through, or show them, a supported Mechanician feature. The agent can request a current signed Show me guide whose summary is grounded in the claims returned for the user’s question. The app resolves that exact guide, opens or ensures only its named Mechanician surface, highlights approved semantic controls, and waits for Back, Next, Done, or Exit. The Help-inspector Start tour control is one example. A guide never sends a message, calls an external tool, synthesizes input, accepts a workspace, window, or conversation identifier, guesses a coordinate, or widens the Help agent’s closed profile. Missing or ambiguous targets stop visibly.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.conversation-guides",
+          "heading": "Guides that leave Help",
+          "body": "Most Show me guides present ordinary product surfaces rather than the Help reader. A conversation guide reveals the Changes, Agents, Artifacts, Skills and Files inspector tabs and the model, reasoning effort, permission and message-box controls in the person’s own conversation window. It presents in the source window when that window is an ordinary standard workspace, otherwise in the frontmost window that is, and it never opens a workspace. A tab the guide had to reveal is put away again when the guide ends; a tab the workspace already showed stays where the person can keep using it. Files and Changes are refused in a folderless workspace instead of being forced into the bar.",
+          "lifecycle": "current",
+          "ordinal": 4,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.operating-the-app",
+          "heading": "Operating the app",
+          "body": "Asking Mechanician to open something is different from asking to be shown where it is. The agent can operate the app itself from a closed vocabulary the app owns: open an inspector tab, hide the inspector, open the Help, Artifacts, Tasks, Extensions, Providers and Settings windows, put the cursor in the message box, start an empty conversation, and set this conversation’s model or reasoning effort. Panel and setting changes are visible as they happen and reversible from the same control. Starting a new conversation creates an empty, unsent conversation that can be removed normally. The vocabulary is the whole boundary: there is no operation for permission mode, for connecting or disconnecting an account, for sending a message, or for deleting anything, so operating the app can never widen what the agent is allowed to do next. A model or effort target is re-resolved against what the account actually reported, and refusals say which. Nothing runs while the conversation is in Plan mode, and a scheduled task has no interface to operate. It can also turn a configured connection on or off, and that one is different: a connection every conversation shares is not the asking conversation’s to change, so Mechanician shows a card composed from its own state saying what is true now and what would become true, and nothing moves until the person presses the confirming button. Declining is reported as their decision; a turn that ends under an unanswered card is reported as unanswered; and a proposal that arrives while another card is already waiting is reported as never put to them at all. Only the first of those is a decision, and they are kept apart so a repeated request cannot come back sounding like a refusal nobody made. The agent supplies no wording on that card.",
+          "lifecycle": "current",
+          "ordinal": 5,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.search",
+          "heading": "What the agent consults",
+          "body": "SearchMechanicianHelp reads only the immutable Help corpus included with the running build and returns a bounded ranked set of complete claims with lifecycle and evidence labels. Current product facts are the default; history is included only when requested for an origin or change question. A concise transcript receipt appears only after the provider accepts a non-empty result.",
+          "lifecycle": "current",
+          "ordinal": 6,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.show-me",
+          "heading": "Automation handoff and workflow advice",
+          "body": "Some current Help articles offer a reviewed automation demonstration as an unsent standard-conversation draft. This is separate from ShowMechanician's bounded in-app navigation and does not run from the closed Help profile. After the user sends the draft, the standard agent calls RecommendMechanicianWorkflow and continues only when the returned ID matches and its app-owned label is Ready to try here. Switch out of Plan, Not available in this conversation, and Not verified yet stop the demonstration. Readiness is advice, not authorization; confirmation, approval, macOS permission, and verification may still be required in any mode.",
+          "lifecycle": "current",
+          "ordinal": 7,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.limits",
+          "heading": "Limits and handoff",
+          "body": "The shipped corpus can explain current behavior, documented issue claims, invariants, history, and extension points, but it does not yet include a complete typed, version-applicable known-issue catalogue. It cannot identify a novel bug in a particular checkout from static product facts alone. Reading live source, collecting diagnostics, changing code, or running external automation requires an explicit handoff to a normal conversation; Help never silently widens its own authority.",
+          "lifecycle": "current",
+          "ordinal": 8,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        },
+        {
+          "key": "mechanician-help.tool-surface",
+          "heading": "Help agent tool boundary",
+          "body": "Across Claude, OpenAI, and Codex, the Help agent exposes exactly SearchMechanicianHelp and ShowMechanician in Plan, and exactly those two plus OperateMechanician in every other permission mode. The operation tool accepts only the app's bounded vocabulary; Plan withholds and rejects it on every provider lane, and the app independently rejects a forged Plan request. Files, shell, web, external MCPs, skills, plugins, subagents, artifacts, arbitrary automation, and elicitation remain excluded.",
+          "lifecycle": "current",
+          "ordinal": 9,
+          "evidenceIDs": [
+            "help-agent-boundary"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "How Mechanician Fits Together",
+      "icon": "square.3.layers.3d",
+      "blurb": "The app, daemon, provider lanes, storage authority, and extension seams",
+      "section": "building",
+      "kind": "architecture",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "aliases": [
+        "architecture",
+        "agentd",
+        "daemon",
+        "SQLite",
+        "process topology",
+        "NDJSON"
+      ],
+      "markdown": "# How Mechanician Fits Together\n\nMechanician is a native Swift and AppKit/SwiftUI macOS application. Provider agents run in a bundled Node daemon named agentd because the Claude Agent SDK and Codex engine are Node packages. The app and daemon speak newline-delimited JSON over standard input and output.\n\n## Windows and provider lanes\n\nEach workspace window owns an AgentBridge. Provider runtimes are created lazily per lane and are not pooled across windows. Live capability claims therefore belong to an exact bridge, lane, conversation, and tool profile.\n\n## Durable and derived data\n\nlibrary.db is the product authority for conversations, workspaces, artifacts, retained media references, and scheduled-task state. projections.db is a disposable search and summary projection: it may lag authority and may never own a fact by itself.\n\n## Trust boundaries\n\nThe app owns persistence, permission presentation, provider routing, and macOS-only operations such as computer control. The daemon owns provider SDK sessions and tool execution. Retrieved documents and stored prose remain untrusted data; they cannot authorize a tool call or a mutation.\n\n## Where to start in the source\n\nThe architecture overview maps each subsystem to its owning Swift, JavaScript, tests, and deeper design document. Use symbol anchors instead of line numbers in large files, because those files move substantially between builds.",
+      "evidence": [
+        {
+          "id": "architecture-overview",
+          "kind": "architecture",
+          "path": "docs/architecture/OVERVIEW.md",
+          "anchor": "## 1. What Mechanician is",
+          "sourceSHA256": "85b46d65880796651c734f5c635cdab9ffa77c302ba0a8c1022faaed71bba075"
+        },
+        {
+          "id": "storage-authority",
+          "kind": "architecture",
+          "path": "docs/architecture/STORAGE-AND-PERSISTENCE.md",
+          "anchor": "## 1. Status, 2026-08-23",
+          "sourceSHA256": "9e68d4b12759c3a24dfeebf5dd547597c799f72cfac831df6e88f718b0e59404"
+        },
+        {
+          "id": "security-boundaries",
+          "kind": "architecture",
+          "path": "docs/architecture/SECURITY-AND-PERMISSIONS.md",
+          "anchor": "## 2. Where authorization happens",
+          "sourceSHA256": "b495b3318d0aa9a943b55a083b70e0fa823e441759824e84d094d9e9291a32dd"
+        }
+      ],
+      "claims": [
+        {
+          "key": "architecture.overview",
+          "heading": "How Mechanician Fits Together",
+          "body": "Mechanician is a native Swift and AppKit/SwiftUI macOS application. Provider agents run in a bundled Node daemon named agentd because the Claude Agent SDK and Codex engine are Node packages. The app and daemon speak newline-delimited JSON over standard input and output.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "architecture-overview"
+          ]
+        },
+        {
+          "key": "architecture.windows-and-provider-lanes",
+          "heading": "Windows and provider lanes",
+          "body": "Each workspace window owns an AgentBridge. Provider runtimes are created lazily per lane and are not pooled across windows. Live capability claims therefore belong to an exact bridge, lane, conversation, and tool profile.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "architecture-overview",
+            "security-boundaries"
+          ]
+        },
+        {
+          "key": "architecture.durable-and-derived-data",
+          "heading": "Durable and derived data",
+          "body": "library.db is the product authority for conversations, workspaces, artifacts, retained media references, and scheduled-task state. projections.db is a disposable search and summary projection: it may lag authority and may never own a fact by itself.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "storage-authority"
+          ]
+        },
+        {
+          "key": "architecture.trust-boundaries",
+          "heading": "Trust boundaries",
+          "body": "The app owns persistence, permission presentation, provider routing, and macOS-only operations such as computer control. The daemon owns provider SDK sessions and tool execution. Retrieved documents and stored prose remain untrusted data; they cannot authorize a tool call or a mutation.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "security-boundaries"
+          ]
+        },
+        {
+          "key": "architecture.where-to-start-in-the-source",
+          "heading": "Where to start in the source",
+          "body": "The architecture overview maps each subsystem to its owning Swift, JavaScript, tests, and deeper design document. Use symbol anchors instead of line numbers in large files, because those files move substantially between builds.",
+          "lifecycle": "current",
+          "ordinal": 4,
+          "evidenceIDs": [
+            "architecture-overview"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extending-mechanician",
+      "title": "Extending Mechanician",
+      "icon": "wrench.and.screwdriver",
+      "blurb": "Choose the smallest extension surface, classify it, and verify every lane",
+      "section": "building",
+      "kind": "extensionPoint",
+      "lifecycle": "current",
+      "ordinal": 1,
+      "aliases": [
+        "add tool",
+        "add provider",
+        "MCP server",
+        "plugin",
+        "skill",
+        "App Intent",
+        "contributor"
+      ],
+      "markdown": "# Extending Mechanician\n\nChoose the smallest surface that delivers the outcome. A reusable prompt belongs in a skill. An external service usually belongs in MCP or a provider plugin. A Mac automation can become a saved capability or Shortcut. A built-in tool is appropriate only when the app must own its security or native integration.\n\n## Adding a built-in tool\n\nImplementing the function is only half the work. Classify it independently for Claude, OpenAI, and Codex; decide interactive, plan-mode, unattended, filesystem, and sensitive-read policy; add it to the exact conversation tool catalog; and test that every provider either exposes or withholds it deliberately.\n\n## Adding a provider lane\n\nA provider route crosses Swift account and model state, daemon boot and credentials, turn execution, capability discovery, failures, and login lifecycle. There is no single provider interface whose implementation completes all of those obligations.\n\n## Adding a native surface\n\nUtility windows, menu commands, toolbar items, transcript rows, and inspector tabs each have established extension checklists. Preserve the AppKit/SwiftUI ownership boundary and give every icon-only control an explicit accessibility label.\n\n## Verification\n\nRun scripts/check.sh before calling an app change complete. Packaging changes also require scripts/dogfood.sh. Verification cost is a design input: prefer an extension whose complete behavior can be exercised in the development bundle.",
+      "evidence": [
+        {
+          "id": "adding-tool",
+          "kind": "architecture",
+          "path": "docs/architecture/SECURITY-AND-PERMISSIONS.md",
+          "anchor": "## 10. Adding a tool: the classification checklist",
+          "sourceSHA256": "b495b3318d0aa9a943b55a083b70e0fa823e441759824e84d094d9e9291a32dd"
+        },
+        {
+          "id": "adding-lane",
+          "kind": "architecture",
+          "path": "docs/architecture/PROVIDER-LANES-AND-ACCOUNTS.md",
+          "anchor": "## 9. Adding a lane",
+          "sourceSHA256": "e737594c0df1b856f02809b02424b214d055d6ca7d640ca290c3d7baef2ae280"
+        },
+        {
+          "id": "native-extension-points",
+          "kind": "architecture",
+          "path": "docs/architecture/APP-SHELL-AND-UI.md",
+          "anchor": "## 11. Extension points",
+          "sourceSHA256": "b4d35636e5988db0a05334cfea84824cd1ceda2d33c89e48f062d5ed2b11e016"
+        },
+        {
+          "id": "contributor-verification",
+          "kind": "canonicalDoc",
+          "path": "CONTRIBUTING.md",
+          "anchor": "## ./scripts/check.sh",
+          "sourceSHA256": "5bd3ca7eca5d6618a4faa8325efb49c65f44697e1ea5573f4ea6aa22e9561fb7"
+        }
+      ],
+      "claims": [
+        {
+          "key": "extending-mechanician.overview",
+          "heading": "Extending Mechanician",
+          "body": "Choose the smallest surface that delivers the outcome. A reusable prompt belongs in a skill. An external service usually belongs in MCP or a provider plugin. A Mac automation can become a saved capability or Shortcut. A built-in tool is appropriate only when the app must own its security or native integration.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "adding-tool",
+            "adding-lane",
+            "native-extension-points"
+          ]
+        },
+        {
+          "key": "extending-mechanician.adding-a-built-in-tool",
+          "heading": "Adding a built-in tool",
+          "body": "Implementing the function is only half the work. Classify it independently for Claude, OpenAI, and Codex; decide interactive, plan-mode, unattended, filesystem, and sensitive-read policy; add it to the exact conversation tool catalog; and test that every provider either exposes or withholds it deliberately.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "adding-tool"
+          ]
+        },
+        {
+          "key": "extending-mechanician.adding-a-provider-lane",
+          "heading": "Adding a provider lane",
+          "body": "A provider route crosses Swift account and model state, daemon boot and credentials, turn execution, capability discovery, failures, and login lifecycle. There is no single provider interface whose implementation completes all of those obligations.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "adding-lane"
+          ]
+        },
+        {
+          "key": "extending-mechanician.adding-a-native-surface",
+          "heading": "Adding a native surface",
+          "body": "Utility windows, menu commands, toolbar items, transcript rows, and inspector tabs each have established extension checklists. Preserve the AppKit/SwiftUI ownership boundary and give every icon-only control an explicit accessibility label.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "native-extension-points"
+          ]
+        },
+        {
+          "key": "extending-mechanician.verification",
+          "heading": "Verification",
+          "body": "Run scripts/check.sh before calling an app change complete. Packaging changes also require scripts/dogfood.sh. Verification cost is a design input: prefer an extension whose complete behavior can be exercised in the development bundle.",
+          "lifecycle": "current",
+          "ordinal": 4,
+          "evidenceIDs": [
+            "contributor-verification"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagnosing-bugs",
+      "title": "Diagnosing Bugs",
+      "icon": "stethoscope",
+      "blurb": "Separate intended invariants, live evidence, known issues, and historical designs",
+      "section": "building",
+      "kind": "troubleshooting",
+      "lifecycle": "current",
+      "ordinal": 2,
+      "aliases": [
+        "bug",
+        "error",
+        "troubleshoot",
+        "diagnostics",
+        "logs",
+        "broken"
+      ],
+      "markdown": "# Diagnosing Bugs\n\nStart by recording the exact app version and build, provider lane, model, workspace, permission mode, and reproduction. A static explanation can recognize known symptoms and teach invariants, but a novel defect requires fresh runtime or source evidence.\n\n## Find the owning boundary\n\nUse the architecture map to identify which process and file own the behavior. Provider output, app presentation, durable authority, disposable projections, and background helpers have different failure and recovery paths.\n\n## Gather bounded evidence\n\nPrefer structured diagnostics, exact tool events, source symbols, focused tests, and redacted lifecycle exports. Per-lane agentd logs live under the app support directory, with a separate development root. Do not begin by exporting raw prompts, credentials, or unrestricted logs.\n\n## Try to falsify the first explanation\n\nA useful diagnosis names the expected invariant, the observation that violates it, evidence that would distinguish competing causes, and a verification that would fail before the fix and pass after it. Historical plans explain decisions, but they are not specifications of current behavior.\n\n## Storage uncertainty\n\nlibrary.db is authority and projections.db is disposable. Never repair an uncertain product root by manufacturing a new authority or by treating a projection as truth. The storage marker and active database must agree before product code proceeds.",
+      "evidence": [
+        {
+          "id": "diagnostic-map",
+          "kind": "architecture",
+          "path": "docs/architecture/OVERVIEW.md",
+          "anchor": "## 6. Subsystem directory",
+          "sourceSHA256": "85b46d65880796651c734f5c635cdab9ffa77c302ba0a8c1022faaed71bba075"
+        },
+        {
+          "id": "storage-recovery",
+          "kind": "architecture",
+          "path": "docs/architecture/STORAGE-AND-PERSISTENCE.md",
+          "anchor": "## 3. How authority is decided",
+          "sourceSHA256": "9e68d4b12759c3a24dfeebf5dd547597c799f72cfac831df6e88f718b0e59404"
+        },
+        {
+          "id": "history-warning",
+          "kind": "architecture",
+          "path": "docs/history/README.md",
+          "anchor": "Nothing in this directory describes how Mechanician works today",
+          "sourceSHA256": "61a08ff5997b13492a748cda84bf86886904c41be44e8246d87c6a95fe262025"
+        }
+      ],
+      "claims": [
+        {
+          "key": "diagnosing-bugs.overview",
+          "heading": "Diagnosing Bugs",
+          "body": "Start by recording the exact app version and build, provider lane, model, workspace, permission mode, and reproduction. A static explanation can recognize known symptoms and teach invariants, but a novel defect requires fresh runtime or source evidence.",
+          "lifecycle": "current",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "diagnostic-map"
+          ]
+        },
+        {
+          "key": "diagnosing-bugs.find-the-owning-boundary",
+          "heading": "Find the owning boundary",
+          "body": "Use the architecture map to identify which process and file own the behavior. Provider output, app presentation, durable authority, disposable projections, and background helpers have different failure and recovery paths.",
+          "lifecycle": "current",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "diagnostic-map"
+          ]
+        },
+        {
+          "key": "diagnosing-bugs.gather-bounded-evidence",
+          "heading": "Gather bounded evidence",
+          "body": "Prefer structured diagnostics, exact tool events, source symbols, focused tests, and redacted lifecycle exports. Per-lane agentd logs live under the app support directory, with a separate development root. Do not begin by exporting raw prompts, credentials, or unrestricted logs.",
+          "lifecycle": "current",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "diagnostic-map"
+          ]
+        },
+        {
+          "key": "diagnosing-bugs.try-to-falsify-the-first-explanation",
+          "heading": "Try to falsify the first explanation",
+          "body": "A useful diagnosis names the expected invariant, the observation that violates it, evidence that would distinguish competing causes, and a verification that would fail before the fix and pass after it. Historical plans explain decisions, but they are not specifications of current behavior.",
+          "lifecycle": "current",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "diagnostic-map",
+            "history-warning"
+          ]
+        },
+        {
+          "key": "diagnosing-bugs.storage-uncertainty",
+          "heading": "Storage uncertainty",
+          "body": "library.db is authority and projections.db is disposable. Never repair an uncertain product root by manufacturing a new authority or by treating a projection as truth. The storage marker and active database must agree before product code proceeds.",
+          "lifecycle": "current",
+          "ordinal": 4,
+          "evidenceIDs": [
+            "storage-recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "history",
+      "title": "History & Design Lessons",
+      "icon": "clock.arrow.circlepath",
+      "blurb": "Retired architectures and the lessons that still shape the product",
+      "section": "history",
+      "kind": "history",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "aliases": [
+        "origin",
+        "runtime service",
+        "revert",
+        "postmortem",
+        "design decisions"
+      ],
+      "markdown": "# History & Design Lessons\n\nHistorical documents explain why Mechanician has its present shape. They are never a current implementation specification.\n\n## The Runtime Service\n\nIn July 2026 a signed per-user Runtime Service was designed to own providers, terminals, and durable work over authenticated XPC. It shipped in 0.10.0 and was reverted the next day. The architecture could not observe all of the writers whose collision it was meant to prevent.\n\nThe current design is direct: each window owns its AgentBridge and child agentd processes, the app owns durable authority, and helpers hand create-only envelopes back to the app.\n\n## The storage migration lesson\n\nA later schema v7 release passed tests but blocked existing libraries because migrations had only run against disposable shadow databases. Current storage work treats the active-authority upgrade path and recovery evidence as first-class acceptance contracts.\n\n## Durable product rules\n\nState the user-visible outcome before starting. Measure the problem before building a process boundary around it. Distinguish identity, liveness, and authority in types. Treat verification cost as a design input. Preserve history so a discarded architecture is not proposed again as if nobody had tried it.",
+      "evidence": [
+        {
+          "id": "runtime-service-history",
+          "kind": "history",
+          "path": "docs/history/README.md",
+          "anchor": "## The Runtime Service",
+          "sourceSHA256": "61a08ff5997b13492a748cda84bf86886904c41be44e8246d87c6a95fe262025"
+        },
+        {
+          "id": "schema-v7-postmortem",
+          "kind": "history",
+          "path": "docs/history/POSTMORTEM-schema-v7-active-authority-brick-2026-08-14.md",
+          "anchor": "# Postmortem: schema v7 bricked launch for every existing library",
+          "sourceSHA256": "44cdf225aba44be6f7d2422c2df2885a181840ccc089835b40605dd6ecbf010f"
+        }
+      ],
+      "claims": [
+        {
+          "key": "history.overview",
+          "heading": "History & Design Lessons",
+          "body": "Historical documents explain why Mechanician has its present shape. They are never a current implementation specification.",
+          "lifecycle": "historical",
+          "ordinal": 0,
+          "evidenceIDs": [
+            "runtime-service-history",
+            "schema-v7-postmortem"
+          ]
+        },
+        {
+          "key": "history.the-runtime-service",
+          "heading": "The Runtime Service",
+          "body": "In July 2026 a signed per-user Runtime Service was designed to own providers, terminals, and durable work over authenticated XPC. It shipped in 0.10.0 and was reverted the next day. The architecture could not observe all of the writers whose collision it was meant to prevent.\n\nThe current design is direct: each window owns its AgentBridge and child agentd processes, the app owns durable authority, and helpers hand create-only envelopes back to the app.",
+          "lifecycle": "historical",
+          "ordinal": 1,
+          "evidenceIDs": [
+            "runtime-service-history"
+          ]
+        },
+        {
+          "key": "history.the-storage-migration-lesson",
+          "heading": "The storage migration lesson",
+          "body": "A later schema v7 release passed tests but blocked existing libraries because migrations had only run against disposable shadow databases. Current storage work treats the active-authority upgrade path and recovery evidence as first-class acceptance contracts.",
+          "lifecycle": "historical",
+          "ordinal": 2,
+          "evidenceIDs": [
+            "schema-v7-postmortem"
+          ]
+        },
+        {
+          "key": "history.durable-product-rules",
+          "heading": "Durable product rules",
+          "body": "State the user-visible outcome before starting. Measure the problem before building a process boundary around it. Distinguish identity, liveness, and authority in types. Treat verification cost as a design input. Preserve history so a discarded architecture is not proposed again as if nobody had tried it.",
+          "lifecycle": "historical",
+          "ordinal": 3,
+          "evidenceIDs": [
+            "runtime-service-history",
+            "schema-v7-postmortem"
+          ]
+        }
+      ]
+    }
+  ],
+  "demonstrations": [
+    {
+      "id": "mac.discover-app-actions",
+      "articleID": "mac",
+      "title": "See what your apps expose",
+      "outcome": "Show the user concrete actions published by an installed Mac app.",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "claimKeys": [
+        "mac.overview"
+      ],
+      "requirements": {
+        "session": "interactive",
+        "mode": "readOnlyOkay",
+        "tools": [
+          "DiscoverAppActions"
+        ]
+      },
+      "risk": "readOnly",
+      "reversibility": {
+        "kind": "notNeeded",
+        "instructions": "This demonstration only reads installed-app metadata."
+      },
+      "userConfirmation": "none",
+      "steps": [
+        {
+          "id": "list-apps",
+          "kind": "observe",
+          "tool": "DiscoverAppActions",
+          "instruction": "List apps that publish App Intents."
+        },
+        {
+          "id": "inspect-app",
+          "kind": "observe",
+          "tool": "DiscoverAppActions",
+          "instruction": "Inspect one app chosen by the user or from the returned list."
+        },
+        {
+          "id": "explain",
+          "kind": "explain",
+          "instruction": "Describe the published actions and explain that invocation still uses a Shortcut, AppleScript, or saved capability."
+        }
+      ],
+      "verification": [
+        {
+          "kind": "toolSucceeded",
+          "stepID": "inspect-app",
+          "instruction": "Report the app name and actions actually returned; an explicit no-actions result is also valid."
+        }
+      ],
+      "fallback": [
+        {
+          "when": "emptyResult",
+          "action": "useDemo",
+          "demoID": "mac.inspect-shortcuts",
+          "instruction": "Show the installed Shortcuts inventory instead."
+        }
+      ]
+    },
+    {
+      "id": "mac.inspect-shortcuts",
+      "articleID": "mac",
+      "title": "See your Shortcut bridge",
+      "outcome": "Show the user the Apple Shortcuts this conversation can discover without running one.",
+      "lifecycle": "current",
+      "ordinal": 1,
+      "claimKeys": [
+        "mac.overview"
+      ],
+      "requirements": {
+        "session": "interactive",
+        "mode": "readOnlyOkay",
+        "tools": [
+          "ListShortcuts"
+        ]
+      },
+      "risk": "readOnly",
+      "reversibility": {
+        "kind": "notNeeded",
+        "instructions": "This demonstration lists Shortcut names and identifiers but runs nothing."
+      },
+      "userConfirmation": "none",
+      "steps": [
+        {
+          "id": "list-shortcuts",
+          "kind": "observe",
+          "tool": "ListShortcuts",
+          "instruction": "List the installed Apple Shortcuts."
+        },
+        {
+          "id": "explain",
+          "kind": "explain",
+          "instruction": "Describe a few returned Shortcuts as examples of the App Intents bridge, without running any of them."
+        }
+      ],
+      "verification": [
+        {
+          "kind": "toolSucceeded",
+          "stepID": "list-shortcuts",
+          "instruction": "Report only Shortcuts returned by the live tool; an explicit empty inventory is also valid."
+        }
+      ],
+      "fallback": [
+        {
+          "when": "emptyResult",
+          "action": "explain",
+          "instruction": "Explain that no installed Shortcuts were reported and offer app-action discovery instead."
+        }
+      ]
+    },
+    {
+      "id": "mac.inspect-saved-capabilities",
+      "articleID": "mac",
+      "title": "Inspect saved automations",
+      "outcome": "Show the user the named, reusable automations currently saved on this Mac.",
+      "lifecycle": "current",
+      "ordinal": 2,
+      "claimKeys": [
+        "mac.overview",
+        "mac.what-it-can-do"
+      ],
+      "requirements": {
+        "session": "interactive",
+        "mode": "readOnlyOkay",
+        "tools": [
+          "ListCapabilities"
+        ]
+      },
+      "risk": "readOnly",
+      "reversibility": {
+        "kind": "notNeeded",
+        "instructions": "This demonstration reads capability definitions and verification state but runs nothing."
+      },
+      "userConfirmation": "none",
+      "steps": [
+        {
+          "id": "list-capabilities",
+          "kind": "observe",
+          "tool": "ListCapabilities",
+          "instruction": "List saved capabilities with their parameters, target app, mechanism, and verification state."
+        },
+        {
+          "id": "explain",
+          "kind": "explain",
+          "instruction": "Explain how one returned capability turns a previously worked-out automation into a reusable verb."
+        }
+      ],
+      "verification": [
+        {
+          "kind": "toolSucceeded",
+          "stepID": "list-capabilities",
+          "instruction": "Name only capabilities returned by the live tool and preserve their reported verification state."
+        }
+      ],
+      "fallback": [
+        {
+          "when": "emptyResult",
+          "action": "useDemo",
+          "demoID": "mac.discover-app-actions",
+          "instruction": "If no capabilities are saved, demonstrate read-only app-action discovery instead."
+        }
+      ]
+    },
+    {
+      "id": "mac.run-user-chosen-capability",
+      "articleID": "mac",
+      "title": "Run a saved automation",
+      "outcome": "Let the user choose one saved capability, run exactly that automation, and report its observed result.",
+      "lifecycle": "current",
+      "ordinal": 3,
+      "claimKeys": [
+        "mac.overview",
+        "mac.what-it-can-do"
+      ],
+      "requirements": {
+        "session": "interactive",
+        "mode": "executionEnabled",
+        "tools": [
+          "ListCapabilities",
+          "RunCapability"
+        ]
+      },
+      "risk": "dynamic",
+      "reversibility": {
+        "kind": "dynamic",
+        "instructions": "The selected capability owns its effects; do not promise an undo unless the live capability or user supplies one."
+      },
+      "userConfirmation": "beforeAct",
+      "steps": [
+        {
+          "id": "list-capabilities",
+          "kind": "observe",
+          "tool": "ListCapabilities",
+          "instruction": "List the saved capabilities and present their target, parameters, and verification state."
+        },
+        {
+          "id": "choose-capability",
+          "kind": "ask",
+          "instruction": "Ask the user to choose the exact capability and supply every required argument; do not choose on their behalf."
+        },
+        {
+          "id": "run-capability",
+          "kind": "act",
+          "tool": "RunCapability",
+          "instruction": "After a fresh explicit confirmation of the exact capability and arguments, request only that capability. App approval or macOS permission may still be required in any conversation mode."
+        },
+        {
+          "id": "explain",
+          "kind": "explain",
+          "instruction": "Describe the actual tool result and never report success from intent alone."
+        }
+      ],
+      "verification": [
+        {
+          "kind": "toolSucceeded",
+          "stepID": "run-capability",
+          "instruction": "Treat only a successful RunCapability result as completion; preserve failures and permission denials as failures."
+        }
+      ],
+      "fallback": [
+        {
+          "when": "emptyResult",
+          "action": "useDemo",
+          "demoID": "mac.inspect-saved-capabilities",
+          "instruction": "If no capability exists, show the empty inventory and do not silently author a replacement script."
+        },
+        {
+          "when": "permissionDenied",
+          "action": "explain",
+          "instruction": "Stop and explain that the user declined the automation."
+        },
+        {
+          "when": "actionFailed",
+          "action": "explain",
+          "instruction": "Report the returned failure and offer diagnosis without claiming the demonstration worked."
+        }
+      ]
+    },
+    {
+      "id": "inspector.create-artifact-preview",
+      "articleID": "inspector",
+      "title": "Create a live artifact preview",
+      "outcome": "Create a small visual artifact and show how agent-made work appears in Mechanician's native preview pane.",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "claimKeys": [
+        "getting-started.where-things-appear",
+        "inspector.artifacts"
+      ],
+      "requirements": {
+        "session": "interactive",
+        "mode": "planCompatibleAction",
+        "tools": [
+          "CreateOrUpdateArtifact"
+        ]
+      },
+      "risk": "additive",
+      "reversibility": {
+        "kind": "manual",
+        "instructions": "The created artifact remains in the conversation until the user deletes it from the artifact UI."
+      },
+      "userConfirmation": "beforeDemo",
+      "steps": [
+        {
+          "id": "create-artifact",
+          "kind": "act",
+          "tool": "CreateOrUpdateArtifact",
+          "instruction": "After telling the user what will appear, create a small Markdown or HTML artifact with a clear demonstration title."
+        },
+        {
+          "id": "explain",
+          "kind": "explain",
+          "instruction": "Point out the rendered preview and explain that later calls with the same title revise it in place."
+        }
+      ],
+      "verification": [
+        {
+          "kind": "toolSucceeded",
+          "stepID": "create-artifact",
+          "instruction": "Report success only after the tool confirms that the artifact was created or updated in the preview pane."
+        }
+      ],
+      "fallback": [
+        {
+          "when": "actionFailed",
+          "action": "explain",
+          "instruction": "Report that the preview could not be created and keep the proposed content in the conversation."
+        }
+      ]
+    }
+  ],
+  "guides": [
+    {
+      "id": "composer.controls-tour",
+      "articleID": "composer",
+      "title": "Show the conversation controls",
+      "summary": "Show the model, reasoning effort and permission controls under the message box, and the message box itself.",
+      "surface": "conversationWorkspace",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "claimKeys": [
+        "composer.conversation-controls"
+      ],
+      "steps": [
+        {
+          "id": "model-control",
+          "title": "The model",
+          "instruction": "The model control names the model this conversation runs on. It belongs to the conversation, so two conversations can sit on two different models at once.",
+          "target": "conversationModelControl",
+          "revealAction": "showConversationControls",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "effort-control",
+          "title": "Reasoning effort",
+          "instruction": "Reasoning effort offers the levels the provider reported for the selected model. When a provider reports none, there is nothing here to adjust.",
+          "target": "conversationEffortControl",
+          "revealAction": "showConversationControls",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "permission-control",
+          "title": "Permissions",
+          "instruction": "Permissions decides how much the agent may do on its own. A pending level is marked NEXT because it applies from the next turn onward.",
+          "target": "conversationPermissionControl",
+          "revealAction": "showConversationControls",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "message-box",
+          "title": "The message box",
+          "instruction": "This is the message box. Files, artifacts and images can be dropped straight into it, and a turn already running can still be steered from here.",
+          "target": "conversationComposer",
+          "revealAction": "showConversationControls",
+          "completion": "userAdvance"
+        }
+      ]
+    },
+    {
+      "id": "inspector.changes-tour",
+      "articleID": "inspector",
+      "title": "Show the Changes panel",
+      "summary": "Show the Changes tab in this conversation's own window, where current Git state and the conversation's own file edits appear together.",
+      "surface": "conversationWorkspace",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "claimKeys": [
+        "inspector.changes"
+      ],
+      "steps": [
+        {
+          "id": "open-changes",
+          "title": "Open Changes",
+          "instruction": "Changes reports what actually happened on disk in this checkout, grouped by Conversation: this one, and the others linked to the same repository. Each file says how Mechanician knows about it, and a clean worktree is never treated as proof that work reached a branch.",
+          "target": "conversationChangesTab",
+          "revealAction": "showChangesInspector",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "changes-message-box",
+          "title": "Where the work starts",
+          "instruction": "Work you ask for in the message box appears in that panel while it happens, so staging, diffs, commit and push stay beside the conversation that caused them.",
+          "target": "conversationComposer",
+          "revealAction": "showConversationControls",
+          "completion": "userAdvance"
+        }
+      ]
+    },
+    {
+      "id": "inspector.agents-tour",
+      "articleID": "inspector",
+      "title": "Show the Agents panel",
+      "summary": "Show the Agents tab, the tree of subagents and workflows this conversation delegated work to, with their reported activity on one clock.",
+      "surface": "conversationWorkspace",
+      "lifecycle": "current",
+      "ordinal": 1,
+      "claimKeys": [
+        "inspector.agents"
+      ],
+      "steps": [
+        {
+          "id": "open-agents",
+          "title": "Open Agents",
+          "instruction": "Agents arranges delegated work under Active, Didn't finish and Completed. Selecting a card shows its task, its result or error, its tool timeline, and the Activity pane's Trace, Path and Usage views.",
+          "target": "conversationAgentsTab",
+          "revealAction": "showAgentsInspector",
+          "completion": "userAdvance"
+        }
+      ]
+    },
+    {
+      "id": "inspector.artifacts-tour",
+      "articleID": "inspector",
+      "title": "Show the Artifacts panel",
+      "summary": "Show the Artifacts tab, where the pages, diagrams, tables and documents the agent produced for this conversation are collected.",
+      "surface": "conversationWorkspace",
+      "lifecycle": "current",
+      "ordinal": 2,
+      "claimKeys": [
+        "inspector.artifacts"
+      ],
+      "steps": [
+        {
+          "id": "open-artifacts",
+          "title": "Open Artifacts",
+          "instruction": "Artifacts collects what the agent made for you to look at. Each one renders in the preview pane and can be popped out, shared, saved, revealed in Finder, or dragged back into the message box for another revision.",
+          "target": "conversationArtifactsTab",
+          "revealAction": "showArtifactsInspector",
+          "completion": "userAdvance"
+        }
+      ]
+    },
+    {
+      "id": "inspector.skills-tour",
+      "articleID": "inspector",
+      "title": "Show the Skills panel",
+      "summary": "Show the Skills tab beside the message box it works with, because arming a skill is about your next message rather than a mode.",
+      "surface": "conversationWorkspace",
+      "lifecycle": "current",
+      "ordinal": 3,
+      "claimKeys": [
+        "inspector.skills"
+      ],
+      "steps": [
+        {
+          "id": "open-skills",
+          "title": "Open Skills",
+          "instruction": "Skills lists every skill available to this conversation, grouped by the plugin that supplied it. Groups start collapsed because the list grows with every plugin you install, and searching expands them.",
+          "target": "conversationSkillsTab",
+          "revealAction": "showSkillsInspector",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "skills-message-box",
+          "title": "Arming is per message",
+          "instruction": "Arming a skill is about your next message. A removable pill appears above the message box, and what you type is sent as that skill’s command.",
+          "target": "conversationComposer",
+          "revealAction": "showConversationControls",
+          "completion": "userAdvance"
+        }
+      ]
+    },
+    {
+      "id": "inspector.files-tour",
+      "articleID": "inspector",
+      "title": "Show the Files panel",
+      "summary": "Show the Files tab, the browsable view of this workspace folder. A folderless workspace such as Home does not offer it.",
+      "surface": "conversationWorkspace",
+      "lifecycle": "current",
+      "ordinal": 4,
+      "claimKeys": [
+        "inspector.files"
+      ],
+      "steps": [
+        {
+          "id": "open-files",
+          "title": "Open Files",
+          "instruction": "Files browses the workspace folder. A workspace without a folder, such as Home, has no Files tab at all, because there is nothing beneath it to browse.",
+          "target": "conversationFilesTab",
+          "revealAction": "showFilesInspector",
+          "completion": "userAdvance"
+        }
+      ]
+    },
+    {
+      "id": "mechanician-help.inspector-tour",
+      "articleID": "mechanician-help",
+      "title": "Tour the Help inspector",
+      "summary": "Learn how to browse signed topics, search product knowledge, read an article, and inspect its evidence.",
+      "surface": "helpWorkspaceInspector",
+      "lifecycle": "current",
+      "ordinal": 0,
+      "claimKeys": [
+        "mechanician-help.guided-tours",
+        "mechanician-help.workspace-inspector",
+        "mechanician-help.search"
+      ],
+      "steps": [
+        {
+          "id": "open-help",
+          "title": "Open Help",
+          "instruction": "The Help tab keeps the signed product guide beside this conversation.",
+          "target": "helpInspectorTab",
+          "revealAction": "showHelpInspector",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "browse-topics",
+          "title": "Browse topics",
+          "instruction": "Topics organize current product knowledge by how you use, build, and understand Mechanician.",
+          "target": "helpTopics",
+          "revealAction": "showHelpTopics",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "search-help",
+          "title": "Search Help",
+          "instruction": "Search returns claim-level matches from the signed guide included with this build.",
+          "target": "helpSearchField",
+          "revealAction": "showHelpTopics",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "read-article",
+          "title": "Read an article",
+          "instruction": "Each article explains the current product behavior without adding hidden context to the conversation.",
+          "target": "helpArticleContent",
+          "revealAction": "showGuideArticle",
+          "completion": "userAdvance"
+        },
+        {
+          "id": "inspect-evidence",
+          "title": "Inspect evidence",
+          "instruction": "Evidence labels show the reviewed product source supporting the article's signed claims.",
+          "target": "helpArticleEvidence",
+          "revealAction": "showGuideEvidence",
+          "completion": "userAdvance"
+        }
+      ]
+    }
+  ]
+}

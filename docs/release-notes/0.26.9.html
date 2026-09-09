@@ -1,0 +1,60 @@
+<h2>What's new in 0.26.9</h2>
+
+<p>When Mechanician holds something back from the agent, it now says so instead of leaving you to
+guess. Two commands that were being refused for the wrong reason work again.</p>
+
+<h3>Ordinary commands were refused as if they read your credentials</h3>
+<ul>
+  <li><strong>Commands like <code>docker ps</code>, <code>npm run ps</code> and
+      <code>grep -r ps ./src</code> were blocked, with a message saying credential stores cannot be
+      read.</strong> None of them read anything of the sort.</li>
+  <li>Mechanician blocks the agent from reading stored keys and from listing running processes,
+      because a running process can carry a token on its command line. That check was matching the
+      word anywhere in a command rather than only where a command name goes, so anything with "ps"
+      in it was caught.</li>
+  <li>It now matches only where a command actually starts. Listing processes is still blocked, and
+      so is reading a credentials file named anywhere in a command.</li>
+</ul>
+
+<h3>Mechanician now tells you what it withheld</h3>
+<ul>
+  <li><strong>When Mechanician stops the agent from using something, it now appears in the
+      conversation and on the agent's timeline</strong>, with what was withheld and why. Until now
+      most of these were silent, so the agent simply seemed unreliable.</li>
+  <li>In Plan mode this is the common one. Plan mode is read-only, and the tools it turns down were
+      refused without saying so, which read as the agent ignoring you. Each is now named.</li>
+  <li>A connected app that gets dropped for a turn says so, whichever reason it was dropped for.
+      Previously only the servers that were unreachable on your network were mentioned; the ones
+      whose saved credentials could not be loaded were dropped in silence.</li>
+  <li>On Codex, a request to widen what the agent may reach, such as network access during an
+      install, was declined automatically and invisibly. It reads as Codex being broken. That
+      refusal now appears in the conversation, so at least it is attributed correctly.</li>
+</ul>
+
+<h3>Scheduled tasks say what they could not do</h3>
+<ul>
+  <li><strong>A scheduled task that reached for something it is not allowed to use finished without
+      mentioning it</strong>, so a task that quietly did less than you asked looked like a task that
+      simply did less than you hoped.</li>
+  <li>The run report now names what was withheld, alongside the permissions it already reported.
+      These read differently on purpose: one is something you could have approved had you been
+      there, the other is something a scheduled run can never have.</li>
+</ul>
+
+<h3>Skills say who can use them</h3>
+<ul>
+  <li><strong>The built-in Claude API reference is listed under Extensions, "What it can do", but on
+      many models the agent cannot reach for it</strong>, because the reference is larger than the
+      conversation it would have to fit in. The list said nothing about that, so the agent looked
+      like it was ignoring a skill you could see.</li>
+  <li>The entry now says which half is true: you can still run it yourself, and the agent cannot
+      reach for it on that model.</li>
+</ul>
+
+<h3>Notices no longer disappear when you switch conversations</h3>
+<ul>
+  <li><strong>Messages such as "continuing without a connected app for this turn" were lost whenever
+      the conversation was not the one on screen</strong>, which is exactly what happens during the
+      long replies people switch away from.</li>
+  <li>They are now recorded in the conversation either way.</li>
+</ul>

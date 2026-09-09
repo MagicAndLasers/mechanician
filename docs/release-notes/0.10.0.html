@@ -1,0 +1,14 @@
+<h2>What's new in 0.10.0</h2>
+<ul>
+  <li><strong>Work survives the window.</strong> One signed per-user Runtime Service now owns provider processes, accepted turns, ambient scheduling, and terminals independently of the app's windows.</li>
+  <li><strong>Reliable reconnect and replay.</strong> Versioned authenticated IPC, durable command admission, idempotent event replay, and explicit cancellation reconciliation prevent accepted work from disappearing or being applied twice after a restart.</li>
+  <li><strong>Stronger Codex Ultra recovery.</strong> Provider generations are fenced explicitly, quiet work remains undisturbed, and a lost provider surfaces each affected activity once as recoverable instead of leaving the interface stuck.</li>
+  <li><strong>Terminal sessions reconnect safely.</strong> Terminal identity and controls persist across window and app relaunches, while raw output uses a separate bounded in-memory channel so high-volume PTY data never bloats the durable event ledger.</li>
+  <li><strong>Hardened runtime boundary.</strong> The app and helper validate identities, protocol versions, frame limits, signed resources, and privacy-safe diagnostics before running the bundled provider worker.</li>
+</ul>
+<h2>Anthropic sign-in, fixed</h2>
+<ul>
+  <li><strong>One button everywhere.</strong> Signing in to your Anthropic account is a single button on every surface — the error card, the Connect to Anthropic card, the Accounts panel, and Settings. No terminal commands, ever.</li>
+  <li><strong>Conversations resume themselves.</strong> A conversation interrupted by an expired sign-in continues automatically after you reconnect, including anything you queued in the meantime.</li>
+  <li><strong>Truthful account status.</strong> An expired credential shows “Sign-in required” instead of “Configured”, Connect validates an already-valid credential without opening a browser, and API keys can be added directly in the Accounts panel.</li>
+</ul>

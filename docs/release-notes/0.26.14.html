@@ -1,0 +1,16 @@
+<h2>What's new in 0.26.14</h2>
+
+<h3>A library update could stop on a single unreadable image</h3>
+<ul>
+  <li><strong>If any image in your conversations could not be read, the one-time library update
+      refused to finish and there was no way past it.</strong> The screen offered only Quit, and
+      reopening Mechanician refused again in the same place.</li>
+  <li>Those bytes were already unreadable before the update started, so stopping did not recover
+      them. It only kept the rest of the library from moving. Mechanician now records the image as
+      unreadable and carries on.</li>
+  <li>Anything that could actually lose your work still stops the update, unchanged. An artifact you
+      wrote, a workspace, or a conversation that cannot be read is not skipped, because migrating
+      without it would silently drop something real.</li>
+  <li>If you are stuck on this screen, install this version and reopen Mechanician. The update
+      continues on its own.</li>
+</ul>

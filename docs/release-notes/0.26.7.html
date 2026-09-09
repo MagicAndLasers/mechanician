@@ -1,0 +1,64 @@
+<h2>What's new in 0.26.7</h2>
+
+<p>Stop now works at every point in a turn, the context meter is right on a managed configuration,
+and Codex conversations can reach your saved automations.</p>
+
+<h3>Stop did nothing if you pressed it early</h3>
+<ul>
+  <li><strong>Pressing Stop in the first seconds of a turn had no effect and the turn carried on and
+      answered.</strong> It was most likely to happen while the status still read that Mechanician
+      was checking your credentials.</li>
+  <li>A turn only became stoppable once Mechanician had finished preparing it. Before that point
+      there was nothing for Stop to act on, so the request was noted and then lost.</li>
+  <li>Stop is now honored from the moment you send. A turn you stop before it reaches Claude ends
+      there and is never sent.</li>
+  <li>This was worst on a managed configuration, where preparing a turn includes refreshing the
+      credentials your organization issued and checking servers that are only reachable on the VPN.
+      On those Macs the gap lasted several seconds, which is long enough to press Stop inside it.</li>
+</ul>
+
+<h3>The context meter was wrong on a managed configuration</h3>
+<ul>
+  <li><strong>Opus 5 served through Google Cloud or Amazon Bedrock was shown as a one million token
+      conversation when the real limit there is two hundred thousand.</strong> The meter showed
+      about five times the room you actually had.</li>
+  <li>The same model can carry a different context size depending on where it is served from, and
+      Mechanician was reading that size from the model's name alone. It now takes account of where
+      the model comes from. Sonnet 5 genuinely does carry the larger size on those services and is
+      unchanged.</li>
+  <li>The same mistake left a large bundled reference document switched on for conversations too
+      small to hold it, which could end a turn with no answer at all. On those conversations the
+      document is now set aside, and you can still open it yourself by typing /claude-api.</li>
+</ul>
+
+<h3>Codex conversations were missing most of Mechanician's tools</h3>
+<ul>
+  <li><strong>Your saved automations, the Shortcuts and app action lists, and the question picker
+      were all unavailable in a Codex conversation</strong>, and nothing said so. The Abilities panel
+      listed them anyway, because it showed the whole set rather than the ones the conversation had
+      actually been given.</li>
+  <li>Codex conversations now receive all of them. Running a saved automation still asks you first,
+      exactly as it does with Claude, and asks for that one automation rather than for all of them.</li>
+  <li>The Abilities panel now lists what the conversation really has.</li>
+  <li>Codex was also never told how to use the tools it did have. It now gets the same short
+      description of them that Claude gets. That is what stops it saying it will wait for something
+      and then simply stopping, instead of setting a real wait you get called back from.</li>
+</ul>
+
+<h3>Plan mode refused to read from your connected apps</h3>
+<ul>
+  <li><strong>In Plan mode a tool from a connector you added, such as Gmail, Drive or GitHub, was
+      refused outright with no chance to approve it.</strong> Planning a piece of work by reading a
+      document could not be done at all.</li>
+  <li>Plan mode now asks, so you can allow a read and carry on planning. Anything that writes,
+      builds, or drives your Mac is still refused in Plan mode exactly as before.</li>
+</ul>
+
+<h3>Scheduled tasks</h3>
+<ul>
+  <li>Scheduled tasks were built from an older, separate set of options rather than the ones your
+      conversations use, which left them without protections your conversations already had. They
+      now use the same ones.</li>
+  <li>A task pointing at a workspace folder that no longer exists is now held for you to repair,
+      instead of running from your home folder.</li>
+</ul>

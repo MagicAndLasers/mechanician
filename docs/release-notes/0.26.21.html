@@ -1,0 +1,13 @@
+<h2>What's new in 0.26.21</h2>
+
+<p>This update fixes a library-migration refusal that could repeat forever after Mechanician had
+already safely inventoried an old malformed trash entry.</p>
+
+<ul>
+  <li>The rollback-capture step now uses the same per-source safety proof as the migration itself,
+      instead of rejecting every accounted trash issue a second time.</li>
+  <li>Malformed or unrecognized trash entries remain untouched in the protected library folder;
+      they no longer prevent healthy conversations from completing migration.</li>
+  <li>Opening 0.26.21 automatically retries the existing migration. No Terminal commands or manual
+      cleanup are required.</li>
+</ul>

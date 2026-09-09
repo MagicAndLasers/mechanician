@@ -1,0 +1,168 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Delete %lld Artifacts": {
+      "comment": "Edit menu Undo action name after deleting artifacts. AppKit composes \"Undo \" in front of this.",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Delete Artifact"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Delete %lld Artifacts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Delete %lld Conversations": {
+      "comment": "Edit menu Undo action name after deleting several conversations. AppKit composes \"Undo \" in front of this.",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Delete Conversation"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Delete %lld Conversations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Delete All Conversations": {
+      "comment": "Edit menu Undo action name after emptying a workspace. Distinct from the counted form because the user chose \"all\", not a number."
+    },
+    "Delete Scheduled Task": {
+      "comment": "Edit menu Undo action name after deleting one scheduled task. AppKit composes \"Undo \" in front of this."
+    },
+    "Move %lld Artifacts": {
+      "comment": "Edit menu Undo action name after moving artifacts between workspaces. AppKit composes \"Undo \" in front of this.",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Move Artifact"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Move %lld Artifacts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Move %lld Conversations": {
+      "comment": "Edit menu Undo action name after moving conversations between workspaces. AppKit composes \"Undo \" in front of this.",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Move Conversation"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Move %lld Conversations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Pin %lld Conversations": {
+      "comment": "Conversation sidebar context-menu action that pins every selected conversation.",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pin Conversation"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pin %lld Conversations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Pin Conversation": {
+      "comment": "Conversation sidebar context-menu action that pins one conversation."
+    },
+    "Move Attachment": {
+      "comment": "Edit menu Undo action name after reordering an attachment in the composer."
+    },
+    "New Conversation": {
+      "comment": "File menu item that starts a conversation. Verb phrase, not a label for an existing one."
+    },
+    "Redo": {
+      "comment": "Edit menu item when there is nothing named to redo."
+    },
+    "Unpin %lld Conversations": {
+      "comment": "Conversation sidebar context-menu action that unpins every selected conversation.",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Unpin Conversation"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Unpin %lld Conversations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Unpin Conversation": {
+      "comment": "Conversation sidebar context-menu action that unpins one conversation."
+    },
+    "Undo": {
+      "comment": "Edit menu item when there is nothing named to undo."
+    }
+  },
+  "version": "1.0"
+}

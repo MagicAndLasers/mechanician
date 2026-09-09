@@ -1,0 +1,7 @@
+<h2>Runtime reliability architecture</h2>
+<ul>
+  <li>Keeps an older compatible Runtime Service fully usable until it explicitly proves durable upgrade-drain support and reaches a safe handoff checkpoint.</li>
+  <li>Accepts new conversation turns durably through Runtime Service reconnects and upgrades instead of disabling Enter when the live transport flickers.</li>
+  <li>Keeps model choices stable through reconnects while binding every cached catalog to the exact Claude or Codex account that supplied it.</li>
+  <li>Prevents parallel builds from replacing a candidate and blocks publication until the exact installed helper authenticates, discovers models, and completes real Claude and Codex turns.</li>
+</ul>

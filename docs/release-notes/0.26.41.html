@@ -1,0 +1,24 @@
+<h2>What's new in 0.26.41</h2>
+
+<p>Two corrections to what Mechanician says about a permission decision: one on the card you see,
+and one in what Memory writes down.</p>
+
+<h3>A decided permission card stops asking</h3>
+<ul>
+  <li><strong>A permission card whose answer is already in now says what happened, instead of still
+  asking the question.</strong> "Allow this command?" becomes "Asked to run a command", with "The
+  agent was not allowed to run a command in this workspace" underneath it.</li>
+  <li>This matters most when the answer arrived without a prompt, which is what happens with a
+  remembered rule, a permission mode, or a conversation reopened from history. A card that was still
+  asking, next to a "Denied" badge, read as a box announcing a decision you were never offered.</li>
+  <li>The new wording never says that you chose it, because sometimes you did not.</li>
+</ul>
+
+<h3>Declining a tool is no longer also counted as that tool failing</h3>
+<ul>
+  <li>Declining a command used to record two separate things: that you declined it, and that the
+  tool failed. Nothing had run, so the failure was invented.</li>
+  <li>Memory reads those records, so a workspace where you decline things often had started to look
+  like a workspace where things break often.</li>
+  <li>A tool that genuinely fails after you decline a different call is still counted.</li>
+</ul>
