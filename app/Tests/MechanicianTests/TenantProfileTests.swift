@@ -62,6 +62,7 @@ final class TenantProfileTests: XCTestCase {
         let p = TenantProfile.default
         XCTAssertTrue(p.isDefault)
         XCTAssertTrue(p.routes.isEmpty)
+        XCTAssertTrue(p.providers.allowPublic)
         XCTAssertTrue(p.extensions.allowPublic)
         XCTAssertTrue(p.extensions.managedSources.isEmpty)
         XCTAssertTrue(p.extensions.managedServers.isEmpty)
@@ -121,6 +122,7 @@ final class TenantProfileTests: XCTestCase {
         XCTAssertEqual(p.schemaVersion, 1)
         XCTAssertEqual(p.tenantId, "acme")
         XCTAssertTrue(p.routes.isEmpty)
+        XCTAssertTrue(p.providers.allowPublic)
         XCTAssertTrue(p.extensions.allowPublic)
         XCTAssertNil(p.update)
         XCTAssertNil(p.portal)
@@ -134,6 +136,44 @@ final class TenantProfileTests: XCTestCase {
         """#)
         XCTAssertEqual(p.routes.first?.isDefault, false)
         XCTAssertNil(p.routes.first?.displayName)
+    }
+
+    func testAProfileCanWithholdThePersonalLanes() throws {
+        let p = try decode(#"""
+        { "tenantId": "acme", "displayName": "Acme",
+          "routes": [ { "routeId": "acme-vertex", "adapter": "claude-vertex",
+                        "vertex": { "projectId": "acme-claude-code", "region": "global" },
+                        "default": true } ],
+          "providers": { "allowPublic": false } }
+        """#)
+
+        XCTAssertFalse(p.providers.allowPublic)
+        for access in ModelAccess.builtInCases {
+            XCTAssertFalse(p.allowsProviderAccess(access), access.rawValue)
+            XCTAssertNotNil(p.providerBlockReason(for: access), access.rawValue)
+        }
+        XCTAssertTrue(p.allowsProviderAccess(.claudeVertex))
+        XCTAssertNil(p.providerBlockReason(for: .claudeVertex))
+        // The inventory keeps every lane, so a conversation already on one is preserved rather than
+        // rewritten; only what a person may choose shrinks.
+        XCTAssertEqual(ModelAccess.allCases(profile: p), ModelAccess.builtInCases + [.claudeVertex])
+        XCTAssertEqual(ModelAccess.selectableCases(profile: p, policy: nil), [.claudeVertex])
+
+        // An empty section, like a missing one, withholds nothing.
+        let unstated = try decode(
+            #"{ "tenantId": "acme", "displayName": "Acme", "providers": {} }"#)
+        XCTAssertTrue(unstated.providers.allowPublic)
+        XCTAssertEqual(
+            ModelAccess.selectableCases(profile: unstated, policy: nil), ModelAccess.builtInCases)
+    }
+
+    func testOnlyAnOrganizationsOwnRouteMakesADeploymentCurated() {
+        XCTAssertFalse(ModelAccess.curatesPersonalLanes(selectable: ModelAccess.builtInCases))
+        XCTAssertTrue(ModelAccess.curatesPersonalLanes(
+            selectable: ModelAccess.builtInCases + [.claudeVertex]))
+        XCTAssertTrue(ModelAccess.curatesPersonalLanes(selectable: [.claudeBedrock]))
+        // A forced allowlist that leaves only personal lanes has no route to curate around.
+        XCTAssertFalse(ModelAccess.curatesPersonalLanes(selectable: [.anthropicAPI]))
     }
 
     func testEnterpriseRouteStorageIsStableAndTenantScoped() {
@@ -698,6 +738,79 @@ final class TenantProfileTests: XCTestCase {
             duplicateRoutes, publicKey: key.publicKey.rawRepresentation)) { error in
             XCTAssertTrue(error.localizedDescription.contains("exactly one complete identity"))
         }
+    }
+
+    /// Withholding the personal lanes from a profile with nothing of its own to offer would leave a
+    /// Mac unable to run any turn, so that document is refused before it can replace a working one.
+    func testSignedProfileWithholdingPersonalAccountsMustDeclareARoute() throws {
+        let key = Curve25519.Signing.PrivateKey()
+        let routeless = try signedEnvelope(profileJSON: #"""
+        { "tenantId": "acme", "displayName": "Acme", "providers": { "allowPublic": false } }
+        """#, privateKey: key)
+        // A route this build has no adapter for activates nothing, so it does not count.
+        let unsupported = try signedEnvelope(profileJSON: #"""
+        { "tenantId": "acme", "displayName": "Acme", "providers": { "allowPublic": false },
+          "routes": [ { "routeId": "acme-future", "adapter": "claude-future" } ] }
+        """#, privateKey: key)
+        for data in [routeless, unsupported] {
+            XCTAssertThrowsError(try TenantProfile.loadSignedProfile(
+                data, publicKey: key.publicKey.rawRepresentation)) { error in
+                XCTAssertEqual(
+                    error.localizedDescription,
+                    TenantProfile.SignedProfileError.invalidProviderPolicy.localizedDescription)
+            }
+        }
+
+        let routed = try signedEnvelope(profileJSON: #"""
+        { "tenantId": "acme", "displayName": "Acme", "providers": { "allowPublic": false },
+          "routes": [ { "routeId": "acme-vertex", "adapter": "claude-vertex",
+                        "vertex": { "projectId": "acme-claude-code", "region": "global" } } ] }
+        """#, privateKey: key)
+        let loaded = try TenantProfile.loadSignedProfile(
+            routed, publicKey: key.publicKey.rawRepresentation)
+
+        // The standard app's sanitization resets branding, never policy.
+        XCTAssertFalse(loaded.providers.allowPublic)
+        XCTAssertEqual(ModelAccess.selectableCases(profile: loaded, policy: nil), [.claudeVertex])
+    }
+
+    /// The signed policy and a forced allowlist intersect. When nothing survives both, the
+    /// configuration is reported as broken rather than shown as a picker with no lanes in it.
+    func testWithheldPersonalLanesAndAForcedAllowlistMustLeaveALane() throws {
+        let home = try temporaryHome()
+        let key = Curve25519.Signing.PrivateKey()
+        let managedData = try signedEnvelope(profileJSON: #"""
+        { "tenantId": "managed", "displayName": "Managed", "providers": { "allowPublic": false },
+          "routes": [ { "routeId": "managed-vertex", "adapter": "claude-vertex",
+                        "vertex": { "projectId": "managed-claude-code", "region": "global" } } ] }
+        """#, privateKey: key)
+        func configuration(allowing accesses: [String]) -> ManagedEnterprisePolicy.Resolution {
+            managedConfiguration([
+                "schemaVersion": 1,
+                "signedProfile": managedData,
+                "policy": ["allowedProviderAccesses": accesses],
+            ])
+        }
+        func resolve(_ managed: ManagedEnterprisePolicy.Resolution) -> TenantProfile.Resolution {
+            TenantProfile.resolve(
+                bundleIdentifier: MechanicianEnvironment.baseBundleIdentifier,
+                environment: [:],
+                homeDirectory: home,
+                publicKey: key.publicKey.rawRepresentation,
+                managedConfiguration: managed)
+        }
+
+        let conflicting = resolve(configuration(allowing: ["anthropic_api"]))
+        XCTAssertTrue(conflicting.profile.isDefault)
+        XCTAssertTrue(conflicting.error?.contains("does not allow any provider") == true)
+
+        let agreeingConfiguration = configuration(allowing: ["anthropic_api", "claude_vertex"])
+        let agreeing = resolve(agreeingConfiguration)
+        XCTAssertNil(agreeing.error)
+        XCTAssertEqual(
+            ModelAccess.selectableCases(
+                profile: agreeing.profile, policy: agreeingConfiguration.policy),
+            [.claudeVertex])
     }
 
     func testSignedProfileCarriesExactManagedModelEfforts() throws {

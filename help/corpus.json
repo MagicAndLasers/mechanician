@@ -40,7 +40,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "# Part I — The mental model",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -114,14 +114,14 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "## 2. The workspace window",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         },
         {
           "id": "guide-transcript",
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "## 3. The transcript",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -264,7 +264,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "## 4. The composer",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -336,7 +336,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "## 5. The inspector",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -453,7 +453,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "- **Extensions (⌥⌘E)**",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -516,7 +516,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "## 8. Approvals, questions, and trust",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -583,7 +583,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "- **Scheduled & Ambient Tasks (⌥⌘T)**",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -645,7 +645,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "## 9. The Mac integration layer",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -702,21 +702,35 @@
         "AWS profile",
         "enterprise profile"
       ],
-      "markdown": "# Accounts & Providers\n\nMechanician's four built-in lanes cover Claude and Codex, with a **subscription** and an **API-key** lane for each provider family. **⌥⌘A** opens Providers, the one place to connect, reconnect and choose the default lane for new conversations.\n\nThese are separate lanes with separate credentials. Signing into one does not sign you into the other, and a conversation belongs to the lane its model comes from.\n\nThe model picker under the message box shows every model you have access to, grouped by provider, with which account each would use. Switching a conversation's model switches its lane.\n\nAPI keys and app-owned tokens live in the macOS Keychain. Removing a key deletes it from this Mac; disconnecting a subscription disconnects Mechanician without claiming to revoke the provider account or destroy Claude Code's global login.\n\n## Managed providers\n\n**Providers** can also import signed enterprise configurations. A verified profile can add managed Claude routes on **Google Vertex AI** or **AWS Bedrock**, plus managed extension catalogs; replacing or removing one takes effect after Mechanician restarts. A Bedrock route names an AWS region and may select one of your existing AWS profiles. The Claude engine resolves the ordinary AWS credential chain, including AWS SSO or an instance role. Mechanician does not store AWS access keys or put them in the route configuration.",
+      "markdown": "# Accounts & Providers\n\nMechanician's four built-in lanes cover Claude and Codex, with a **subscription** and an **API-key** lane for each provider family. **⌥⌘A** opens Providers, the one place to connect, reconnect and choose the default lane for new conversations.\n\nThese are separate lanes with separate credentials. Signing into one does not sign you into the other, and a conversation belongs to the lane its model comes from.\n\nThe model picker under the message box shows every model you have access to, grouped by provider, with which account each would use. Switching a conversation's model switches its lane.\n\nAPI keys and app-owned tokens live in the macOS Keychain. Removing a key deletes it from this Mac; disconnecting a subscription disconnects Mechanician without claiming to revoke the provider account or destroy Claude Code's global login.\n\n## Managed providers\n\n**Providers** can also import signed enterprise configurations. A verified profile can add managed Claude routes on **Google Vertex AI** or **AWS Bedrock**, plus managed extension catalogs; replacing or removing one takes effect after Mechanician restarts. A Bedrock route names an AWS region and may select one of your existing AWS profiles. The Claude engine resolves the ordinary AWS credential chain, including AWS SSO or an instance role. Mechanician does not store AWS access keys or put them in the route configuration.\n\nA profile can also limit Mechanician to its organization's routes, so personal subscriptions and API keys are not offered at all. Whenever a profile adds a route, the model picker lists your organization's providers and, of your personal accounts, only the ones you have connected or used on this Mac. **Providers** still lists every lane you can connect.",
       "evidence": [
         {
           "id": "guide-accounts",
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "## 10. Accounts and providers",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         },
         {
           "id": "source-bedrock-route",
           "kind": "source",
           "path": "app/Sources/Mechanician/TenantProfile.swift",
           "anchor": "struct Bedrock: Codable, Equatable {",
-          "sourceSHA256": "bca18105493351a72b9abf270fb9c1d26bd1eaf50f37c9ba70c0e20b8cd35c67"
+          "sourceSHA256": "6678dee863ac16b3344fcc59c9a0b49c5c97819f99d654bdce50be74e8dadcd5"
+        },
+        {
+          "id": "source-provider-policy",
+          "kind": "source",
+          "path": "app/Sources/Mechanician/TenantProfile.swift",
+          "anchor": "struct ProviderPolicy: Codable, Equatable {",
+          "sourceSHA256": "6678dee863ac16b3344fcc59c9a0b49c5c97819f99d654bdce50be74e8dadcd5"
+        },
+        {
+          "id": "source-curated-picker",
+          "kind": "source",
+          "path": "app/Sources/Mechanician/ModelPickerView.swift",
+          "anchor": "static func hasBeenUsed(_ access: ModelAccess, bridge: AgentBridge) -> Bool {",
+          "sourceSHA256": "4ee19b78e0040f174c6085eb191379c5f2c2da05749bf0baccd4ae68cee3717e"
         }
       ],
       "claims": [
@@ -733,12 +747,14 @@
         {
           "key": "accounts.managed-providers",
           "heading": "Managed providers",
-          "body": "**Providers** can also import signed enterprise configurations. A verified profile can add managed Claude routes on **Google Vertex AI** or **AWS Bedrock**, plus managed extension catalogs; replacing or removing one takes effect after Mechanician restarts. A Bedrock route names an AWS region and may select one of your existing AWS profiles. The Claude engine resolves the ordinary AWS credential chain, including AWS SSO or an instance role. Mechanician does not store AWS access keys or put them in the route configuration.",
+          "body": "**Providers** can also import signed enterprise configurations. A verified profile can add managed Claude routes on **Google Vertex AI** or **AWS Bedrock**, plus managed extension catalogs; replacing or removing one takes effect after Mechanician restarts. A Bedrock route names an AWS region and may select one of your existing AWS profiles. The Claude engine resolves the ordinary AWS credential chain, including AWS SSO or an instance role. Mechanician does not store AWS access keys or put them in the route configuration.\n\nA profile can also limit Mechanician to its organization's routes, so personal subscriptions and API keys are not offered at all. Whenever a profile adds a route, the model picker lists your organization's providers and, of your personal accounts, only the ones you have connected or used on this Mac. **Providers** still lists every lane you can connect.",
           "lifecycle": "current",
           "ordinal": 1,
           "evidenceIDs": [
             "guide-accounts",
-            "source-bedrock-route"
+            "source-bedrock-route",
+            "source-provider-policy",
+            "source-curated-picker"
           ]
         }
       ]
@@ -763,7 +779,7 @@
           "kind": "canonicalDoc",
           "path": "docs/GUIDE.md",
           "anchor": "# Part V — Keyboard shortcuts",
-          "sourceSHA256": "076d0729d080e9c3f720a5e3ffda88901a546f45f13f28524e918de006cf07ef"
+          "sourceSHA256": "d6c8ca7587f2c6a757ddb0aabb4d3df08ad8a8ba877f92fc4b74c02364ed5554"
         }
       ],
       "claims": [
@@ -1091,7 +1107,7 @@
           "kind": "architecture",
           "path": "docs/architecture/PROVIDER-LANES-AND-ACCOUNTS.md",
           "anchor": "## 9. Adding a lane",
-          "sourceSHA256": "e737594c0df1b856f02809b02424b214d055d6ca7d640ca290c3d7baef2ae280"
+          "sourceSHA256": "474e6b301bff9654054d758d46c5267719a0a7db790e7be1ba0a974f629cfddf"
         },
         {
           "id": "native-extension-points",

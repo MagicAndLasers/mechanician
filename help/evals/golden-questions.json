@@ -383,7 +383,27 @@
       "expectedEvidenceByClaim": {
         "accounts.managed-providers": [
           "guide-accounts",
-          "source-bedrock-route"
+          "source-bedrock-route",
+          "source-provider-policy",
+          "source-curated-picker"
+        ]
+      }
+    },
+    {
+      "id": "managed-personal-accounts",
+      "category": "retrieval",
+      "question": "Why is my personal Claude subscription missing from the model picker on a managed Mac?",
+      "includeHistory": false,
+      "expectedClaimKeys": [
+        "accounts.managed-providers"
+      ],
+      "excludedClaimKeys": [],
+      "expectedEvidenceByClaim": {
+        "accounts.managed-providers": [
+          "guide-accounts",
+          "source-bedrock-route",
+          "source-provider-policy",
+          "source-curated-picker"
         ]
       }
     },

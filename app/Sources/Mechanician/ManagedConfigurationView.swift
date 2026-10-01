@@ -952,6 +952,9 @@ struct ManagedConfigurationView: View {
                 : signed.extensions.managedServers
                     .map { "\($0.name) (\($0.transport))" }
                     .joined(separator: "\n"))
+            row("Personal accounts", signed.providers.allowPublic
+                ? "Allowed alongside this profile's routes."
+                : "Blocked. Only this profile's routes are available.")
             row("Not editable here",
                 "A route's adapter, a source's format, and any managed MCP server are fixed by the "
                 + "signed profile. Those select which code runs, and a stdio server names a command to "

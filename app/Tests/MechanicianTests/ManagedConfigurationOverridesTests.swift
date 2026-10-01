@@ -399,6 +399,20 @@ extension ManagedConfigurationOverridesTests {
         XCTAssertEqual(decoded.extensions.managedSources.first { $0.name == "Acme Plugins" }?
             .authentication, "googleIdentity")
     }
+
+    /// Likewise a profile that withholds personal accounts: dropping the policy on export would
+    /// hand every Mac its personal lanes back the next time the document was signed.
+    func testExportingAPublishedProfileKeepsItsProviderPolicy() throws {
+        var profile = acmeProfile
+        profile.providers.allowPublic = false
+
+        let document = ManagedConfigurationOverrides.exportableProfile(from: profile)
+        let data = try JSONSerialization.data(withJSONObject: document)
+        let decoded = try JSONDecoder().decode(TenantProfile.self, from: data)
+
+        XCTAssertFalse(decoded.providers.allowPublic)
+        XCTAssertFalse(ManagedConfigurationOverrides().applied(to: profile).providers.allowPublic)
+    }
 }
 
 // MARK: - Claude on AWS Bedrock

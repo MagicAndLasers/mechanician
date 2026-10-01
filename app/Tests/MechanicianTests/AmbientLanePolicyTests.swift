@@ -159,6 +159,51 @@ final class AmbientLanePolicyTests: XCTestCase {
             [.openAIAPI])
     }
 
+    /// A signed profile can withhold the personal lanes without any forced preference beside it,
+    /// leaving only its own route to schedule on.
+    func testAProfileWithholdingPersonalAccountsFiltersSchedulerAndCredentialHandoff() {
+        let profile = TenantProfile(
+            tenantId: "acme",
+            displayName: "Acme",
+            routes: [
+                .init(
+                    routeId: "acme-vertex",
+                    adapter: "claude-vertex",
+                    vertex: .init(projectId: "acme-claude-code", region: "global"),
+                    isDefault: true),
+            ],
+            providers: .init(allowPublic: false))
+        let vertex = task(access: "claude_vertex")
+        let openAI = task(access: "openai_api")
+
+        XCTAssertEqual(
+            AmbientLanePolicy.selectableSchedulable(
+                directAccess: .claudeVertex,
+                managedPolicy: nil,
+                profile: profile),
+            [.claudeVertex])
+        XCTAssertFalse(AmbientStore.shouldRunInProcess(
+            tasks: [openAI],
+            backgroundAgentInstalled: false,
+            daemonAvailable: true,
+            credentialAvailable: { _ in true },
+            managedPolicy: nil,
+            profile: profile))
+        XCTAssertTrue(AmbientStore.shouldRunInProcess(
+            tasks: [openAI, vertex],
+            backgroundAgentInstalled: false,
+            daemonAvailable: true,
+            credentialAvailable: { _ in true },
+            managedPolicy: nil,
+            profile: profile))
+        XCTAssertEqual(
+            AmbientStore.requiredLanes(
+                tasks: [vertex, openAI],
+                managedPolicy: nil,
+                profile: profile),
+            [.claudeVertex])
+    }
+
     func testManagedUnattendedTaskBanStopsSchedulerAndCredentialHandoff() throws {
         let policy = try managedPolicy([
             "allowedProviderAccesses": ["anthropic_api"],

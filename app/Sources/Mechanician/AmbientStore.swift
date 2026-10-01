@@ -482,6 +482,7 @@ final class AmbientStore: ObservableObject {
             EnterpriseConfigurationStartupGate.currentAllowsRuntime,
         schedulingAllowed: Bool = true,
         managedPolicy: ManagedEnterprisePolicy? = ManagedEnterprisePolicy.current,
+        profile: TenantProfile = TenantProfile.current,
         currentBuild: Int = ManagedEnterprisePolicy.currentAppBuild
     ) -> Bool {
         guard enterpriseConfigurationAllowsRuntime,
@@ -491,7 +492,7 @@ final class AmbientStore: ObservableObject {
               daemonAvailable else { return false }
         return tasks.contains {
             $0.needsSchedulerProcess
-                && (managedPolicy?.allows($0.resolvedAccess) ?? true)
+                && $0.resolvedAccess.isAllowed(profile: profile, policy: managedPolicy)
                 && credentialAvailable($0.resolvedAccess)
         }
     }
@@ -502,6 +503,7 @@ final class AmbientStore: ObservableObject {
         enterpriseConfigurationAllowsRuntime: Bool =
             EnterpriseConfigurationStartupGate.currentAllowsRuntime,
         managedPolicy: ManagedEnterprisePolicy? = ManagedEnterprisePolicy.current,
+        profile: TenantProfile = TenantProfile.current,
         currentBuild: Int = ManagedEnterprisePolicy.currentAppBuild
     ) -> Set<ModelAccess> {
         guard enterpriseConfigurationAllowsRuntime,
@@ -511,7 +513,7 @@ final class AmbientStore: ObservableObject {
         return Set(tasks.lazy
             .filter { $0.needsSchedulerProcess }
             .map(\.resolvedAccess)
-            .filter { managedPolicy?.allows($0) ?? true })
+            .filter { $0.isAllowed(profile: profile, policy: managedPolicy) })
     }
 
     /// A lane is usable when it is connected and not mid-account-operation.
@@ -990,6 +992,7 @@ enum AmbientDaemon {
         derived["MECHANICIAN_ALLOW_USER_EXTENSIONS"] = nil
         derived["MECHANICIAN_MANAGED_EXTENSION_SERVERS"] = nil
         derived["MECHANICIAN_ALLOW_UNATTENDED_TASKS"] = nil
+        derived["MECHANICIAN_ALLOW_PERSONAL_PROVIDERS"] = nil
         derived.merge(
             MechanicianEnvironment.credentialServices(for: bundleIdentifier).processEnvironment,
             uniquingKeysWith: { _, signedIdentity in signedIdentity })
@@ -1030,6 +1033,12 @@ enum AmbientDaemon {
             }
             derived["MECHANICIAN_ALLOW_UNATTENDED_TASKS"] =
                 managedPolicy.allowsUnattendedWork(currentBuild: currentBuild) ? "1" : "0"
+        }
+        // The signed profile can withhold the personal lanes on a Mac with no forced preference at
+        // all, so this travels outside the managed transport above. The scheduler otherwise knows
+        // nothing of the profile and would run a task left on one of those lanes.
+        if !profile.providers.allowPublic {
+            derived["MECHANICIAN_ALLOW_PERSONAL_PROVIDERS"] = "0"
         }
         return derived
     }
@@ -1093,8 +1102,14 @@ enum AmbientDaemon {
         let authorityIdentity = authorityGeneration == "legacy-unmarked"
             ? legacyIdentity
             : legacyIdentity + "|\(authorityGeneration)"
-        guard let managedPolicyIdentity else { return authorityIdentity }
-        return authorityIdentity + "|mdm|\(managedPolicyIdentity)"
+        // Only a profile that withholds the personal lanes adds anything, so an installation that
+        // does not use the policy keeps its identity and is not replaced for it. One that does must
+        // be replaced, or a retained job would go on running tasks on lanes it no longer offers.
+        let profileIdentity = profile.providers.allowPublic
+            ? authorityIdentity
+            : authorityIdentity + "|personal-providers-withheld"
+        guard let managedPolicyIdentity else { return profileIdentity }
+        return profileIdentity + "|mdm|\(managedPolicyIdentity)"
     }
 
     private static var currentConfigurationIdentity: String {
@@ -1384,6 +1399,7 @@ enum AmbientDaemon {
         env["MECHANICIAN_ALLOW_USER_EXTENSIONS"] = nil
         env["MECHANICIAN_MANAGED_EXTENSION_SERVERS"] = nil
         env["MECHANICIAN_ALLOW_UNATTENDED_TASKS"] = nil
+        env["MECHANICIAN_ALLOW_PERSONAL_PROVIDERS"] = nil
         env["MECHANICIAN_VERTEX_PROJECT"] = nil
         env["MECHANICIAN_VERTEX_REGION"] = nil
         env.merge(currentProcessEnvironment, uniquingKeysWith: { _, derived in derived })

@@ -43,7 +43,7 @@ test('the public corpus has stable authored claims and explicit evidence mapping
   assert.equal(corpus.schemaVersion, 4)
   assert.equal(corpus.articles.length, 15)
   assert.equal(corpus.articles.flatMap(article => article.claims).length, 75)
-  assert.equal(corpus.articles.flatMap(article => article.evidence).length, 28)
+  assert.equal(corpus.articles.flatMap(article => article.evidence).length, 30)
   assert.deepEqual(corpus.demonstrations.map(demo => demo.id).sort(), [
     'inspector.create-artifact-preview',
     'mac.discover-app-actions',

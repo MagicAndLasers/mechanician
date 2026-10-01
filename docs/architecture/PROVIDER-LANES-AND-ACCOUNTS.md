@@ -163,6 +163,22 @@ persistent Providers window. `ProviderSetupBanner.swift` is the in-conversation 
 lane, and `ProviderSetupRecovery.swift` binds that banner to a destination so an account action
 resumes the exact conversation that was blocked. Opening the window carries no routing authority.
 
+`ModelPickerProviderPolicy.presents` in `ModelPickerView.swift` decides which lanes the model picker
+lists. Vertex and the two subscription lanes are listed before they authenticate, so an account can
+be recovered where its models belong; the API-key lanes and Bedrock are listed only once available.
+A deployment that runs an organization's route is the exception. There
+`ModelAccess.curatesPersonalLanes` is true, and a personal subscription is listed only once it is
+usable or `hasBeenUsed` finds evidence that a person used it on this Mac: the conversation is on
+it, a sign-in is under way or has just failed, it has produced models here before, or it needs
+reconnecting. Without this rule every managed Mac listed accounts its organization never set up.
+The toolbar Providers menu applies the same rule, the built-in fallback models are not previewed
+for a personal lane there, and `prepareModelCatalog` does not start a runtime to probe a lane the
+picker hides. The Providers window still lists every lane a person may connect, so it calls
+`checkPersonalAccounts()` when it opens and on Refresh, and the menu's **Check Accounts Again**
+calls it too. A subscription that is signed in but has never produced models on this Mac therefore
+reaches the picker only after one of those has checked it, and again after anything that returns
+every lane to checking.
+
 ## 6. Model catalogs and capabilities
 
 `requestModelCatalog` in `agentd/src/agentd.mjs` runs discovery: Claude routes open a real `query()`
@@ -225,6 +241,24 @@ secret-free mapping, which is what stops a profile from becoming a generic envir
 injection surface. The profile-signing public key is embedded in the app and is deliberately
 separate from Sparkle's update-signing key. A missing profile resolves to `TenantProfile.default`;
 an invalid one is a launch-blocking error.
+
+**A profile can withhold the personal lanes.** When `providers.allowPublic` is `false`,
+`TenantProfile.allowsProviderAccess` refuses the four built-in lanes, which leaves only the
+profile's own routes. `ModelAccess.selectableCases` intersects that with the forced MDM allowlist.
+`providerBlockReason(for:)` stops a turn in `AgentBridge`, and again in `AgentdRuntime.start()`
+before a child is spawned. The scheduler receives the policy as
+`MECHANICIAN_ALLOW_PERSONAL_PROVIDERS=0`. `AmbientDaemon.processEnvironment` sets that variable
+only from the profile and scrubs any inherited value, and `ambientd.mjs` skips a task on a withheld
+lane exactly as it skips one the MDM allowlist forbids. Withholding also changes the scheduler's
+`configurationIdentity`, so an installed background job is replaced. A profile that allows
+personal accounts leaves the identity as it was. `loadSignedProfile` refuses a document that
+withholds the personal lanes without declaring a supported route, because it would leave a Mac
+that can run no turn. No local override changes the policy, an exported profile carries it, and
+the Managed Configuration inspector shows it as **Personal accounts**. Like
+`extensions.allowPublic`, this is policy for a cooperating app, not a control against the person
+running it. Removing the profile removes the policy, and a build that predates the field ignores
+it. A deployment that needs a guarantee sets `allowedProviderAccesses` in the forced preference
+([../enterprise/MDM-DEPLOYMENT.md](../enterprise/MDM-DEPLOYMENT.md)).
 
 The standard bundle owns the `.mechanician-profile` document type. Opening one from Finder or a
 browser never sends it to a conversation: the app verifies its signature, opens Providers on the
