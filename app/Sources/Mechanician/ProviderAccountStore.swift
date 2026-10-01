@@ -680,19 +680,48 @@ extension ModelAccess: CaseIterable {
     /// the four built-ins; an imported or MDM-delivered profile can add `.claudeVertex` or
     /// `.claudeBedrock` without requiring a different app build.
     static var allCases: [ModelAccess] {
-        builtInCases + TenantProfile.current.enterpriseAccesses.filter { !builtInCases.contains($0) }
+        allCases(profile: TenantProfile.current)
     }
 
-    /// Routes a person may choose for new work under the forced enterprise policy. `allCases`
+    static func allCases(profile: TenantProfile) -> [ModelAccess] {
+        builtInCases + profile.enterpriseAccesses.filter { !builtInCases.contains($0) }
+    }
+
+    /// Routes a person may choose for new work: the configured inventory, less the personal lanes
+    /// a signed profile withholds and anything the forced enterprise policy prohibits. `allCases`
     /// deliberately remains the complete configured inventory so persisted conversations and
     /// preferences on a newly prohibited route can be preserved rather than silently rewritten.
     static var selectableCases: [ModelAccess] {
-        guard let policy = ManagedEnterprisePolicy.current else { return allCases }
-        return policy.filteredProviderAccesses(allCases)
+        selectableCases(profile: TenantProfile.current, policy: ManagedEnterprisePolicy.current)
+    }
+
+    /// Pure so the two policies' intersection can be tested without this process's own.
+    static func selectableCases(
+        profile: TenantProfile,
+        policy: ManagedEnterprisePolicy?
+    ) -> [ModelAccess] {
+        allCases(profile: profile).filter { $0.isAllowed(profile: profile, policy: policy) }
     }
 
     var isAllowedByEnterprisePolicy: Bool {
-        ManagedEnterprisePolicy.current?.allows(self) ?? true
+        isAllowed(profile: TenantProfile.current, policy: ManagedEnterprisePolicy.current)
+    }
+
+    func isAllowed(profile: TenantProfile, policy: ManagedEnterprisePolicy?) -> Bool {
+        profile.allowsProviderAccess(self) && (policy?.allows(self) ?? true)
+    }
+
+    /// True when an organization's route is among the lanes a person may choose. Such a deployment
+    /// offers a personal lane only once it is usable or has been used on this Mac, rather than
+    /// every lane the app knows how to drive: nobody on a managed Mac should have to work out which
+    /// personal accounts their organization never set up. With no route, as in the public app,
+    /// every lane is offered as before.
+    static var curatesPersonalLanes: Bool {
+        curatesPersonalLanes(selectable: selectableCases)
+    }
+
+    static func curatesPersonalLanes(selectable: [ModelAccess]) -> Bool {
+        selectable.contains { !builtInCases.contains($0) }
     }
 
     var displayName: String {

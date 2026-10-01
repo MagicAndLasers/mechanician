@@ -23,9 +23,10 @@ struct TenantProfile: Codable, Equatable {
     var bundleIdentifier: String?
     var branding: Branding
     var update: Update?
-    /// Additive enterprise routes (e.g. Claude-on-Vertex). The app's four built-in routes are always
-    /// present regardless of this list.
+    /// Additive enterprise routes (e.g. Claude-on-Vertex). The app's four built-in routes are present
+    /// alongside this list unless ``providers`` withholds them.
     var routes: [Route]
+    var providers: ProviderPolicy
     var extensions: ExtensionPolicy
     var portal: Portal?
 
@@ -196,6 +197,27 @@ struct TenantProfile: Codable, Equatable {
         var profile: String?
     }
 
+    /// Which accounts a person may use besides the routes this profile declares.
+    ///
+    /// When `allowPublic` is false the personal lanes — a Claude or ChatGPT subscription, an
+    /// Anthropic or OpenAI API key — are not offered, cannot be connected, and cannot run a turn,
+    /// leaving only this profile's routes. Like ``ExtensionPolicy/allowPublic`` this is policy for
+    /// a cooperating app rather than a control against the person running it: removing the profile
+    /// removes the restriction with it. An organization that needs a guarantee sets
+    /// `allowedProviderAccesses` in the forced MDM preference, which a person cannot remove.
+    struct ProviderPolicy: Codable, Equatable {
+        var allowPublic: Bool
+
+        init(allowPublic: Bool = true) {
+            self.allowPublic = allowPublic
+        }
+
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            allowPublic = try c.decodeIfPresent(Bool.self, forKey: .allowPublic) ?? true
+        }
+    }
+
     struct ExtensionPolicy: Codable, Equatable {
         /// When true, the user's own MCP/plugin sources and the public registries remain available
         /// alongside the managed ones.
@@ -304,7 +326,8 @@ struct TenantProfile: Codable, Equatable {
     // `tenantId` and `displayName` are truly required. Missing sections fall back to public-equivalent
     // defaults so an under-specified profile degrades toward "public", never toward broken.
     enum CodingKeys: String, CodingKey {
-        case schemaVersion, tenantId, displayName, bundleIdentifier, branding, update, routes, extensions, portal
+        case schemaVersion, tenantId, displayName, bundleIdentifier, branding, update, routes, providers
+        case extensions, portal
     }
 
     init(from decoder: Decoder) throws {
@@ -316,6 +339,7 @@ struct TenantProfile: Codable, Equatable {
         branding = try c.decodeIfPresent(Branding.self, forKey: .branding) ?? Branding()
         update = try c.decodeIfPresent(Update.self, forKey: .update)
         routes = try c.decodeIfPresent([Route].self, forKey: .routes) ?? []
+        providers = try c.decodeIfPresent(ProviderPolicy.self, forKey: .providers) ?? ProviderPolicy()
         extensions = try c.decodeIfPresent(ExtensionPolicy.self, forKey: .extensions) ?? ExtensionPolicy()
         portal = try c.decodeIfPresent(Portal.self, forKey: .portal)
     }
@@ -328,6 +352,7 @@ struct TenantProfile: Codable, Equatable {
         branding: Branding = Branding(),
         update: Update? = nil,
         routes: [Route] = [],
+        providers: ProviderPolicy = ProviderPolicy(),
         extensions: ExtensionPolicy = ExtensionPolicy(),
         portal: Portal? = nil
     ) {
@@ -338,6 +363,7 @@ struct TenantProfile: Codable, Equatable {
         self.branding = branding
         self.update = update
         self.routes = routes
+        self.providers = providers
         self.extensions = extensions
         self.portal = portal
     }
@@ -442,6 +468,20 @@ struct TenantProfile: Codable, Equatable {
     var enterpriseAccesses: [ModelAccess] {
         var seen = Set<ModelAccess>()
         return routes.compactMap { ModelAccess(adapter: $0.adapter) }.filter { seen.insert($0).inserted }
+    }
+
+    /// Whether this profile lets a person use `access`. Only the personal lanes can be withheld:
+    /// an enterprise lane exists exactly when a route declares it, which ``enterpriseAccesses``
+    /// decides, so this never refuses one.
+    func allowsProviderAccess(_ access: ModelAccess) -> Bool {
+        providers.allowPublic || !ModelAccess.builtInCases.contains(access)
+    }
+
+    /// Why this profile refuses a turn on `access`, worded for the person who chose it. Nil when
+    /// the profile allows it.
+    func providerBlockReason(for access: ModelAccess) -> String? {
+        guard !allowsProviderAccess(access) else { return nil }
+        return "Your organization's configuration does not allow personal accounts. Choose one of its providers to continue."
     }
 
     /// The Vertex project/region for this profile's `claude-vertex` route, if it declares one. The
@@ -583,6 +623,7 @@ struct TenantProfile: Codable, Equatable {
         case invalidModelConfiguration
         case invalidManagedServerConfiguration
         case executableConfigurationNotAllowed
+        case invalidProviderPolicy
 
         var errorDescription: String? {
             switch self {
@@ -606,6 +647,8 @@ struct TenantProfile: Codable, Equatable {
                 return "The enterprise profile contains an invalid managed extension server declaration."
             case .executableConfigurationNotAllowed:
                 return "Enterprise profiles cannot supply executable MCP commands, arguments, or environment variables."
+            case .invalidProviderPolicy:
+                return "An enterprise profile that does not allow personal accounts must define a supported provider route."
             }
         }
     }
@@ -869,8 +912,7 @@ struct TenantProfile: Codable, Equatable {
     ) -> String? {
         guard let policy else { return nil }
         if policy.allowedProviderAccesses != nil {
-            let available = ModelAccess.builtInCases + profile.enterpriseAccesses
-            guard !policy.filteredProviderAccesses(available).isEmpty else {
+            guard !ModelAccess.selectableCases(profile: profile, policy: policy).isEmpty else {
                 return "The managed enterprise policy does not allow any provider configured in this version of Mechanician."
             }
         }
@@ -955,6 +997,13 @@ struct TenantProfile: Codable, Equatable {
         }
         guard validManagedServers(envelope.profile.extensions.managedServers) else {
             throw SignedProfileError.invalidManagedServerConfiguration
+        }
+        // Withholding the personal lanes from a profile with no route of its own would leave a Mac
+        // that can run no turn at all, so that document is refused here, before it can replace a
+        // working one.
+        guard envelope.profile.providers.allowPublic
+                || !envelope.profile.enterpriseAccesses.isEmpty else {
+            throw SignedProfileError.invalidProviderPolicy
         }
         return envelope.profile.sanitizedForStandardApp()
     }

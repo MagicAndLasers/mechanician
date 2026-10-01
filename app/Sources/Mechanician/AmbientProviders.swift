@@ -47,11 +47,12 @@ enum AmbientLanePolicy {
 
     static func selectableSchedulable(
         directAccess: ModelAccess,
-        managedPolicy: ManagedEnterprisePolicy?
+        managedPolicy: ManagedEnterprisePolicy?,
+        profile: TenantProfile = TenantProfile.current
     ) -> [ModelAccess] {
         guard managedPolicy?.allowsUnattendedWork() ?? true else { return [] }
         return schedulable.filter {
-            (managedPolicy?.allows($0) ?? true)
+            $0.isAllowed(profile: profile, policy: managedPolicy)
                 && isAvailableToScheduler($0, directAccess: directAccess)
         }
     }

@@ -726,6 +726,11 @@ it active. A profile may check its organization-owned feed automatically or only
 **Check for Updates**. In manual mode, opening Mechanician does not contact the profile publisher.
 Removing a profile takes effect after a restart.
 
+A profile can also limit Mechanician to its organization's routes. In that case the personal
+subscriptions and API keys are not offered at all. Whenever a profile adds a route, the model picker
+lists your organization's providers. Of your personal accounts, it lists only the ones you have
+connected or already used on this Mac. The Providers window still lists every lane you can connect.
+
 There is no separate first-run sign-in screen. When a conversation's lane has no usable credential,
 an account card appears above the composer, **"<Lane> needs a connection"**, with the reason and a
 single action: **Connect** for subscription lanes (in-app OAuth) or **Choose Connection…**, which

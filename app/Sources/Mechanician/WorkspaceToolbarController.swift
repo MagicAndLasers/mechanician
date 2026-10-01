@@ -1050,7 +1050,14 @@ final class WorkspaceToolbarController: NSObject, NSToolbarDelegate, NSMenuDeleg
     private func buildProvidersMenu(_ menu: NSMenu) {
         menu.addItem(sectionHeader("Providers"))
         let store = ProviderAccountStore.shared
-        for access in ModelAccess.selectableCases {
+        // A curated deployment lists the same lanes as the model picker. Open Providers below still
+        // reaches every lane a person may connect.
+        let curated = ModelAccess.curatesPersonalLanes
+        for access in ModelAccess.selectableCases where !curated || ModelPickerProviderPolicy.presents(
+            access,
+            state: store.state(for: access),
+            curatesPersonalLanes: true,
+            hasBeenUsed: ModelPickerProviderPolicy.hasBeenUsed(access, bridge: bridge)) {
             menu.addItem(providerRow(access, store: store))
         }
         menu.addItem(.separator())
@@ -1248,7 +1255,13 @@ final class WorkspaceToolbarController: NSObject, NSToolbarDelegate, NSMenuDeleg
     // is a show/hide control — a menu row named "Open Extensions" that closed the window would be
     // a trap (same rule `showProviders` documents).
     @objc private func didShowProvidersFromMenu() { showProviders() }
-    @objc private func didRecheckAccounts() { ProviderAccountStore.shared.refresh() }
+    /// Also asks about the personal subscriptions a curated deployment's menu leaves out, as Refresh
+    /// in the Providers window does. `refresh()` returns every lane to checking, and nothing else
+    /// probes a lane the picker hides, so a usable account could otherwise drop out of this menu.
+    @objc private func didRecheckAccounts() {
+        ProviderAccountStore.shared.refresh()
+        bridge.checkPersonalAccounts()
+    }
     /// One entry point for both verbs — the same call the model picker makes, so a lane can't be
     /// connected one way here and another way there.
     @objc private func didConnectProviderFromMenu(_ sender: NSMenuItem) {

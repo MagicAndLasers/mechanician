@@ -540,6 +540,41 @@ extension ModelCatalogStoreTests {
         XCTAssertEqual(entries, [cached])
     }
 
+    /// The built-in list is a preview of what reconnecting restores. On a curated deployment a
+    /// personal lane with no rows of its own was never served those models here, and rows marked
+    /// "Last available" would say otherwise.
+    @MainActor
+    func testACuratedPersonalLaneWithNoCachedRowsDoesNotPreviewTheBuiltInList() {
+        let entries = ModelPickerCatalogProjection.entries(
+            snapshot: ModelCatalogSnapshot(
+                phase: .idle, entries: [], credentialEpoch: 0, updatedAt: Date()),
+            isEligible: false,
+            isReconnectable: true,
+            hasAccountOperation: false,
+            fallbackEntries: AgentBridge.fallbackEntries(
+                for: .codexSubscription, scope: "account"),
+            lastKnownEntries: [],
+            previewsFallbackEntries: false)
+
+        XCTAssertTrue(entries.isEmpty)
+    }
+
+    /// A curated deployment offers a personal subscription once it has served models on this Mac.
+    /// Checking a lane for an account it never had records an empty catalog, which is not use.
+    func testOnlyACatalogWithModelsCountsAsALaneHavingBeenUsed() {
+        let store = ModelCatalogStore(cacheURL: nil)
+        XCTAssertFalse(store.hasLastKnownEntries(for: access))
+
+        XCTAssertTrue(store.alignCredentialEpoch(0, for: access))
+        _ = store.publishAutomatic([], access: access, scope: scope, credentialEpoch: 0)
+        XCTAssertFalse(store.hasLastKnownEntries(for: access))
+
+        XCTAssertTrue(store.publishAutomatic(
+            [model], access: access, scope: "another-workspace", credentialEpoch: 0))
+        XCTAssertTrue(store.hasLastKnownEntries(for: access), "any workspace counts")
+        XCTAssertFalse(store.hasLastKnownEntries(for: .claudeSubscription))
+    }
+
     @MainActor
     func testAVertexRouteDeclaringNoModelsStillNeverGuessesTheNewestGeneration() {
         // Declaring nothing must not produce an empty lane — but it must not guess the newest

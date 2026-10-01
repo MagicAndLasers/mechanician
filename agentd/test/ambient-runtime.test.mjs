@@ -360,6 +360,55 @@ test('a legacy task without a provider inherits the scheduler Vertex route', asy
   assert.equal(running.child.exitCode, null, running.stderr())
 })
 
+test('a profile that withholds personal accounts skips a task left on one', async (t) => {
+  const harness = ambientHarness(t, 'mechanician-ambient-personal-withheld-')
+  const { support } = harness
+  const ambient = path.join(support, 'ambient')
+  const routeConfig = path.join(support, 'provider-routes', 'fixture-route', 'claude')
+  const adcDirectory = path.join(routeConfig, 'gcloud')
+  fs.mkdirSync(ambient, { recursive: true })
+  fs.mkdirSync(adcDirectory, { recursive: true })
+  fs.writeFileSync(
+    path.join(adcDirectory, 'application_default_credentials.json'),
+    JSON.stringify({ type: 'authorized_user' }))
+  // A tick visits tasks in order, so the personal task has been passed over by the time the route
+  // task finishes. Were it not, it would fail against this Vertex scheduler and leave a run behind.
+  fs.writeFileSync(path.join(ambient, 'tasks.json'), JSON.stringify([{
+    id: 'personal-task', name: 'Personal', prompt: 'must not reach a model',
+    enabled: false, workspaceID: null, access: 'anthropic_api', permissionMode: 'dontAsk',
+    definitionRevision: 'personal-revision-1', runRequestID: 'personal-request-1',
+    trigger: { type: 'time', schedule: { kind: 'daily', hour: 9, minute: 0 } },
+  }, {
+    id: 'route-task', name: 'Route', prompt: 'use the configured route',
+    enabled: false, workspaceID: null, access: 'claude_vertex', permissionMode: 'dontAsk',
+    definitionRevision: 'route-revision-1', runRequestID: 'route-request-1',
+    trigger: { type: 'time', schedule: { kind: 'daily', hour: 9, minute: 0 } },
+  }], null, 2))
+  const { loader, releaseFile } = writeFakeSDKLoader(support)
+  fs.writeFileSync(releaseFile, '')
+  const running = harness.start({
+    nodeArgs: ['--import', loader],
+    env: {
+      MECHANICIAN_AUTH: 'vertex',
+      MECHANICIAN_CONFIG_DIR: routeConfig,
+      MECHANICIAN_VERTEX_PROJECT: 'acme-claude-code',
+      MECHANICIAN_VERTEX_REGION: 'global',
+      ANTHROPIC_API_KEY: '',
+      MECHANICIAN_AMBIENT_TEST_RELEASE: releaseFile,
+      // No forced preference: the signed profile's policy travels on its own.
+      MECHANICIAN_ALLOW_PERSONAL_PROVIDERS: '0',
+    },
+  })
+
+  const runs = await waitFor(() => {
+    const recorded = readJSON(path.join(ambient, 'runs.json'))
+    return recorded?.some((run) => run.taskId === 'route-task') ? recorded : null
+  }, 'the route task after the withheld personal task')
+
+  assert.deepEqual(runs.map((run) => [run.taskId, run.ok]), [['route-task', true]])
+  assert.equal(running.child.exitCode, null, running.stderr())
+})
+
 test('a pending exact-lane MCP boundary holds a scheduled run before model execution', async (t) => {
   const harness = ambientHarness(t, 'mechanician-ambient-mcp-boundary-')
   const { support } = harness

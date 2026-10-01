@@ -138,6 +138,15 @@ Provider lane identifiers are exact persisted values:
 Unknown future lane strings are retained for forward compatibility but do not make a lane available
 to an older app. An empty allowlist is invalid.
 
+A signed tenant profile can also withhold the four personal lanes with
+`"providers": {"allowPublic": false}`. That leaves only the routes the profile declares, and a
+profile that sets it without declaring a supported route fails verification. This is a profile
+field, not a key in this payload, and it is weaker than the allowlist in two ways. A profile that a
+person imported themselves can be removed, and the restriction goes with it. An app build that
+predates the field ignores it. When the restriction must hold, deliver the profile through
+`signedProfile` and also set `allowedProviderAccesses`. When both are present, only the lanes that
+both allow are offered, and a combination that leaves none is launch-blocking.
+
 The permission value is a ceiling, not a remembered-approval reset. `default` can still honor an
 existing workspace-scoped **Always Allow** decision. A `plan` ceiling prevents built-in file,
 shell, computer-control, and Apple-automation mutation, but a third-party MCP tool whose effects
