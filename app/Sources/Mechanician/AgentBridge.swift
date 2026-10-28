@@ -2518,7 +2518,11 @@ enum MCPAuthorizationPreparationStateResolver {
         currentState: MCPAuthState
     ) -> MCPAuthState? {
         guard currentState == .preparing else { return nil }
-        guard clickedServer == reconciledServer else { return .idle }
+        // A saved attempt for another server owns this provider lane. Resetting the clicked row to
+        // idle made Authorize look dead; say which sign-in has to be finished or cancelled first.
+        guard clickedServer == reconciledServer else {
+            return .failed("Another sign-in (\(reconciledServer)) is unfinished on this provider. Finish or cancel it, then try again.")
+        }
         return launched
             ? .authorizing
             : .failed("Mechanician could not resume the saved sign-in attempt.")
@@ -23912,8 +23916,15 @@ final class AgentBridge: ObservableObject {
         }) {
             return
         }
-        guard case .mcpAuthorize(_, let attemptID) =
-                ownerBridge.extensionControlRoutes[owner.requestID]?.kind,
+        // A reconcile owns the lane exactly like a fresh authorize does (a stale attempt is resumed
+        // under its own id), so it must be cancellable too; otherwise the stale attempt can never be
+        // dismissed and every other server's Authorize is blocked behind it.
+        let ownedAttemptID: String?
+        switch ownerBridge.extensionControlRoutes[owner.requestID]?.kind {
+        case .mcpAuthorize(_, let id), .mcpReconcile(_, let id): ownedAttemptID = id
+        default: ownedAttemptID = nil
+        }
+        guard let attemptID = ownedAttemptID,
               let attempt = ExtensionsStore.shared.pendingMCPAuthorizationAttempt(
                 id: attemptID, for: owner.access) else {
             ExtensionsStore.shared.setAuthState(

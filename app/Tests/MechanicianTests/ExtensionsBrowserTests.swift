@@ -122,8 +122,8 @@ final class ExtensionsBrowserTests: XCTestCase {
                 reconciledServer: "github",
                 launched: true,
                 currentState: .preparing),
-            .idle,
-            "Only the server with the durable attempt may present cancel-capable progress.")
+            .failed("Another sign-in (github) is unfinished on this provider. Finish or cancel it, then try again."),
+            "Only the server with the durable attempt may present cancel-capable progress, and the clicked row must say why nothing started.")
         XCTAssertEqual(
             MCPAuthorizationPreparationStateResolver.finishingState(
                 clickedServer: "notion",
