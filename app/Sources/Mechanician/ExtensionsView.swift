@@ -206,6 +206,8 @@ struct ExtensionsSettings: View {
     /// credential with it. Same rule as uninstalling a plugin: the reversible actions do not ask,
     /// the destructive one does.
     @State private var confirmingServerRemoval: MCPServer?
+    /// Clearing a stored sign-in or token cannot be undone from here, so it asks, like removal.
+    @State private var confirmingCredentialClear: MCPServer?
     @State private var showingAddConnection = false
     @State private var mcpTab: MCPTab = .configured
     @State private var pickingPlugin = false
@@ -258,16 +260,6 @@ struct ExtensionsSettings: View {
     private var remoteServerCount: Int { store.mcpServers.filter(\.isRemote).count }
     private var localServerCount: Int { store.mcpServers.count - remoteServerCount }
     private var connectionCount: Int { store.mcpServers.count + foreignServers.count }
-    private var attention: MCPAttention? {
-        let connections = Dictionary(uniqueKeysWithValues: store.mcpServers.map {
-            ($0.name, store.connState(for: $0.name, access: extensionAccess))
-        })
-        return MCPAttentionResolver.primary(
-            servers: store.mcpServers,
-            authStates: store.authStates(for: extensionAccess),
-            connectionStates: connections)
-    }
-
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
@@ -392,6 +384,23 @@ struct ExtensionsSettings: View {
         } message: {
             Text("Its settings and any stored credential are removed. "
                + "Its tools stop being offered in every conversation.")
+        }
+        .confirmationDialog(
+            "Clear sign-in for \(confirmingCredentialClear?.name ?? "this server")?",
+            isPresented: Binding(get: { confirmingCredentialClear != nil },
+                                 set: { if !$0 { confirmingCredentialClear = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("Clear", role: .destructive) {
+                if let server = confirmingCredentialClear {
+                    active.bridge?.mcpClearAuth(server.name, for: extensionAccess)
+                }
+                confirmingCredentialClear = nil
+            }
+            Button("Cancel", role: .cancel) { confirmingCredentialClear = nil }
+        } message: {
+            Text("The stored credential is removed from this Mac. The server stays configured "
+               + "and will need to sign in again.")
         }
         .sheet(item: $editing) { s in
             MCPServerEditor(server: s,
@@ -810,7 +819,6 @@ struct ExtensionsSettings: View {
     private var configuredPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                if let attention { mcpAttentionBanner(attention) }
                 if store.mcpServers.isEmpty && foreignServers.isEmpty {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("No servers yet.").font(.system(size: 13, weight: .medium))
@@ -819,8 +827,12 @@ struct ExtensionsSettings: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
-                    remoteServersSection
-                    localServersSection
+                    connectionsHeader
+                    ForEach(groupedServerIndices, id: \.group) { section in
+                        connectionGroupSection(section.group, indices: section.indices)
+                    }
+                    connectorsSection
+                    connectionFootnotes
                 }
             }
             .padding(16)
@@ -854,282 +866,100 @@ struct ExtensionsSettings: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
-    private var remoteServersSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Text("Remote Servers").font(.headline)
-                Text("\(remoteServerCount + foreignServers.count)")
-                    .font(.caption2.weight(.semibold)).foregroundStyle(.secondary)
-                Spacer()
-                if supportsProviderConnectors, !foreignServers.isEmpty {
-                    Button {
-                        NSWorkspace.shared.open(URL(string: "https://claude.ai/settings/connectors")!)
-                    } label: {
-                        ExtensionIconLabel(systemName: "arrow.up.right.square")
-                    }
-                    .buttonStyle(.plain)
-                    .help("Manage Claude connections on claude.ai")
-                    .accessibilityLabel("Manage Claude connections on claude.ai")
-                }
-                Button { active.bridge?.refreshMcpStatus(for: extensionAccess) } label: {
-                    Label("Refresh Auth", systemImage: "arrow.clockwise")
-                }
-                .buttonStyle(PillButtonStyle(kind: .plain))
-                .controlSize(.small)
-                .disabled(active.bridge == nil || !supportsLiveMCP)
-                .help("Refresh configured servers’ authorization state from macOS Keychain.")
-            }
-
-            VStack(spacing: 0) {
-                if remoteServerIndices.isEmpty && foreignServers.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("No remote MCP servers are configured.")
-                            .font(.callout).foregroundStyle(.secondary)
-                        if store.hasManagedDiscovery {
-                            Text("Choose Add Server to connect an entry from your managed catalog.")
-                                .font(.caption).foregroundStyle(.tertiary)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-                }
-                ForEach(Array(remoteServerIndices.enumerated()), id: \.element) { offset, index in
-                    serverRow($store.mcpServers[index])
-                        .padding(.horizontal, 14).padding(.vertical, 11)
-                    if offset < remoteServerIndices.count - 1 || !foreignServers.isEmpty { Divider() }
-                }
-                ForEach(Array(foreignServers.enumerated()), id: \.element) { offset, name in
-                    connectorRow(name)
-                        .padding(.horizontal, 14).padding(.vertical, 11)
-                    if offset < foreignServers.count - 1 { Divider() }
-                }
-            }
-            .cardSurface(cornerRadius: 12, strokeOpacity: 0.38)
-
-            Text(remoteAuthenticationFootnote)
-                .font(.caption2).foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+    /// Rows by state group, in the fixed group order. Within a group the store's own order is kept,
+    /// so a row moves only when its state changes, never because something re-ranked it.
+    private var groupedServerIndices: [(group: ConnectionRowGroup, indices: [Int])] {
+        let byGroup = Dictionary(grouping: store.mcpServers.indices) { index in
+            ConnectionRowGroup(rowState(store.mcpServers[index]))
+        }
+        return ConnectionRowGroup.allCases.compactMap { group in
+            byGroup[group].map { (group: group, indices: $0) }
         }
     }
 
-    private var localServersSection: some View {
+    private func rowState(_ server: MCPServer) -> ConnectionRowState {
+        ConnectionRowState.resolve(
+            server: server,
+            auth: store.authState(for: server.name, access: extensionAccess),
+            connection: store.connState(for: server.name, access: extensionAccess))
+    }
+
+    private var connectionsHeader: some View {
+        HStack(spacing: 8) {
+            Text("\(store.mcpServers.count + foreignServers.count) connections")
+                .font(.caption).foregroundStyle(.secondary)
+            Spacer()
+            Button { active.bridge?.refreshMcpStatus(for: extensionAccess) } label: {
+                Label("Check all", systemImage: "arrow.clockwise")
+            }
+            .buttonStyle(PillButtonStyle(kind: .plain))
+            .controlSize(.small)
+            .disabled(active.bridge == nil || !supportsLiveMCP)
+            .help("Check every connection's sign-in and tool status.")
+        }
+    }
+
+    private func connectionGroupSection(_ group: ConnectionRowGroup, indices: [Int]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
-                Text("Local Servers").font(.headline)
-                Text("\(localServerCount)")
+                Text(verbatim: group.title).font(.headline)
+                Text("\(indices.count)")
                     .font(.caption2.weight(.semibold)).foregroundStyle(.secondary)
             }
             VStack(spacing: 0) {
-                if localServerIndices.isEmpty {
-                    Text("No local MCP servers.")
-                        .font(.callout).foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(16)
-                }
-                ForEach(Array(localServerIndices.enumerated()), id: \.element) { offset, index in
+                ForEach(Array(indices.enumerated()), id: \.element) { offset, index in
                     serverRow($store.mcpServers[index])
                         .padding(.horizontal, 14).padding(.vertical, 11)
-                    if offset < localServerIndices.count - 1 { Divider() }
+                    if offset < indices.count - 1 { Divider() }
                 }
             }
             .cardSurface(cornerRadius: 12, strokeOpacity: 0.38)
+        }
+    }
+
+    @ViewBuilder private var connectorsSection: some View {
+        if !foreignServers.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Text("Claude connectors").font(.headline)
+                    Text("\(foreignServers.count)")
+                        .font(.caption2.weight(.semibold)).foregroundStyle(.secondary)
+                    Spacer()
+                    if supportsProviderConnectors {
+                        Button {
+                            NSWorkspace.shared.open(URL(string: "https://claude.ai/settings/connectors")!)
+                        } label: {
+                            ExtensionIconLabel(systemName: "arrow.up.right.square")
+                        }
+                        .buttonStyle(.plain)
+                        .help("Manage Claude connections on claude.ai")
+                        .accessibilityLabel("Manage Claude connections on claude.ai")
+                    }
+                }
+                VStack(spacing: 0) {
+                    ForEach(Array(foreignServers.enumerated()), id: \.element) { offset, name in
+                        connectorRow(name)
+                            .padding(.horizontal, 14).padding(.vertical, 11)
+                        if offset < foreignServers.count - 1 { Divider() }
+                    }
+                }
+                .cardSurface(cornerRadius: 12, strokeOpacity: 0.38)
+            }
+        }
+    }
+
+    @ViewBuilder private var connectionFootnotes: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if store.mcpServers.contains(where: \.isRemote) || !foreignServers.isEmpty {
+                Text(remoteAuthenticationFootnote)
+                    .font(.caption2).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             if localServerCount > 0 {
                 Text("Local processes run on this Mac with the permissions of your agent session.")
                     .font(.caption2).foregroundStyle(.secondary)
             }
         }
-    }
-
-    @ViewBuilder private func mcpAttentionBanner(_ attention: MCPAttention) -> some View {
-        let name = attention.serverName
-        let manualCredentials = store.mcpServers.first(where: { $0.name == name })?
-            .hasManualHeaderCredentials == true
-        HStack(alignment: .center, spacing: 12) {
-            Group {
-                switch attention.kind {
-                case .preparing, .authorizing, .waitingForBrowser, .checking:
-                    OrbitingDots(diameter: 18, allowsVisualOverflow: true)
-                case .needsAuthentication, .authenticationFailed:
-                    Image(systemName: "lock.trianglebadge.exclamationmark.fill")
-                        .foregroundStyle(Color.nWarningText)
-                case .connectionFailed:
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(Color.nErrorText)
-                case .noTools, .toolCountUnavailable, .statusUnavailable:
-                    Image(systemName: "wrench.and.screwdriver.fill")
-                        .foregroundStyle(Color.nWarningText)
-                }
-            }
-            .font(.system(size: 18, weight: .semibold))
-            .frame(width: 26, height: 26)
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(attentionTitle(attention))
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.nText)
-                Text(attentionDetail(attention))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
-                    .textSelection(.enabled)
-            }
-
-            Spacer(minLength: 12)
-
-            switch attention.kind {
-            case .preparing:
-                EmptyView()
-            case .authorizing:
-                Button("Cancel") {
-                    active.bridge?.mcpAuthorizeCancel(name, for: extensionAccess)
-                }
-                .buttonStyle(PillButtonStyle(kind: .neutral))
-            case .waitingForBrowser:
-                if let raw = store.authURL(for: name, access: extensionAccess),
-                   let url = URL(string: raw) {
-                    Button("Open Sign-In") { NSWorkspace.shared.open(url) }
-                        .buttonStyle(PillButtonStyle(kind: .accent))
-                }
-                Button("Cancel") {
-                    active.bridge?.mcpAuthorizeCancel(name, for: extensionAccess)
-                }
-                .buttonStyle(PillButtonStyle(kind: .neutral))
-            case .needsAuthentication:
-                if manualCredentials,
-                   let server = store.mcpServers.first(where: { $0.name == name }) {
-                    Button("Edit Credentials") { editing = server }
-                        .buttonStyle(PillButtonStyle(kind: .accent))
-                } else {
-                    Button("Authenticate") {
-                        active.bridge?.mcpAuthorize(name, for: extensionAccess)
-                    }
-                    .buttonStyle(PillButtonStyle(kind: .accent))
-                }
-            case .authenticationFailed(let failure):
-                let presentation = MCPAuthorizationFailurePresentation.resolve(
-                    failure,
-                    hasManualCredentials: manualCredentials)
-                authorizationFailureAction(
-                    presentation.action,
-                    name: name,
-                    server: store.mcpServers.first(where: { $0.name == name }))
-            case .connectionFailed:
-                Button("Refresh Authorization") {
-                    active.bridge?.refreshMcpStatus(for: extensionAccess)
-                }
-                .buttonStyle(PillButtonStyle(kind: .neutral))
-                if manualCredentials,
-                   let server = store.mcpServers.first(where: { $0.name == name }) {
-                    Button("Edit Credentials") { editing = server }
-                        .buttonStyle(PillButtonStyle(kind: .accent))
-                } else {
-                    Button("Re-authenticate") {
-                        active.bridge?.mcpReauthorize(name, for: extensionAccess)
-                    }
-                    .buttonStyle(PillButtonStyle(kind: .accent))
-                }
-            case .noTools, .toolCountUnavailable, .statusUnavailable:
-                Button("Refresh Authorization") {
-                    active.bridge?.refreshMcpStatus(for: extensionAccess)
-                }
-                .buttonStyle(PillButtonStyle(kind: .neutral))
-                if manualCredentials,
-                   let server = store.mcpServers.first(where: { $0.name == name }) {
-                    Button("Edit Credentials") { editing = server }
-                        .buttonStyle(PillButtonStyle(kind: .accent))
-                } else {
-                    Button("Re-authenticate") {
-                        active.bridge?.mcpReauthorize(name, for: extensionAccess)
-                    }
-                    .buttonStyle(PillButtonStyle(kind: .accent))
-                }
-            case .checking:
-                EmptyView()
-            }
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(attentionColor(attention).opacity(0.10))
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(attentionColor(attention).opacity(0.42), lineWidth: 1)
-        }
-        .accessibilityElement(children: .contain)
-    }
-
-    private func attentionTitle(_ attention: MCPAttention) -> String {
-        switch attention.kind {
-        case .preparing:
-            return String(localized: "Preparing sign-in for \(attention.serverName)…")
-        case .authorizing: return "Starting sign-in for \(attention.serverName)…"
-        case .waitingForBrowser: return "Finish signing in to \(attention.serverName)"
-        case .needsAuthentication:
-            let manualCredentials = store.mcpServers.first(where: {
-                $0.name == attention.serverName
-            })?.hasManualHeaderCredentials == true
-            return manualCredentials
-                ? "\(attention.serverName) rejected its saved credentials"
-                : "\(attention.serverName) is not authenticated"
-        case .authenticationFailed(let failure):
-            let presentation = MCPAuthorizationFailurePresentation.resolve(
-                failure,
-                hasManualCredentials: store.mcpServers.first(where: {
-                    $0.name == attention.serverName
-                })?.hasManualHeaderCredentials == true)
-            return "\(presentation.title) for \(attention.serverName)"
-        case .connectionFailed:
-            return "\(attention.serverName) is not available"
-        case .noTools:
-            return "\(attention.serverName) connected without tools"
-        case .toolCountUnavailable:
-            return "Verifying tools from \(attention.serverName)"
-        case .checking:
-            return "Checking \(attention.serverName)…"
-        case .statusUnavailable:
-            return "Could not verify \(attention.serverName)"
-        }
-    }
-
-    private func attentionDetail(_ attention: MCPAttention) -> String {
-        switch attention.kind {
-        case .preparing:
-            return String(localized: "Your sign-in request was accepted. Your browser will open when the secure connection is ready.")
-        case .authorizing:
-            return "Mechanician is preparing the browser authentication flow."
-        case .waitingForBrowser:
-            return "Complete the browser flow. Until it finishes, this server's tools are not available to the agent."
-        case .needsAuthentication:
-            let manualCredentials = store.mcpServers.first(where: {
-                $0.name == attention.serverName
-            })?.hasManualHeaderCredentials == true
-            return manualCredentials
-                ? "Edit the saved header or PAT. This server uses manual credentials, not browser sign-in."
-                : "Authenticate for \(extensionAccess.displayName) before asking the agent to use this server."
-        case .authenticationFailed(let failure):
-            return failure.message
-        case .connectionFailed(let message):
-            return message
-        case .noTools:
-            return "The endpoint connected, but the provider reported zero tools, so the agent cannot use it yet."
-        case .toolCountUnavailable:
-            return "The connection succeeded, but the provider did not report a tool count. New turns wait for tools to mount before starting."
-        case .checking:
-            return "Verifying authentication and counting the tools that will be available to the agent."
-        case .statusUnavailable:
-            return "Sign-in completed, but the connection check did not return a final status. Try the check again before using this server."
-        }
-    }
-
-    private func attentionColor(_ attention: MCPAttention) -> Color {
-        if case .connectionFailed = attention.kind { return .red }
-        if case .checking = attention.kind { return .nAccent }
-        if case .preparing = attention.kind { return .nAccent }
-        if case .authorizing = attention.kind { return .nAccent }
-        if case .waitingForBrowser = attention.kind { return .nAccent }
-        return .orange
     }
 
     @ViewBuilder private func authorizationFailureAction(
@@ -1177,6 +1007,7 @@ struct ExtensionsSettings: View {
         let value = server.wrappedValue
         let auth = store.authState(for: value.name, access: extensionAccess)
         let authInFlight = auth.isInProgress
+        let state = rowState(value)
         HStack(spacing: 10) {
             Toggle("", isOn: server.enabled).labelsHidden()
                 .onChange(of: value.enabled) { _, enabled in
@@ -1204,14 +1035,8 @@ struct ExtensionsSettings: View {
                     .lineLimit(1).truncationMode(.middle)
             }
             Spacer(minLength: 8)
-            if value.enabled {
-                if supportsLiveMCP {
-                    mcpStatusControl(value)
-                } else {
-                    Text("Claude")
-                        .font(.caption2).foregroundStyle(Color.nSecondaryText)
-                }
-            }
+            rowStatus(state)
+            rowPrimaryAction(value, state: state)
             // A configured server deserves the same card as one you are only considering. "What is
             // this, where did it come from, what can it reach" is a question you ask about the
             // things already running, and it had no answer here at all.
@@ -1221,6 +1046,91 @@ struct ExtensionsSettings: View {
                 .accessibilityLabel("Details for \(value.name)")
             serverActionsMenu(value)
                 .disabled(authInFlight)
+        }
+        .opacity(state == .off ? 0.6 : 1)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(state.accessibilitySummary(serverName: value.name))
+    }
+
+    /// The row's one status: an indicator and one short line. The reason behind a problem is not
+    /// clipped into the row; it is the full text in the details sheet and the help tooltip.
+    @ViewBuilder private func rowStatus(_ state: ConnectionRowState) -> some View {
+        HStack(spacing: 5) {
+            switch state {
+            case .signingIn, .checking:
+                OrbitingDots(diameter: 13, allowsVisualOverflow: true)
+            case .ready:
+                Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.nSuccessText)
+            case .needsSignIn:
+                Image(systemName: "lock.fill").foregroundStyle(Color.nWarningText)
+            case .problem:
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(Color.nErrorText)
+            case .unverified:
+                Image(systemName: "minus.circle").foregroundStyle(Color.nSecondaryText)
+            case .off:
+                EmptyView()
+            }
+            Text(verbatim: state.summary).font(.caption).foregroundStyle(Color.nSecondaryText)
+                .lineLimit(1).fixedSize()
+        }
+        .help(state.detail ?? state.summary)
+    }
+
+    /// The single button a row may show. What it does depends on why the row needs it, so the
+    /// mapping from the typed action to the existing bridge calls lives here, in one place.
+    @ViewBuilder private func rowPrimaryAction(
+        _ server: MCPServer, state: ConnectionRowState
+    ) -> some View {
+        if let action = state.primaryAction {
+            let resolved = resolvedAction(action, server: server, state: state)
+            HStack(spacing: 6) {
+                if case .signingIn(.waitingForBrowser) = state,
+                   let raw = store.authURL(for: server.name, access: extensionAccess),
+                   let url = URL(string: raw) {
+                    // Manual fallback: a cold-launching default browser can DROP the URL
+                    // LaunchServices hands it, so keep the page a click away. A link, not a second
+                    // primary button.
+                    Button("Open sign-in page") { NSWorkspace.shared.open(url) }
+                        .buttonStyle(.link).font(.caption)
+                }
+                Button(resolved.label, action: resolved.run)
+                    .buttonStyle(PillButtonStyle(kind: action == .signIn ? .accent : .neutral))
+                    .controlSize(.small)
+                    .disabled(resolved.needsLiveMCP && (active.bridge == nil || !supportsLiveMCP))
+            }
+        }
+    }
+
+    private func resolvedAction(
+        _ action: ConnectionRowState.PrimaryAction, server: MCPServer, state: ConnectionRowState
+    ) -> (label: String, needsLiveMCP: Bool, run: () -> Void) {
+        let name = server.name
+        let access = extensionAccess
+        let edit = { editing = server }
+        switch action {
+        case .cancel:
+            return (action.label, true, { active.bridge?.mcpAuthorizeCancel(name, for: access) })
+        case .editServer:
+            return (action.label, false, edit)
+        case .signIn:
+            // Manual header credentials have no browser flow, so the useful act is editing them.
+            if server.hasManualHeaderCredentials {
+                return (String(localized: "Edit credentials…"), false, edit)
+            }
+            return (action.label, true, { active.bridge?.mcpAuthorize(name, for: access) })
+        case .retry:
+            guard case .problem(.authenticationFailed(let failure)) = state else {
+                return (action.label, true, { active.bridge?.refreshMcpStatus(for: access) })
+            }
+            let presentation = MCPAuthorizationFailurePresentation.resolve(
+                failure, hasManualCredentials: server.hasManualHeaderCredentials)
+            switch presentation.action {
+            case .some(.addToken), .some(.editCredentials), .some(.editServer):
+                return (presentation.action?.label ?? action.label, false, edit)
+            case .some(.retry), .none:
+                return (action.label, true, { active.bridge?.mcpReauthorize(name, for: access) })
+            }
         }
     }
 
@@ -1260,9 +1170,23 @@ struct ExtensionsSettings: View {
                 }
 
                 detailBlock("Status") {
-                    Text(liveStatusDescription(state))
-                        .font(.caption).foregroundStyle(Color.nSecondaryText)
-                        .fixedSize(horizontal: false, vertical: true)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(liveStatusDescription(state))
+                            .font(.caption).foregroundStyle(Color.nSecondaryText)
+                            .fixedSize(horizontal: false, vertical: true)
+                        // The row shows one short line; the whole reason is here, untruncated.
+                        if let detail = rowState(server).detail {
+                            Text(verbatim: detail)
+                                .font(.caption).foregroundStyle(Color.nSecondaryText)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .textSelection(.enabled)
+                        }
+                        if server.source == nil {
+                            Text("Origin not recorded. This server predates provenance tracking; remove and re-add it if you don't recognise it.")
+                                .font(.caption).foregroundStyle(Color.nSecondaryText)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
                 }
 
                 detailBlock("Connection") {
@@ -1391,10 +1315,9 @@ struct ExtensionsSettings: View {
                     .accessibilityLabel("Added by you")
             }
         case .none:
-            badgeChip("Unknown origin", Color.nWarningText)
-                .help("This server predates provenance tracking, so its origin was never recorded. "
-                      + "Remove and re-add it if you don't recognise it.")
-                .accessibilityLabel("Unknown origin, not recorded")
+            // Nothing on the row. A warning that is always on is ignored, which would defeat the
+            // badge that matters. The details sheet says the origin was not recorded.
+            EmptyView()
         }
     }
 
@@ -1504,76 +1427,6 @@ struct ExtensionsSettings: View {
             // the configuration reload still reaches agentd before the prepared request begins.
             active.bridge?.mcpAuthorize(name, for: extensionAccess)
             active.bridge?.reloadMcpConfiguration(for: extensionAccess)
-        }
-    }
-
-    /// Unified status + auth control for an enabled MCP server. In-progress OAuth state takes
-    /// visual priority; Cancel appears only after agentd owns an exact request. Otherwise we render
-    /// the live connection status (`connState`) as a badge plus a context-appropriate action.
-    @ViewBuilder private func mcpStatusControl(_ s: MCPServer) -> some View {
-        let name = s.name   // RAW name: the key agentd/connState/authState all use
-        let auth = store.authState(for: name, access: extensionAccess)
-        HStack(spacing: 8) {
-            switch auth {
-            case .preparing:
-                OrbitingDots(diameter: 13, allowsVisualOverflow: true)
-                Text("Preparing sign-in…")
-                    .font(.caption).foregroundStyle(Color.nSecondaryText)
-            case .authorizing, .waiting:
-                OrbitingDots(diameter: 13, allowsVisualOverflow: true)
-                if auth == .waiting {
-                    Text("Check your browser…")
-                        .font(.caption).foregroundStyle(Color.nSecondaryText)
-                } else {
-                    Text("Opening sign-in…")
-                        .font(.caption).foregroundStyle(Color.nSecondaryText)
-                }
-                // Manual fallback: a cold-launching default browser can DROP the URL LaunchServices
-                // hands it (seen live: Chrome came up on chrome://newtab). Keep the sign-in page a
-                // click away instead of leaving the user staring at a spinner.
-                if auth == .waiting,
-                   let u = store.authURL(for: name, access: extensionAccess),
-                   let url = URL(string: u) {
-                    Button("Open sign-in page") { NSWorkspace.shared.open(url) }
-                        .buttonStyle(PillButtonStyle(kind: .accent))
-                }
-                Button("Cancel") { active.bridge?.mcpAuthorizeCancel(name, for: extensionAccess) }
-                    .buttonStyle(PillButtonStyle(kind: .neutral))
-            case .failed(let failure):
-                // A failed sign-in attempt — the REASON shows inline (a tooltip hid it, and users
-                // retried a doomed flow). The typed recovery policy below points servers without
-                // browser OAuth at the header-token editor without matching English prose.
-                let presentation = MCPAuthorizationFailurePresentation.resolve(
-                    failure,
-                    hasManualCredentials: s.hasManualHeaderCredentials)
-                VStack(alignment: .trailing, spacing: 2) {
-                    Label(presentation.title, systemImage: "exclamationmark.triangle.fill")
-                        .labelStyle(.titleAndIcon).font(.caption)
-                        .foregroundStyle(Color.nWarningText)
-                        .fixedSize()
-                    Text(presentation.message).font(.caption2)
-                        .foregroundStyle(Color.nSecondaryText)
-                        .lineLimit(2).frame(maxWidth: 260, alignment: .trailing)
-                        .help(presentation.message)
-                }
-                authorizationFailureAction(presentation.action, name: name, server: s)
-            default:
-                // Only `.checking` means a probe is actually in flight. A completed or timed-out
-                // probe maps to `.unknown` and must not be turned back into an endless spinner.
-                let conn = store.connState(for: name, access: extensionAccess)
-                statusBadge(conn, manualCredentials: s.hasManualHeaderCredentials)
-                if conn.wantsAuth {
-                    if s.hasManualHeaderCredentials {
-                        Button("Edit Credentials") { editing = s }
-                            .buttonStyle(PillButtonStyle(kind: .accent))
-                            .controlSize(.small)
-                    } else {
-                        Button("Sign In") { active.bridge?.mcpAuthorize(name, for: extensionAccess) }
-                            .buttonStyle(PillButtonStyle(kind: .accent))
-                            .controlSize(.small)
-                    }
-                }
-            }
         }
     }
 
@@ -1691,33 +1544,28 @@ struct ExtensionsSettings: View {
         }
     }
 
+    /// Two groups, split by a divider: acts that change nothing you cannot undo, then the two that
+    /// do. Checking status is `Check all` in the list header, and signing in is the row's button.
     private func serverActionsMenu(_ server: MCPServer) -> some View {
         let name = server.name
         return Menu {
+            Button("Edit Server…", systemImage: "slider.horizontal.3") { editing = server }
             if server.isRemote {
-                Button("Refresh Authorization Status", systemImage: "arrow.clockwise") {
-                    active.bridge?.refreshMcpStatus(for: extensionAccess)
-                }
-                Divider()
                 if server.hasManualHeaderCredentials {
                     Button("Edit Credentials…", systemImage: "key") { editing = server }
-                    Button("Clear Credentials", role: .destructive) {
-                        active.bridge?.mcpClearAuth(name, for: extensionAccess)
-                    }
                 } else {
-                    Button("Authenticate…") {
-                        active.bridge?.mcpAuthorize(name, for: extensionAccess)
-                    }
-                    Button("Re-authenticate…") {
+                    Button("Sign in again…", systemImage: "person.badge.key") {
                         active.bridge?.mcpReauthorize(name, for: extensionAccess)
                     }
-                    Button("Clear Authorization", role: .destructive) {
-                        active.bridge?.mcpClearAuth(name, for: extensionAccess)
-                    }
                 }
-                Divider()
             }
-            Button("Edit Server…", systemImage: "slider.horizontal.3") { editing = server }
+            Divider()
+            if server.isRemote {
+                Button(server.hasManualHeaderCredentials
+                       ? "Clear Credentials…" : "Clear Sign-in…", role: .destructive) {
+                    confirmingCredentialClear = server
+                }
+            }
             Button("Remove Server…", systemImage: "trash", role: .destructive) {
                 confirmingServerRemoval = server
             }
@@ -1727,9 +1575,7 @@ struct ExtensionsSettings: View {
         .menuStyle(.borderlessButton)
         .fixedSize()
         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
-        .help(server.hasManualHeaderCredentials
-              ? "Refresh, edit credentials, or remove \(name)"
-              : "Refresh authorization, authenticate, edit, or remove \(name)")
+        .help("Edit, sign in again, or remove \(name)")
         .accessibilityLabel("Manage \(name)")
     }
 
