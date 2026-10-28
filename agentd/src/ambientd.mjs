@@ -83,6 +83,17 @@ function managedAccessAllowed(access) {
     || MANAGED_ALLOWED_PROVIDER_ACCESSES.has(access)
 }
 
+// A signed profile may withhold the personal lanes and leave only its own routes. That is not a
+// forced preference, so it arrives apart from the managed policy above, with or without one.
+const PERSONAL_PROVIDERS_ALLOWED = process.env.MECHANICIAN_ALLOW_PERSONAL_PROVIDERS !== '0'
+const PERSONAL_PROVIDER_ACCESSES = new Set([
+  'claude_subscription', 'anthropic_api', 'codex_subscription', 'openai_api',
+])
+
+function profileAccessAllowed(access) {
+  return PERSONAL_PROVIDERS_ALLOWED || !PERSONAL_PROVIDER_ACCESSES.has(access)
+}
+
 const SUPPORT = process.env.MECHANICIAN_SUPPORT_DIR ||
   path.join(os.homedir(), 'Library', 'Application Support', 'Mechanician')
 // The inbox belongs to the stable root, not whichever Legacy rollback generation currently backs
@@ -1006,6 +1017,11 @@ async function runTask(task, nudge) {
     return completeRun(task, nudge, randomUUID().toUpperCase(),
       'Ambient task failed: this provider is blocked by managed enterprise policy.', true)
   }
+  if (!profileAccessAllowed(access)) {
+    return completeRun(task, nudge, randomUUID().toUpperCase(),
+      "Ambient task failed: your organization's configuration does not allow personal accounts.",
+      true)
+  }
   const workspace = workspaceContext(task)
   log(`firing "${task.name}" (${task.trigger?.type}) on ${access}`)
   const convId = randomUUID().toUpperCase()
@@ -1422,7 +1438,8 @@ async function tick() {
   ticking = true
   try {
     for (const task of tasks) {
-      if (!managedAccessAllowed(taskAccess(task))) continue
+      const access = taskAccess(task)
+      if (!managedAccessAllowed(access) || !profileAccessAllowed(access)) continue
       // Help is a closed interactive profile, not an ordinary unattended workspace. Reject its
       // fixed id here, at the last boundary before a durable run claim, even if an older app
       // already persisted the task and its Workspace row still resolves on disk.

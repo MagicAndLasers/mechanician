@@ -338,6 +338,7 @@ struct ManagedConfigurationOverrides: Codable, Equatable {
             if route.isDefault { entry["default"] = true }
             return entry
         }
+        document["providers"] = ["allowPublic": profile.providers.allowPublic]
         var extensions: [String: Any] = ["allowPublic": profile.extensions.allowPublic]
         extensions["managedSources"] = profile.extensions.managedSources.map { source -> [String: Any] in
             var entry: [String: Any] = ["kind": source.kind, "name": source.name]

@@ -194,6 +194,16 @@ final class ModelCatalogStore: ObservableObject {
         return Self.constrained(lastKnownEntries[key] ?? [], for: access)
     }
 
+    /// Whether this lane has ever produced models on this Mac, in any workspace. The model picker
+    /// reads it as evidence that a person has used the lane, which on a managed deployment decides
+    /// whether a personal account is offered at all. An empty catalog is not evidence: checking a
+    /// lane for an account it never had records one.
+    func hasLastKnownEntries(for access: ModelAccess) -> Bool {
+        lastKnownEntries.contains { key, entries in
+            key.access == access && !Self.constrained(entries, for: access).isEmpty
+        }
+    }
+
     /// What the provider reported for this lane before any managed constraint was applied. Empty
     /// until a catalog has been published in this process.
     func providerReported(for access: ModelAccess, scope: String) -> [ModelCatalogEntry] {

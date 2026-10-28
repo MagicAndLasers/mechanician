@@ -4,15 +4,40 @@ import SwiftUI
 /// Interactive account routes are product capabilities, not model-catalog side effects. Keep them in
 /// the picker even before they have authenticated or published a catalog so the user can recover
 /// the missing account from the surface where its models belong.
+///
+/// A deployment that runs an organization's route is the exception (see
+/// ``ModelAccess/curatesPersonalLanes``). There a personal subscription appears only once it is
+/// usable or has been used on this Mac; otherwise every managed Mac listed accounts its organization
+/// never set up, each with a Connect button and models nobody there could run.
 @MainActor
 enum ModelPickerProviderPolicy {
-    static func presents(_ access: ModelAccess, state: ProviderAccountStore.State) -> Bool {
+    static func presents(
+        _ access: ModelAccess,
+        state: ProviderAccountStore.State,
+        curatesPersonalLanes: Bool = false,
+        hasBeenUsed: Bool = false
+    ) -> Bool {
         switch access {
-        case .claudeSubscription, .codexSubscription, .claudeVertex:
+        case .claudeVertex:
             return true
+        case .claudeSubscription, .codexSubscription:
+            return !curatesPersonalLanes || state.isAvailable || hasBeenUsed
         case .anthropicAPI, .openAIAPI, .claudeBedrock:
             return state.isAvailable
         }
+    }
+
+    /// Evidence that a person has used `access` on this Mac: the conversation is on it, a sign-in is
+    /// under way or has just failed, it has produced models here before, or its account needs
+    /// reconnecting. Each is something a person did, never a guess about what their organization
+    /// set up.
+    static func hasBeenUsed(_ access: ModelAccess, bridge: AgentBridge) -> Bool {
+        let accounts = ProviderAccountStore.shared
+        return access == bridge.currentModelAccess
+            || accounts.operation(for: access) != nil
+            || accounts.error(for: access) != nil
+            || ModelCatalogStore.shared.hasLastKnownEntries(for: access)
+            || bridge.providerNeedsReconnect(access)
     }
 
     static func connectionAction(
@@ -39,18 +64,26 @@ enum ModelPickerProviderPolicy {
     /// Interactive credential storage is intentionally verified by the provider runtime, not by a
     /// second passive credential reader. Opening the picker must therefore start that lightweight
     /// runtime probe while the account is `checking`, even when a last-known catalog is cached.
+    ///
+    /// Except for a personal lane a curated deployment does not show: that probe starts a provider
+    /// runtime for an account the organization never set up, on every launch. The Providers window
+    /// still checks those lanes when a person opens it.
     static func shouldPrepareCatalog(
         for access: ModelAccess,
         state: ProviderAccountStore.State,
-        hasUsableRuntime: Bool = false
+        hasUsableRuntime: Bool = false,
+        curatesPersonalLanes: Bool = false,
+        hasBeenUsed: Bool = false
     ) -> Bool {
         // Sending and the account list intentionally have separate authorities. A live,
         // authenticated runtime is stronger evidence than a stale process-wide row and must be
         // allowed to repair that row's missing catalog.
         if hasUsableRuntime { return true }
         if state.isAvailable { return true }
-        return state == .checking
-            && access.usesInteractiveAccountFlow
+        guard state == .checking, access.usesInteractiveAccountFlow else { return false }
+        return presents(
+            access, state: state,
+            curatesPersonalLanes: curatesPersonalLanes, hasBeenUsed: hasBeenUsed)
     }
 }
 
@@ -68,7 +101,8 @@ enum ModelPickerCatalogProjection {
         isReconnectable: Bool,
         hasAccountOperation: Bool,
         fallbackEntries: [ModelCatalogEntry],
-        lastKnownEntries: [ModelCatalogEntry]
+        lastKnownEntries: [ModelCatalogEntry],
+        previewsFallbackEntries: Bool = true
     ) -> [ModelCatalogEntry] {
         if isEligible {
             // Ready-and-empty is an authoritative provider answer. Every other non-ready phase
@@ -80,7 +114,11 @@ enum ModelPickerCatalogProjection {
             // there are none, and that is the case this branch used to get wrong. A lane with no
             // cached rows rendered an empty section with a Reconnect button and no indication of
             // what reconnecting would offer, even though a built-in list existed for exactly this.
-            return lastKnownEntries.isEmpty ? fallbackEntries : lastKnownEntries
+            //
+            // A curated deployment's personal lane opts out: there the generic built-in list is
+            // models no account on this Mac has served, and the rows say "Last available".
+            guard lastKnownEntries.isEmpty else { return lastKnownEntries }
+            return previewsFallbackEntries ? fallbackEntries : []
         }
         return []
     }
@@ -853,9 +891,15 @@ struct ModelPickerView: View {
         HStack {
             if search.isEmpty && capabilityFilter == nil {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Connected models and configured providers are shown.")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                    Group {
+                        if ModelAccess.curatesPersonalLanes {
+                            Text("Your organization's providers and the accounts you've connected are shown.")
+                        } else {
+                            Text("Connected models and configured providers are shown.")
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
                     // On a managed lane this list IS the configuration, so name the configuration
                     // that produced it. Without this, "my new model is missing" and "my update did
                     // not arrive" look identical from here, which cost a support round trip.
@@ -969,8 +1013,13 @@ struct ModelPickerView: View {
     }
 
     private var presentedAccesses: [ModelAccess] {
-        ModelAccess.selectableCases.filter { access in
-            ModelPickerProviderPolicy.presents(access, state: accounts.state(for: access))
+        let curated = ModelAccess.curatesPersonalLanes
+        return ModelAccess.selectableCases.filter { access in
+            ModelPickerProviderPolicy.presents(
+                access,
+                state: accounts.state(for: access),
+                curatesPersonalLanes: curated,
+                hasBeenUsed: curated && ModelPickerProviderPolicy.hasBeenUsed(access, bridge: bridge))
         }
     }
 
@@ -1023,7 +1072,8 @@ struct ModelPickerView: View {
     }
 
     private var allEntries: [ModelCatalogEntry] {
-        presentedAccesses.flatMap { access -> [ModelCatalogEntry] in
+        let curated = ModelAccess.curatesPersonalLanes
+        return presentedAccesses.flatMap { access -> [ModelCatalogEntry] in
             let scope = bridge.catalogScope(for: access)
             let snapshot = catalogs.snapshot(for: access, scope: scope)
             let entries = ModelPickerCatalogProjection.entries(
@@ -1032,7 +1082,8 @@ struct ModelPickerView: View {
                 isReconnectable: reconnectableAccesses.contains(access),
                 hasAccountOperation: accounts.operation(for: access) != nil,
                 fallbackEntries: AgentBridge.fallbackEntries(for: access, scope: scope),
-                lastKnownEntries: catalogs.lastKnownEntries(for: access, scope: scope))
+                lastKnownEntries: catalogs.lastKnownEntries(for: access, scope: scope),
+                previewsFallbackEntries: !curated || !ModelAccess.builtInCases.contains(access))
             return entries.filter { $0.selection.access == access }
         }
     }

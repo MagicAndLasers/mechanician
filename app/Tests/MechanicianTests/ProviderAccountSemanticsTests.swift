@@ -430,6 +430,45 @@ final class ProviderAccountSemanticsTests: XCTestCase {
         XCTAssertTrue(ModelPickerProviderPolicy.shouldPrepareCatalog(
             for: .anthropicAPI, state: .configured))
     }
+
+    /// On a deployment that runs its organization's route, every managed Mac listed both personal
+    /// subscriptions with a Connect button, and opening the picker launched a daemon for each to
+    /// ask about accounts nobody there had. Nobody should have to work out which providers are real.
+    func testACuratedDeploymentOffersPersonalSubscriptionsOnlyOnceUsableOrUsed() {
+        for access in [ModelAccess.claudeSubscription, .codexSubscription] {
+            for state in [ProviderAccountStore.State.checking, .disconnected] {
+                XCTAssertFalse(ModelPickerProviderPolicy.presents(
+                    access, state: state, curatesPersonalLanes: true))
+                XCTAssertTrue(ModelPickerProviderPolicy.presents(
+                    access, state: state, curatesPersonalLanes: true, hasBeenUsed: true))
+            }
+            XCTAssertTrue(ModelPickerProviderPolicy.presents(
+                access, state: .connected(detail: nil), curatesPersonalLanes: true))
+
+            XCTAssertFalse(
+                ModelPickerProviderPolicy.shouldPrepareCatalog(
+                    for: access, state: .checking, curatesPersonalLanes: true),
+                "a lane the picker does not show must not get a daemon to ask about it")
+            XCTAssertTrue(ModelPickerProviderPolicy.shouldPrepareCatalog(
+                for: access, state: .checking, curatesPersonalLanes: true, hasBeenUsed: true))
+            XCTAssertTrue(ModelPickerProviderPolicy.shouldPrepareCatalog(
+                for: access, state: .connected(detail: nil), curatesPersonalLanes: true))
+            XCTAssertTrue(ModelPickerProviderPolicy.shouldPrepareCatalog(
+                for: access, state: .checking, hasUsableRuntime: true,
+                curatesPersonalLanes: true))
+        }
+
+        // The organization's own route is what the deployment is for, and is never curated away.
+        XCTAssertTrue(ModelPickerProviderPolicy.presents(
+            .claudeVertex, state: .disconnected, curatesPersonalLanes: true))
+        XCTAssertTrue(ModelPickerProviderPolicy.shouldPrepareCatalog(
+            for: .claudeVertex, state: .checking, curatesPersonalLanes: true))
+        // API keys were already listed only once configured.
+        XCTAssertFalse(ModelPickerProviderPolicy.presents(
+            .anthropicAPI, state: .disconnected, curatesPersonalLanes: true))
+        XCTAssertTrue(ModelPickerProviderPolicy.presents(
+            .anthropicAPI, state: .configured, curatesPersonalLanes: true))
+    }
 }
 
 /// `checking` is the state that causes `prepareModelCatalog` to launch a lane's daemon. A probe that

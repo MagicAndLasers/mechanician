@@ -260,11 +260,12 @@ final class AgentdRuntime {
     /// the pool owner so the runtime can remain identity-safe if its window closes mid-launch.
     func start() {
         guard process == nil else { return }
-        if let reason = managedPolicy?.turnBlockReason(for: access) {
+        let profile = tenantProfile()
+        if let reason = managedPolicy?.turnBlockReason(for: access)
+            ?? profile.providerBlockReason(for: access) {
             onLaunchFailure(access, reason)
             return
         }
-        let profile = tenantProfile()
 
         let proc = Process()
         let inPipe = Pipe()

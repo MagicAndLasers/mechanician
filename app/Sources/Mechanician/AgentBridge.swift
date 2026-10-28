@@ -2518,7 +2518,11 @@ enum MCPAuthorizationPreparationStateResolver {
         currentState: MCPAuthState
     ) -> MCPAuthState? {
         guard currentState == .preparing else { return nil }
-        guard clickedServer == reconciledServer else { return .idle }
+        // A saved attempt for another server owns this provider lane. Resetting the clicked row to
+        // idle made Authorize look dead; say which sign-in has to be finished or cancelled first.
+        guard clickedServer == reconciledServer else {
+            return .failed("Another sign-in (\(reconciledServer)) is unfinished on this provider. Finish or cancel it, then try again.")
+        }
         return launched
             ? .authorizing
             : .failed("Mechanician could not resume the saved sign-in attempt.")
@@ -4526,6 +4530,26 @@ final class AgentBridge: ObservableObject {
         prepareModelCatalog(for: currentModelAccess, force: force)
     }
 
+    /// A curated deployment's picker never probes a personal subscription it does not show, so the
+    /// Providers window, which lists every lane, asks for that account status itself. Without this
+    /// those rows would read "Checking…" for as long as the app runs.
+    func checkPersonalAccounts() {
+        guard ModelAccess.curatesPersonalLanes else { return }
+        let accounts = ProviderAccountStore.shared
+        for access in ModelAccess.selectableCases
+        where ModelAccess.builtInCases.contains(access)
+            && access.usesInteractiveAccountFlow
+            && accounts.state(for: access) == .checking
+            && accounts.operation(for: access) == nil {
+            // `refresh()` returns a ready lane to `checking` without asking its runtime again.
+            if isRuntimeReady(access) {
+                reportAccountState(for: access)
+            } else {
+                ensureRuntime(for: access)
+            }
+        }
+    }
+
     private func prepareModelCatalog(for access: ModelAccess, force: Bool) {
         guard access.isAllowedByEnterprisePolicy else { return }
         let accounts = ProviderAccountStore.shared
@@ -4534,11 +4558,15 @@ final class AgentBridge: ObservableObject {
         let accountState = accounts.state(for: access)
         let needsAccountProbe = accountState == .checking
             && access.usesInteractiveAccountFlow
+        let curated = ModelAccess.curatesPersonalLanes
         guard accounts.operation(for: access) == nil,
               ModelPickerProviderPolicy.shouldPrepareCatalog(
                 for: access,
                 state: accountState,
-                hasUsableRuntime: isRuntimeUsable(access)) else {
+                hasUsableRuntime: isRuntimeUsable(access),
+                curatesPersonalLanes: curated,
+                hasBeenUsed: curated
+                    && ModelPickerProviderPolicy.hasBeenUsed(access, bridge: self)) else {
             ModelCatalogStore.shared.disable(
                 access: access, credentialEpoch: epoch,
                 message: accounts.operation(for: access) == nil ? nil : "Account change in progress")
@@ -8676,9 +8704,16 @@ final class AgentBridge: ObservableObject {
         lastComposerPrewarm = nil
     }
 
+    /// An organization withholds a lane through managed preferences, which are enforced, or through
+    /// its signed profile's `providers` policy, which ships with the deployment. Either stops a turn.
+    private func providerTurnBlockReason(for access: ModelAccess) -> String? {
+        managedEnterprisePolicy?.turnBlockReason(for: access)
+            ?? TenantProfile.current.providerBlockReason(for: access)
+    }
+
     @discardableResult
     private func ensureRuntime(for access: ModelAccess) -> AgentdRuntime? {
-        if let reason = managedEnterprisePolicy?.turnBlockReason(for: access) {
+        if let reason = providerTurnBlockReason(for: access) {
             var state = laneStates[access] ?? RuntimeLaneState()
             state.ready = false
             state.mode = reason
@@ -9503,8 +9538,7 @@ final class AgentBridge: ObservableObject {
         let trimmed = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         guard currentProviderAccessRequest == nil else { return }
-        if let reason = managedEnterprisePolicy?.turnBlockReason(
-            for: currentModelAccess) {
+        if let reason = providerTurnBlockReason(for: currentModelAccess) {
             appendSystem(reason)
             return
         }
@@ -10563,7 +10597,7 @@ final class AgentBridge: ObservableObject {
         guard let healing = healStampedSelection(
             priorSelection ?? currentModelSelection, in: conversation) else { return false }
         let selection = healing.selection
-        guard managedEnterprisePolicy?.turnBlockReason(for: selection.access) == nil else {
+        guard providerTurnBlockReason(for: selection.access) == nil else {
             return false
         }
         let toolProfile = Self.toolProfile(for: conversation)
@@ -13240,7 +13274,7 @@ final class AgentBridge: ObservableObject {
         guard let healing = healStampedSelection(
             priorSelection ?? currentModelSelection, in: before) else { return false }
         let selection = healing.selection
-        guard managedEnterprisePolicy?.turnBlockReason(for: selection.access) == nil else {
+        guard providerTurnBlockReason(for: selection.access) == nil else {
             return false
         }
         let toolProfile = Self.toolProfile(for: before)
@@ -23882,8 +23916,15 @@ final class AgentBridge: ObservableObject {
         }) {
             return
         }
-        guard case .mcpAuthorize(_, let attemptID) =
-                ownerBridge.extensionControlRoutes[owner.requestID]?.kind,
+        // A reconcile owns the lane exactly like a fresh authorize does (a stale attempt is resumed
+        // under its own id), so it must be cancellable too; otherwise the stale attempt can never be
+        // dismissed and every other server's Authorize is blocked behind it.
+        let ownedAttemptID: String?
+        switch ownerBridge.extensionControlRoutes[owner.requestID]?.kind {
+        case .mcpAuthorize(_, let id), .mcpReconcile(_, let id): ownedAttemptID = id
+        default: ownedAttemptID = nil
+        }
+        guard let attemptID = ownedAttemptID,
               let attempt = ExtensionsStore.shared.pendingMCPAuthorizationAttempt(
                 id: attemptID, for: owner.access) else {
             ExtensionsStore.shared.setAuthState(

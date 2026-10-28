@@ -431,6 +431,40 @@ final class AgentdRuntimeTests: XCTestCase {
         await fulfillment(of: [rejected], timeout: 1)
     }
 
+    func testRuntimeRejectsAPersonalLaneTheProfileWithholdsBeforeStartingAChild() async {
+        let profile = TenantProfile(
+            tenantId: "acme",
+            displayName: "Acme",
+            routes: [
+                .init(
+                    routeId: "acme-vertex",
+                    adapter: "claude-vertex",
+                    vertex: .init(projectId: "acme-claude-code", region: "global"),
+                    isDefault: true),
+            ],
+            providers: .init(allowPublic: false))
+        let rejected = expectation(description: "withheld personal lane rejected")
+        let runtime = AgentdRuntime(
+            access: .claudeSubscription,
+            onEvent: { _, _ in },
+            onLaunchFailure: { access, detail in
+                XCTAssertEqual(access, .claudeSubscription)
+                XCTAssertTrue(detail.contains("does not allow personal accounts"))
+                rejected.fulfill()
+            },
+            onUnexpectedExit: { _, _ in },
+            processStarter: { _ in
+                XCTFail("a withheld personal lane must not start agentd")
+                return "unexpected start"
+            },
+            // No forced preference: the signed profile alone withholds the lane.
+            managedPolicy: nil,
+            tenantProfile: { profile })
+
+        runtime.start()
+        await fulfillment(of: [rejected], timeout: 1)
+    }
+
     func testRuntimeWriteReturnsBeforeSlowPipeConsumerCompletes() async {
         let launched = expectation(description: "fixture launched")
         let writeEntered = expectation(description: "background writer entered")

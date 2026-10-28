@@ -399,6 +399,62 @@ final class AmbientStoreTests: XCTestCase {
         XCTAssertEqual(allowed["MECHANICIAN_ALLOW_UNATTENDED_TASKS"], "1")
     }
 
+    func testAmbientEnvironmentCarriesAProfileWithholdingPersonalAccounts() {
+        let withheld = TenantProfile(
+            tenantId: "acme",
+            displayName: "Acme",
+            routes: [
+                .init(
+                    routeId: "acme-vertex",
+                    adapter: "claude-vertex",
+                    vertex: .init(projectId: "acme-claude-code", region: "global"),
+                    isDefault: true),
+            ],
+            providers: .init(allowPublic: false))
+        let home = URL(fileURLWithPath: "/Users/tester", isDirectory: true)
+
+        // No forced preference here: the signed profile alone withholds the lanes.
+        let restricted = AmbientDaemon.processEnvironment(
+            profile: withheld,
+            bundleIdentifier: MechanicianEnvironment.baseBundleIdentifier,
+            environment: [:],
+            homeDirectory: home,
+            managedPolicy: nil)
+        let inherited = AmbientDaemon.processEnvironment(
+            profile: .default,
+            bundleIdentifier: MechanicianEnvironment.baseBundleIdentifier,
+            environment: ["MECHANICIAN_ALLOW_PERSONAL_PROVIDERS": "0"],
+            homeDirectory: home,
+            managedPolicy: nil)
+
+        XCTAssertEqual(restricted["MECHANICIAN_ALLOW_PERSONAL_PROVIDERS"], "0")
+        XCTAssertNil(restricted["MECHANICIAN_MANAGED_POLICY"])
+        XCTAssertNil(inherited["MECHANICIAN_ALLOW_PERSONAL_PROVIDERS"],
+                     "only the installed profile decides this, never a launching shell")
+    }
+
+    func testWithholdingPersonalAccountsReplacesAnInstalledScheduler() {
+        var profile = TenantProfile(
+            tenantId: "acme",
+            displayName: "Acme",
+            routes: [
+                .init(
+                    routeId: "acme-vertex",
+                    adapter: "claude-vertex",
+                    vertex: .init(projectId: "acme-claude-code", region: "global"),
+                    isDefault: true),
+            ])
+        let allowing = AmbientDaemon.configurationIdentity(build: "132", profile: profile)
+        profile.providers.allowPublic = false
+        let withholding = AmbientDaemon.configurationIdentity(build: "132", profile: profile)
+
+        XCTAssertNotEqual(withholding, allowing)
+        // An installation that never sets the policy keeps the identity it was installed with.
+        XCTAssertTrue(allowing.hasSuffix("|authority-inbox-v1"))
+        XCTAssertTrue(AmbientDaemon.shouldRefreshInstallation(
+            isInstalled: true, installedIdentity: allowing, currentIdentity: withholding))
+    }
+
     private func makeTask(
         enabled: Bool,
         assigned: Bool = true,

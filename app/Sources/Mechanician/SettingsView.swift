@@ -350,7 +350,10 @@ struct ProviderCenterView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     Spacer(minLength: 16)
-                    Button { accounts.refresh() } label: {
+                    Button {
+                        accounts.refresh()
+                        bridge.checkPersonalAccounts()
+                    } label: {
                         Label("Refresh", systemImage: "arrow.clockwise")
                     }
                     .buttonStyle(PillButtonStyle(kind: .plain))
@@ -362,14 +365,15 @@ struct ProviderCenterView: View {
 
                 managedConfigurationCard
 
+                // Policy can leave a maker with no lane at all; an empty card would offer nothing.
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .top, spacing: 16) {
-                        anthropicCard.frame(minWidth: 360)
-                        openAICard.frame(minWidth: 360)
+                        if listsLanes(from: .anthropic) { anthropicCard.frame(minWidth: 360) }
+                        if listsLanes(from: .openAI) { openAICard.frame(minWidth: 360) }
                     }
                     VStack(alignment: .leading, spacing: 16) {
-                        anthropicCard
-                        openAICard
+                        if listsLanes(from: .anthropic) { anthropicCard }
+                        if listsLanes(from: .openAI) { openAICard }
                     }
                 }
 
@@ -394,6 +398,7 @@ struct ProviderCenterView: View {
         .background(Color.nBg)
         .onAppear {
             accounts.refresh()
+            bridge.checkPersonalAccounts()
             reloadInstalledProfile()
         }
         .onChange(of: profileImports.delivery?.id, initial: true) { _, id in
@@ -789,13 +794,21 @@ struct ProviderCenterView: View {
         }
     }
 
+    private func listsLanes(from maker: ModelMaker) -> Bool {
+        ModelAccess.selectableCases.contains { $0.maker == maker }
+    }
+
     private var anthropicCard: some View {
-        providerCard(
-            maker: .anthropic,
-            subtitle: TenantProfile.current.enterpriseAccesses.contains(.claudeVertex)
-                ? "Use Claude through Vertex AI, your Claude subscription, or a metered Anthropic API key."
-                : "Use Claude through your Claude subscription or a metered Anthropic API key.",
-            accesses: ModelAccess.selectableCases.filter { $0.maker == .anthropic })
+        let accesses = ModelAccess.selectableCases.filter { $0.maker == .anthropic }
+        let subtitle: String
+        if !accesses.contains(where: ModelAccess.builtInCases.contains) {
+            subtitle = "Use Claude through your organization's providers."
+        } else if accesses.contains(.claudeVertex) {
+            subtitle = "Use Claude through Vertex AI, your Claude subscription, or a metered Anthropic API key."
+        } else {
+            subtitle = "Use Claude through your Claude subscription or a metered Anthropic API key."
+        }
+        return providerCard(maker: .anthropic, subtitle: subtitle, accesses: accesses)
     }
 
     private var openAICard: some View {
