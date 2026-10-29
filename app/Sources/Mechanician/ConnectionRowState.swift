@@ -11,7 +11,11 @@ enum ConnectionRowState: Equatable {
     case needsSignIn
     case signingIn(MCPAuthorizationProgressPhase)
     case problem(Problem)
+    /// A probe is actually in flight.
     case checking
+    /// The last probe came back indeterminate (or none has run). The status check re-reads the
+    /// Keychain and does not connect, so this can persist; a real tool call is authoritative.
+    case unverified
     case off
 
     enum Problem: Equatable {
@@ -51,10 +55,13 @@ enum ConnectionRowState: Equatable {
             // nil is "the SDK omitted its tools array", not "no tools".
             if count == 0 { return .problem(.noTools) }
             return .ready(toolCount: count)
-        case .unknown, .checking, .authenticated, .disabled:
-            // A saved login whose tools have not been verified here is not a settled state. It is
-            // Checking, and `needsStatusRefresh` tells the caller to go and find out.
+        case .checking:
             return .checking
+        case .unknown, .authenticated, .disabled:
+            // A saved login whose tools are not verified here. `needsStatusRefresh` tells the
+            // caller to go and find out, but the probe may stay indeterminate, so this must never
+            // render as an endless spinner. It names itself and offers Retry instead.
+            return .unverified
         }
     }
 
@@ -74,7 +81,7 @@ enum ConnectionRowState: Equatable {
         case .signingIn(.preparing): nil // no owned attempt exists yet, so Cancel would be a lie
         case .signingIn: .cancel
         case .problem(.invalidConfiguration): .editServer
-        case .problem: .retry
+        case .problem, .unverified: .retry
         case .ready, .checking, .off: nil
         }
     }
@@ -105,6 +112,8 @@ enum ConnectionRowState: Equatable {
             String(localized: "Connected, but offers no tools")
         case .checking:
             String(localized: "Checking…")
+        case .unverified:
+            String(localized: "Not checked yet")
         case .off:
             String(localized: "Off")
         }
@@ -146,14 +155,20 @@ extension ConnectionRowState.PrimaryAction {
 /// never moves because something scored it differently, only because its state changed.
 enum ConnectionRowGroup: Int, CaseIterable, Comparable {
     case needsAttention
+    case notSignedIn
     case ready
     case off
 
     init(_ state: ConnectionRowState) {
         switch state {
-        case .needsSignIn, .problem, .signingIn: self = .needsAttention
-        // Checking sits with Ready so a first paint does not put a row at the top and then drop it.
-        case .ready, .checking: self = .ready
+        // Something broke. Kept apart from servers that were simply never signed in, so the count
+        // under this heading means "urgent" and nothing else.
+        case .problem: self = .needsAttention
+        // A sign-in that has started stays here, so beginning one does not move the row.
+        case .needsSignIn, .signingIn: self = .notSignedIn
+        // Checking and unverified sit with Ready so a first paint does not put a row at the top
+        // and then drop it.
+        case .ready, .checking, .unverified: self = .ready
         case .off: self = .off
         }
     }
@@ -163,6 +178,7 @@ enum ConnectionRowGroup: Int, CaseIterable, Comparable {
     var title: String {
         switch self {
         case .needsAttention: String(localized: "Needs attention")
+        case .notSignedIn: String(localized: "Not signed in")
         case .ready: String(localized: "Ready")
         case .off: String(localized: "Off")
         }

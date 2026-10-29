@@ -81,14 +81,18 @@ final class ConnectionRowStateTests: XCTestCase {
     }
 
     /// The Jira case from the audit: a saved login with tools not yet verified in this lane used to
-    /// be a silent gray row with no button. It is Checking, and the panel is told to refresh it.
-    func testSavedLoginWithUnverifiedToolsIsCheckingAndAsksForARefresh() {
-        XCTAssertEqual(resolve(auth: .idle, connection: .authenticated), .checking)
+    /// be a silent gray row with no button. It is Unverified with a Retry action, and the panel is
+    /// told to refresh it. It is not Checking: the probe can stay indeterminate, so a spinner here
+    /// could spin forever.
+    func testSavedLoginWithUnverifiedToolsIsUnverifiedWithRetryAndAsksForARefresh() {
+        XCTAssertEqual(resolve(auth: .idle, connection: .authenticated), .unverified)
+        XCTAssertEqual(ConnectionRowState.unverified.primaryAction, .retry)
         XCTAssertTrue(ConnectionRowState.needsStatusRefresh(connection: .authenticated, auth: .idle))
         XCTAssertTrue(ConnectionRowState.needsStatusRefresh(connection: .unknown, auth: .idle))
 
-        XCTAssertEqual(resolve(connection: .unknown), .checking)
+        XCTAssertEqual(resolve(connection: .unknown), .unverified)
         XCTAssertEqual(resolve(connection: .checking), .checking)
+        XCTAssertNil(ConnectionRowState.checking.primaryAction)
         XCTAssertFalse(ConnectionRowState.needsStatusRefresh(connection: .checking, auth: .idle))
     }
 
@@ -102,13 +106,14 @@ final class ConnectionRowStateTests: XCTestCase {
     }
 
     func testGroupingIsADeterministicSortOnState() {
-        XCTAssertEqual(ConnectionRowGroup(.needsSignIn), .needsAttention)
-        XCTAssertEqual(ConnectionRowGroup(.signingIn(.waitingForBrowser)), .needsAttention)
+        XCTAssertEqual(ConnectionRowGroup(.needsSignIn), .notSignedIn)
+        XCTAssertEqual(ConnectionRowGroup(.signingIn(.waitingForBrowser)), .notSignedIn)
         XCTAssertEqual(ConnectionRowGroup(.problem(.noTools)), .needsAttention)
         XCTAssertEqual(ConnectionRowGroup(.ready(toolCount: 1)), .ready)
         XCTAssertEqual(ConnectionRowGroup(.checking), .ready)
+        XCTAssertEqual(ConnectionRowGroup(.unverified), .ready)
         XCTAssertEqual(ConnectionRowGroup(.off), .off)
-        XCTAssertEqual(ConnectionRowGroup.allCases.sorted(), [.needsAttention, .ready, .off])
+        XCTAssertEqual(ConnectionRowGroup.allCases.sorted(), [.needsAttention, .notSignedIn, .ready, .off])
     }
 
     func testEveryEnabledRowStateHasASummaryAndANamedActionWhenItOffersOne() {
@@ -116,7 +121,7 @@ final class ConnectionRowStateTests: XCTestCase {
             .ready(toolCount: 2), .ready(toolCount: nil), .needsSignIn,
             .signingIn(.preparing), .signingIn(.authorizing), .signingIn(.waitingForBrowser),
             .problem(.invalidConfiguration), .problem(.noTools),
-            .problem(.connectionFailed("x")), .checking, .off,
+            .problem(.connectionFailed("x")), .checking, .unverified, .off,
         ]
         for state in states {
             XCTAssertFalse(state.summary.isEmpty, "\(state)")
