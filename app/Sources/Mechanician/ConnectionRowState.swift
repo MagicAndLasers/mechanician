@@ -155,12 +155,17 @@ extension ConnectionRowState.PrimaryAction {
 /// never moves because something scored it differently, only because its state changed.
 enum ConnectionRowGroup: Int, CaseIterable, Comparable {
     case needsAttention
+    case notSignedIn
     case ready
     case off
 
     init(_ state: ConnectionRowState) {
         switch state {
-        case .needsSignIn, .problem, .signingIn: self = .needsAttention
+        // Something broke. Kept apart from servers that were simply never signed in, so the count
+        // under this heading means "urgent" and nothing else.
+        case .problem: self = .needsAttention
+        // A sign-in that has started stays here, so beginning one does not move the row.
+        case .needsSignIn, .signingIn: self = .notSignedIn
         // Checking and unverified sit with Ready so a first paint does not put a row at the top
         // and then drop it.
         case .ready, .checking, .unverified: self = .ready
@@ -173,6 +178,7 @@ enum ConnectionRowGroup: Int, CaseIterable, Comparable {
     var title: String {
         switch self {
         case .needsAttention: String(localized: "Needs attention")
+        case .notSignedIn: String(localized: "Not signed in")
         case .ready: String(localized: "Ready")
         case .off: String(localized: "Off")
         }

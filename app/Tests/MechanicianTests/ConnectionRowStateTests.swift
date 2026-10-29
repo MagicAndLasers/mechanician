@@ -106,14 +106,14 @@ final class ConnectionRowStateTests: XCTestCase {
     }
 
     func testGroupingIsADeterministicSortOnState() {
-        XCTAssertEqual(ConnectionRowGroup(.needsSignIn), .needsAttention)
-        XCTAssertEqual(ConnectionRowGroup(.signingIn(.waitingForBrowser)), .needsAttention)
+        XCTAssertEqual(ConnectionRowGroup(.needsSignIn), .notSignedIn)
+        XCTAssertEqual(ConnectionRowGroup(.signingIn(.waitingForBrowser)), .notSignedIn)
         XCTAssertEqual(ConnectionRowGroup(.problem(.noTools)), .needsAttention)
         XCTAssertEqual(ConnectionRowGroup(.ready(toolCount: 1)), .ready)
         XCTAssertEqual(ConnectionRowGroup(.checking), .ready)
         XCTAssertEqual(ConnectionRowGroup(.unverified), .ready)
         XCTAssertEqual(ConnectionRowGroup(.off), .off)
-        XCTAssertEqual(ConnectionRowGroup.allCases.sorted(), [.needsAttention, .ready, .off])
+        XCTAssertEqual(ConnectionRowGroup.allCases.sorted(), [.needsAttention, .notSignedIn, .ready, .off])
     }
 
     func testEveryEnabledRowStateHasASummaryAndANamedActionWhenItOffersOne() {
